@@ -1,36 +1,153 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Metuah Hub — Agro-Maritim Aceh Ecosystem
 
-## Getting Started
+> Platform digital ekosistem agro-maritim Aceh untuk The 12th UTU Awards 2026
 
-First, run the development server:
+Metuah Hub menghubungkan UMKM, petani, nelayan, eksportir, dan mitra internasional dalam satu ekosistem terintegrasi — dari sertifikasi halal, HACCP, kemasan ekspor, hingga koneksi ke buyer global.
+
+## Tech Stack
+
+| Layer | Teknologi |
+|-------|-----------|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS v3 |
+| Animation | Framer Motion v12, GSAP |
+| Smooth Scroll | Lenis |
+| State | Zustand |
+| Auth | NextAuth v5 (Auth.js) |
+| Database | PostgreSQL (Supabase / local) |
+| ORM | Prisma v6 |
+| Validation | Zod + React Hook Form |
+| Data Fetching | TanStack Query |
+| Icons | Lucide React |
+
+## Struktur Folder
+
+```
+src/
+├── animations/     # Framer Motion + GSAP utilities
+├── app/            # Next.js App Router pages & API
+├── components/     # UI, layout, & section components
+├── constants/      # Menu, products, config
+├── contexts/       # Auth context (SessionProvider)
+├── hooks/          # useAuth, useScroll, useProducts
+├── lib/            # Prisma client, utils
+├── locales/        # id.json, en.json
+├── navigation/     # Route constants
+├── services/       # Auth, product, partner services
+├── store/          # Zustand stores (auth, product, ui)
+├── types/          # TypeScript types
+└── utils/          # Validation, helpers
+```
+
+## Fitur
+
+### Landing Page
+- **Hero** — Parallax, animated counters, floating blobs
+- **Dashboard Preview** — Live stats with sparklines
+- **Product Catalog** — Search, filter, categories, detail modal
+- **Mentoring** — Timeline cards, CTA
+- **International Partners** — Partner grid
+- **Workflow** — Producer → Metuah Hub → Certification → Global Market
+- **Financial** — Cost/revenue metrics, revenue streams
+- **Team** — Team member cards
+
+### Dashboard (User)
+- Overview — Stats, recent products, mentoring progress
+- My Products — CRUD table
+- Mentoring — Progress tracking
+- Partners — Partner list
+- Settings — Profile & theme toggle
+- Profile — User info
+
+### Dashboard (Admin)
+- Admin Panel — Stats overview, product approval
+- Manage Products — Approve/reject products
+- Manage Users — User list
+
+### API
+- `GET/POST /api/products` — List & create products
+- `GET/PUT /api/products/[id]` — Get & update product
+- `GET/POST /api/partners` — List & create partners
+- `GET/POST /api/mentoring` — List & create mentoring
+- `POST /api/auth/register` — Register user
+- `GET/POST /api/auth/[...nextauth]` — NextAuth v5
+
+## Memulai
+
+### Prasyarat
+
+- Node.js 18+
+- PostgreSQL (local) atau Supabase account
+- npm / yarn
+
+### 1. Clone & Install
+
+```bash
+git clone <repo-url>
+cd meutuah
+npm install --legacy-peer-deps
+```
+
+### 2. Environment Variables
+
+Salin `.env.example` ke `.env` dan isi:
+
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/meutuah?schema=public"
+NEXTAUTH_SECRET="generate-random-secret"
+NEXTAUTH_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_NAME="Metuah Hub"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+```
+
+### 3. Database
+
+```bash
+# Push schema to database
+npx prisma db push
+
+# Seed with sample data
+npx tsx prisma/seed.ts
+```
+
+Akun default:
+- Admin: `admin@metuahhub.id` / `admin123`
+- User: `user@metuahhub.id` / `user123`
+
+### 4. Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 5. Build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deployment (Vercel + Supabase)
 
-## Learn More
+### Supabase
 
-To learn more about Next.js, take a look at the following resources:
+1. Buat project di [supabase.com](https://supabase.com)
+2. Dapatkan connection string (`DATABASE_URL`) dari Settings → Database
+3. Jalankan `npx prisma db push` untuk migrasi
+4. Jalankan `npx tsx prisma/seed.ts` untuk seed data
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Push repo ke GitHub/GitLab
+2. Import di [vercel.com](https://vercel.com)
+3. Set environment variables:
+   - `DATABASE_URL` — Supabase connection string
+   - `NEXTAUTH_SECRET` — Generate dengan `openssl rand -base64 32`
+   - `NEXTAUTH_URL` — URL deployment Vercel
+4. Deploy
 
-## Deploy on Vercel
+## Lisensi
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Metuah Hub — The 12th UTU Awards 2026

@@ -1,0 +1,159 @@
+// Prisma Schema for Metuah Hub
+// Agro-Maritime Ecosystem Platform
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Model
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String?
+  image     String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products  Product[]
+  accounts  Account[]
+  sessions  Session[]
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+  PARTNER
+}
+
+// Product Model
+model Product {
+  id          String        @id @default(cuid())
+  name        String
+  category    ProductCategory
+  description String
+  image       String?
+  origin      String
+  status      ProductStatus @default(PENDING)
+  legality    String?
+  ownerId     String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  owner     User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  mentoring Mentoring[]
+
+  @@map("products")
+}
+
+enum ProductCategory {
+  COFFEE
+  PATCHOULI
+  SEAFOOD
+  SPICES
+  PROCESSED
+}
+
+enum ProductStatus {
+  PENDING
+  REVIEW
+  VERIFIED
+  APPROVED
+  REJECTED
+}
+
+// Mentoring Model
+model Mentoring {
+  id        String          @id @default(cuid())
+  type      MentoringType
+  status    MentoringStatus @default(ACTIVE)
+  productId String
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("mentorings")
+}
+
+enum MentoringType {
+  HALAL_CERTIFICATION
+  HACCP
+  EXPORT_PACKAGING
+  SUPPLY_CHAIN_TRAINING
+}
+
+enum MentoringStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+// Partner Model
+model Partner {
+  id        String          @id @default(cuid())
+  company   String
+  country   String
+  location  String
+  category  PartnerCategory
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@map("partners")
+}
+
+enum PartnerCategory {
+  ASIA
+  EUROPE
+  MIDDLE_EAST
+  AMERICA
+  AFRICA
+}
+
+// NextAuth Models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}

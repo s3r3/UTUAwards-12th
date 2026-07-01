@@ -1,0 +1,47 @@
+{
+  "site": {
+    "title": "Metuah Hub – Agro-Maritim Aceh Ecosystem",
+    "tagline": "Mentransformasi Komoditas Agro-Maritim Aceh Menjadi Pemain Utama Rantai Pasok Global"
+  },
+  "nav": {
+    "home": "Beranda",
+    "about": "Tentang Kami",
+    "products": "Produk",
+    "mentoring": "Mentoring",
+    "partners": "Mitra",
+    "business": "Bisnis",
+    "team": "Tim",
+    "contact": "Kontak",
+    "login": "Masuk",
+    "register": "Daftar"
+  },
+  "hero": {
+    "headline": "Mentransformasi Komoditas Agro-Maritim Aceh Menjadi Pemain Utama Rantai Pasok Global",
+    "explore": "Explore Product",
+    "join": "Join Ecosystem"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalProducts": "Total Produk",
+    "reviewProducts": "Sedang Review",
+    "activePrograms": "Program Aktif",
+    "partnerCountries": "Negara Mitra"
+  },
+  "product": {
+    "title": "Katalog Produk",
+    "search": "Cari produk...",
+    "allCategories": "Semua Kategori",
+    "addProduct": "Tambah Produk"
+  },
+  "mentoring": {
+    "title": "Program Mentoring",
+    "halal": "Sertifikasi Halal",
+    "haccp": "HACCP",
+    "exportPackaging": "Kemasan Ekspor",
+    "supplyChain": "Rantai Pasok"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "competition": "The 12th UTU Awards 2026"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "site": {
+    "title": "Metuah Hub – Agro-Maritime Aceh Ecosystem",
+    "tagline": "Transforming Aceh's Agro-Maritime Commodities into a Global Supply Chain Leader"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "products": "Products",
+    "mentoring": "Mentoring",
+    "partners": "Partners",
+    "business": "Business",
+    "team": "Team",
+    "contact": "Contact",
+    "login": "Sign In",
+    "register": "Register"
+  },
+  "hero": {
+    "headline": "Transforming Aceh's Agro-Maritime Commodities into a Global Supply Chain Leader",
+    "explore": "Explore Product",
+    "join": "Join Ecosystem"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalProducts": "Total Products",
+    "reviewProducts": "Under Review",
+    "activePrograms": "Active Programs",
+    "partnerCountries": "Partner Countries"
+  },
+  "product": {
+    "title": "Product Catalog",
+    "search": "Search products...",
+    "allCategories": "All Categories",
+    "addProduct": "Add Product"
+  },
+  "mentoring": {
+    "title": "Mentoring Programs",
+    "halal": "Halal Certification",
+    "haccp": "HACCP",
+    "exportPackaging": "Export Packaging",
+    "supplyChain": "Supply Chain"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "competition": "The 12th UTU Awards 2026"
+  }
+}
