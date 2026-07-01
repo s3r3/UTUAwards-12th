@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
+import Link from 'next/link'
 import { Search, Coffee, Waves, Leaf, Package, Star, MapPin, ArrowRight } from 'lucide-react'
 
 const categories = [
@@ -88,7 +89,7 @@ export default function ProductsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {filtered.map((p) => (
-              <div key={p.id} className="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1">
+              <Link key={p.id} href={`/products/${p.id}`} className="block bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 group">
                 <div className="h-48 bg-gradient-to-br from-primary-200 to-ocean-200 dark:from-primary-900 dark:to-ocean-900 flex items-center justify-center">
                   <Package className="text-primary-500" size={48} />
                 </div>
@@ -104,12 +105,12 @@ export default function ProductsPage() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-primary-600 dark:text-primary-400">{p.price}</span>
-                    <button className="text-sm text-primary-600 dark:text-primary-400 hover:underline inline-flex items-center gap-1">
+                    <span className="text-sm text-primary-600 dark:text-primary-400 group-hover:underline inline-flex items-center gap-1">
                       Detail <ArrowRight size={14} />
-                    </button>
+                    </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

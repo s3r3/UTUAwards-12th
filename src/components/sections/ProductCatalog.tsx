@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import Link from 'next/link'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import {
   Search,
@@ -135,8 +136,13 @@ function ProductModal({
     return () => window.removeEventListener('keydown', handler)
   }, [onClose])
 
+  // Prevent body scroll when modal open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
   return (
-    <AnimatePresence>
       <motion.div
         className="fixed inset-0 z-50 flex items-center justify-center p-4"
         initial={{ opacity: 0 }}
@@ -219,15 +225,20 @@ function ProductModal({
                 <div className="text-2xl font-black text-[#22c55e]">{product.price}</div>
                 <div className="text-xs text-gray-400 mt-0.5">Stok: {product.stock} unit</div>
               </div>
+              <div className="flex gap-2">
+              <Link href={`/products/${product.id}`} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e]/10 transition-colors">
+                <Package size={16} />
+                Detail Lengkap
+              </Link>
               <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#22c55e] to-[#0ea5e9] hover:opacity-90 transition-opacity shadow-lg">
                 <ShoppingBag size={16} />
                 Hubungi Supplier
               </button>
+              </div>
             </div>
           </div>
         </motion.div>
       </motion.div>
-    </AnimatePresence>
   )
 }
 
@@ -427,7 +438,11 @@ export default function ProductCatalog() {
 
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-[#22c55e] text-sm">{product.price}</span>
-                      <button className="flex items-center gap-1 text-xs font-semibold text-[#0ea5e9] hover:text-[#22c55e] transition-colors">
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setSelectedProduct(product); }}
+                        className="flex items-center gap-1 text-xs font-semibold text-[#0ea5e9] hover:text-[#22c55e] transition-colors"
+                      >
                         Detail <ChevronRight size={14} />
                       </button>
                     </div>
@@ -449,9 +464,11 @@ export default function ProductCatalog() {
       </div>
 
       {/* Modal */}
-      {selectedProduct && (
-        <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
-      )}
+      <AnimatePresence>
+        {selectedProduct && (
+          <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+        )}
+      </AnimatePresence>
     </section>
   )
 }
