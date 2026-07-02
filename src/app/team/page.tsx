@@ -1,3 +1,6 @@
+'use client'
+
+import { useTranslations } from "@/lib/i18n"
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { Linkedin, Twitter, Mail } from 'lucide-react'
@@ -17,6 +20,7 @@ const advisors = [
 ]
 
 export default function TeamPage() {
+  const t = useTranslations()
   return (
     <main className="min-h-screen">
       <Navbar />
@@ -24,7 +28,7 @@ export default function TeamPage() {
       <section className="pt-28 pb-20 gradient-hero">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            Tim <span className="bg-gradient-to-r from-primary-600 to-ocean-600 bg-clip-text text-transparent">Kami</span>
+            {t.team.pageTitle} <span className="bg-gradient-to-r from-primary-600 to-ocean-600 bg-clip-text text-transparent">{t.team.pageTitleHighlight}</span>
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Didukung oleh tim profesional yang berpengalaman di bidang agro-maritim, teknologi, dan bisnis internasional.
@@ -34,7 +38,7 @@ export default function TeamPage() {
 
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Tim Inti</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">{t.team.coreTeam}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {team.map((m, i) => (
               <div key={i} className="group bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center hover:shadow-xl transition-all hover:-translate-y-2">
@@ -57,7 +61,7 @@ export default function TeamPage() {
 
       <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Advisors</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">{t.team.advisors}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
             {advisors.map((a, i) => (
               <div key={i} className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-lg">

@@ -1,53 +1,54 @@
 'use client'
 
 import { useRef } from 'react'
+import { useTranslations } from "@/lib/i18n"
 import { motion, useInView } from 'framer-motion'
 import { Award, Shield, Package, Truck, ArrowRight, CheckCircle2, Calendar } from 'lucide-react'
 
-const programs = [
+const getPrograms = (t: ReturnType<typeof useTranslations>) => [
   {
     step: '01',
-    title: 'Sertifikasi Halal',
-    description: 'Pendampingan proses sertifikasi halal untuk produk Anda agar memenuhi standar pasar Muslim global.',
+    title: t.mentoring.program1,
+    description: t.mentoring.program1desc,
     icon: Award,
     gradient: 'from-[#22c55e] to-emerald-600',
     glow: 'shadow-[0_4px_32px_rgba(34,197,94,0.20)]',
     badgeColor: 'bg-[#22c55e]',
-    features: ['Konsultasi dokumen lengkap', 'Pendampingan audit MUI', 'Sertifikat resmi MUI'],
-    duration: '2-3 Bulan',
+    features: [t.mentoring.program1 + ' ' + t.mentoring.program1desc],
+    duration: t.mentoring.program1duration,
   },
   {
     step: '02',
-    title: 'HACCP',
-    description: 'Implementasi sistem manajemen keamanan pangan internasional untuk menembus pasar ekspor.',
+    title: t.mentoring.program2,
+    description: t.mentoring.program2desc,
     icon: Shield,
     gradient: 'from-[#0ea5e9] to-blue-600',
     glow: 'shadow-[0_4px_32px_rgba(14,165,233,0.20)]',
     badgeColor: 'bg-[#0ea5e9]',
-    features: ['Training tim produksi', 'Implementasi SOP', 'Sertifikasi internasional'],
-    duration: '3-4 Bulan',
+    features: [t.mentoring.program2 + ' ' + t.mentoring.program2desc],
+    duration: t.mentoring.program2duration,
   },
   {
     step: '03',
-    title: 'Export Packaging',
-    description: 'Desain dan implementasi kemasan standar ekspor untuk meningkatkan daya tarik produk di pasar global.',
+    title: t.mentoring.program3,
+    description: t.mentoring.program3desc,
     icon: Package,
     gradient: 'from-purple-500 to-violet-600',
     glow: 'shadow-[0_4px_32px_rgba(168,85,247,0.20)]',
     badgeColor: 'bg-purple-500',
-    features: ['Desain kemasan premium', 'Material berkualitas ekspor', 'Standar label internasional'],
-    duration: '1-2 Bulan',
+    features: [t.mentoring.program3 + ' ' + t.mentoring.program3desc],
+    duration: t.mentoring.program3duration,
   },
   {
     step: '04',
     title: 'Supply Chain Training',
-    description: 'Pelatihan komprehensif manajemen rantai pasok terintegrasi untuk efisiensi operasional.',
+    description: 'Comprehensive integrated supply chain management training for operational efficiency.',
     icon: Truck,
     gradient: 'from-orange-500 to-amber-600',
     glow: 'shadow-[0_4px_32px_rgba(249,115,22,0.20)]',
     badgeColor: 'bg-orange-500',
-    features: ['Manajemen inventori modern', 'Optimasi logistik', 'Tracking real-time'],
-    duration: '1 Bulan',
+    features: ['Modern inventory management', 'Logistics optimization', 'Real-time tracking'],
+    duration: '1 Month',
   },
 ]
 
@@ -66,6 +67,7 @@ const cardVariants = {
 }
 
 export default function Mentoring() {
+  const t = useTranslations()
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-60px' })
 
@@ -115,7 +117,7 @@ export default function Mentoring() {
           <div className="hidden lg:block absolute left-[2.75rem] top-8 bottom-8 w-px bg-gradient-to-b from-[#22c55e] via-[#0ea5e9] to-orange-500 opacity-30" />
 
           <div className="space-y-6">
-            {programs.map((program, index) => (
+            {getPrograms(t).map((program, index) => (
               <motion.div
                 key={index}
                 variants={cardVariants}
@@ -157,7 +159,7 @@ export default function Mentoring() {
                       </div>
                     </div>
                     {/* Timeline dot connector */}
-                    {index < programs.length - 1 && (
+                    {index < getPrograms(t).length - 1 && (
                       <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 top-full mt-2 flex-col items-center gap-1">
                         {[0, 1, 2].map((i) => (
                           <div

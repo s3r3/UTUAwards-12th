@@ -4,25 +4,30 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Sun, Moon } from 'lucide-react'
+import { Menu, X, Sun, Moon, Globe } from 'lucide-react'
 import { useUIStore } from '@/store/ui.store'
+import { useI18NStore, useTranslations } from '@/lib/i18n'
+import type { Lang } from '@/lib/i18n'
 
 const publicMenu = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '/about' },
-  { name: 'Products', href: '/products' },
-  { name: 'Mentoring', href: '/mentoring' },
-  { name: 'Partners', href: '/partners' },
-  { name: 'Business', href: '/business' },
-  { name: 'Team', href: '/team' },
-  { name: 'Contact', href: '/contact' },
+  { key: 'home', href: '/' },
+  { key: 'about', href: '/about' },
+  { key: 'products', href: '/products' },
+  { key: 'mentoring', href: '/mentoring' },
+  { key: 'partners', href: '/partners' },
+  { key: 'business', href: '/business' },
+  { key: 'team', href: '/team' },
+  { key: 'contact', href: '/contact' },
 ]
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [langOpen, setLangOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
   const { theme, setTheme } = useUIStore()
+  const { lang, setLang } = useI18NStore()
+  const t = useTranslations()
 
   const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light')
 
@@ -35,7 +40,9 @@ export default function Navbar() {
 
   // Close mobile menu on route change
   useEffect(() => {
-    setIsOpen(false)
+    // Using a timeout to avoid cascading re-renders
+    const timer = setTimeout(() => setIsOpen(false), 0)
+    return () => clearTimeout(timer)
   }, [pathname])
 
   return (
@@ -102,7 +109,7 @@ export default function Navbar() {
                 const isActive = pathname === item.href
                 return (
                   <motion.div
-                    key={item.name}
+                    key={item.key}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.05 * i + 0.3, duration: 0.4 }}
@@ -126,7 +133,7 @@ export default function Navbar() {
                           transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                         />
                       )}
-                      <span className="relative z-10">{item.name}</span>
+                      <span className="relative z-10">{t.nav[item.key as keyof typeof t.nav]}</span>
                     </Link>
                   </motion.div>
                 )
@@ -135,6 +142,66 @@ export default function Navbar() {
 
             {/* Right actions */}
             <div className="hidden md:flex items-center gap-2">
+              {/* Language Switcher */}
+              <div className="relative">
+                <motion.button
+                  onClick={() => setLangOpen(!langOpen)}
+                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: 1.05 }}
+                  className="relative p-2 rounded-lg overflow-hidden flex items-center gap-1"
+                  style={{
+                    color: theme === 'dark' ? '#d1d5db' : '#374151',
+                    backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+                  }}
+                  aria-label="Switch language"
+                >
+                  <Globe size={18} />
+                  <span className="text-xs font-semibold uppercase">{lang}</span>
+                </motion.button>
+                <AnimatePresence>
+                  {langOpen && (
+                    <>
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-40"
+                        onClick={() => setLangOpen(false)}
+                      />
+                      <motion.div
+                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 mt-2 w-28 z-50 rounded-xl overflow-hidden shadow-xl border"
+                        style={{
+                          backgroundColor: theme === 'dark' ? 'rgba(15,23,42,0.98)' : 'rgba(255,255,255,0.98)',
+                          borderColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
+                        }}
+                      >
+                        {(['en', 'id'] as Lang[]).map((l) => (
+                          <button
+                            key={l}
+                            onClick={() => { setLang(l); setLangOpen(false); }}
+                            className="w-full px-4 py-2.5 text-sm font-medium flex items-center gap-2 transition-colors"
+                            style={{
+                              color: lang === l ? 'var(--primary-600)' : theme === 'dark' ? '#d1d5db' : '#374151',
+                              backgroundColor: lang === l ? 'rgba(34,197,94,0.10)' : 'transparent',
+                            }}
+                          >
+                            <span className="text-base">{l === 'en' ? '🇬🇧' : '🇮🇩'}</span>
+                            <span>{l === 'en' ? 'English' : 'Indonesia'}</span>
+                            {lang === l && (
+                              <span className="ml-auto w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--primary-500)' }} />
+                            )}
+                          </button>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+
               {/* Theme toggle */}
               <motion.button
                 onClick={toggleTheme}
@@ -215,7 +282,63 @@ export default function Navbar() {
                 </AnimatePresence>
               </motion.button>
 
-              <motion.button
+              {/* Language Switcher */}
+              <div className="relative">
+                <motion.button
+                  onClick={() => setLangOpen(!langOpen)}
+                  whileTap={{ scale: 0.9 }}
+                  className="p-2 rounded-lg flex items-center gap-1"
+                  style={{ color: theme === 'dark' ? '#d1d5db' : '#374151' }}
+                  aria-label="Switch language"
+                >
+                  <Globe size={18} />
+                  <span className="text-xs font-semibold uppercase">{lang}</span>
+                </motion.button>
+                <AnimatePresence>
+                  {langOpen && (
+                    <>
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-40"
+                        onClick={() => setLangOpen(false)}
+                      />
+                      <motion.div
+                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 mt-2 w-28 z-50 rounded-xl overflow-hidden shadow-xl border"
+                        style={{
+                          backgroundColor: theme === 'dark' ? 'rgba(15,23,42,0.98)' : 'rgba(255,255,255,0.98)',
+                          borderColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
+                        }}
+                      >
+                        {(['en', 'id'] as Lang[]).map((l) => (
+                          <button
+                            key={l}
+                            onClick={() => { setLang(l); setLangOpen(false); }}
+                            className="w-full px-4 py-2.5 text-sm font-medium flex items-center gap-2 transition-colors"
+                            style={{
+                              color: lang === l ? 'var(--primary-600)' : theme === 'dark' ? '#d1d5db' : '#374151',
+                              backgroundColor: lang === l ? 'rgba(34,197,94,0.10)' : 'transparent',
+                            }}
+                          >
+                            <span className="text-base">{l === 'en' ? '🇬🇧' : '🇮🇩'}</span>
+                            <span>{l === 'en' ? 'English' : 'Indonesia'}</span>
+                            {lang === l && (
+                              <span className="ml-auto w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--primary-500)' }} />
+                            )}
+                          </button>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+
+                            <motion.button
                 onClick={() => setIsOpen(!isOpen)}
                 whileTap={{ scale: 0.9 }}
                 className="p-2 rounded-lg"
@@ -256,7 +379,7 @@ export default function Navbar() {
                   const isActive = pathname === item.href
                   return (
                     <motion.div
-                      key={item.name}
+                      key={item.key}
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: i * 0.04, duration: 0.3, ease: 'easeOut' }}
@@ -272,7 +395,7 @@ export default function Navbar() {
                             : 'transparent',
                         }}
                       >
-                        {item.name}
+                        {t.nav[item.key as keyof typeof t.nav]}
                         {isActive && (
                           <span
                             className="ml-auto w-1.5 h-1.5 rounded-full"

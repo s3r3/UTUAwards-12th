@@ -2,6 +2,7 @@
 
 import { Package, Search, CheckCircle, XCircle } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslations } from '@/lib/i18n'
 
 const products = [
   { id: 1, name: 'Kopi Luwak Gayo', owner: 'Pak Ahmad', category: 'COFFEE', date: '30 Jun 2026' },
@@ -10,11 +11,12 @@ const products = [
 ]
 
 export default function AdminProductsPage() {
+  const t = useTranslations()
   const [search, setSearch] = useState('')
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Kelola Produk</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t.dashboard.adminProducts}</h1>
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
         <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
@@ -25,11 +27,11 @@ export default function AdminProductsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-                <th className="pb-3 font-medium">Produk</th>
-                <th className="pb-3 font-medium">Pemilik</th>
-                <th className="pb-3 font-medium">Kategori</th>
-                <th className="pb-3 font-medium">Tanggal</th>
-                <th className="pb-3 font-medium text-right">Aksi</th>
+                <th className="pb-3 font-medium">{t.dashboard.product}</th>
+                <th className="pb-3 font-medium">{t.dashboard.owner}</th>
+                <th className="pb-3 font-medium">{t.dashboard.category}</th>
+                <th className="pb-3 font-medium">{t.dashboard.date}</th>
+                <th className="pb-3 font-medium text-right">{t.dashboard.action}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">

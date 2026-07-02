@@ -6,6 +6,7 @@ import { ArrowLeft, MapPin, Star, Package, ShoppingBag, ChevronRight } from 'luc
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Button from '@/components/ui/Button'
+import { useTranslations } from '@/lib/i18n'
 
 const products = [
   { id: '1', name: 'Kopi Arabica Gayo Premium', category: 'Kopi Gayo', origin: 'Gayo Lues', price: 'Rp 150.000/kg', rating: 4.9, emoji: '☕', description: 'Kopi arabica single origin dari dataran tinggi Gayo Lues.', certifications: ['Organic', 'Fair Trade'], stock: 250 },
@@ -13,11 +14,12 @@ const products = [
 ]
 
 export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const t = useTranslations()
   const { id } = use(params)
   const product = products.find(p => p.id === id)
 
   if (!product) return (
-    <main className="min-h-screen"><Navbar /><div className="pt-32 text-center"><Package size={48} className="mx-auto text-gray-300 mb-4" /><h2 className="text-xl font-bold text-gray-900">Produk tidak ditemukan</h2><Link href="/products" className="text-primary-600 mt-2 inline-block">Kembali</Link></div><Footer /></main>
+    <main className="min-h-screen"><Navbar /><div className="pt-32 text-center"><Package size={48} className="mx-auto text-gray-300 mb-4" /><h2 className="text-xl font-bold text-gray-900">{t.dashboard.productNotFound}</h2><Link href="/products" className="text-primary-600 mt-2 inline-block">{t.dashboard.back}</Link></div><Footer /></main>
   )
 
   return (
@@ -25,7 +27,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       <Navbar />
       <section className="pt-28 pb-20">
         <div className="max-w-4xl mx-auto px-4">
-          <Link href="/products" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-primary-600 mb-6"><ArrowLeft size={16} /> Kembali</Link>
+          <Link href="/products" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-primary-600 mb-6"><ArrowLeft size={16} /> {t.dashboard.back}</Link>
           <div className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-xl">
             <div className="h-64 bg-gradient-to-br from-primary-400 to-ocean-500 flex items-center justify-center"><span className="text-8xl">{product.emoji}</span></div>
             <div className="p-8">
@@ -41,7 +43,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               <div className="flex flex-wrap gap-2 mb-6">{product.certifications.map((c, i) => <span key={i} className="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">{c}</span>)}</div>
               <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-6">
                 <span className="text-sm text-gray-500">Stok: {product.stock} kg</span>
-                <Button className="gap-2"><ShoppingBag size={16} /> Hubungi Penjual</Button>
+                <Button className="gap-2"><ShoppingBag size={16} /> {t.dashboard.contactSeller}</Button>
               </div>
             </div>
           </div>

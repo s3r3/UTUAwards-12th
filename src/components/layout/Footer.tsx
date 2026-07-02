@@ -1,7 +1,10 @@
+'use client'
 import Link from 'next/link'
 import { Github, Twitter, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
 export default function Footer() {
+  const t = useTranslations()
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -15,8 +18,7 @@ export default function Footer() {
               <span className="font-bold text-xl text-white">Metuah Hub</span>
             </div>
             <p className="text-gray-400 mb-4 max-w-md">
-              Platform digital ekosistem agro-maritim Aceh yang menghubungkan UMKM, 
-              petani, nelayan, eksportir, dan mitra internasional.
+              {t.footer.tagline}
             </p>
             <div className="flex space-x-4">
               <a href="#" className="hover:text-primary-400 transition-colors">
@@ -33,19 +35,19 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Quick Links</h3>
+            <h3 className="font-semibold text-white mb-4">{t.footer.support}</h3>
             <ul className="space-y-2">
-              <li><Link href="/about" className="hover:text-primary-400 transition-colors">About</Link></li>
-              <li><Link href="/products" className="hover:text-primary-400 transition-colors">Products</Link></li>
-              <li><Link href="/mentoring" className="hover:text-primary-400 transition-colors">Mentoring</Link></li>
-              <li><Link href="/partners" className="hover:text-primary-400 transition-colors">Partners</Link></li>
-              <li><Link href="/contact" className="hover:text-primary-400 transition-colors">Contact</Link></li>
+              <li><Link href="/about" className="hover:text-primary-400 transition-colors">{t.nav.about}</Link></li>
+              <li><Link href="/products" className="hover:text-primary-400 transition-colors">{t.nav.products}</Link></li>
+              <li><Link href="/mentoring" className="hover:text-primary-400 transition-colors">{t.nav.mentoring}</Link></li>
+              <li><Link href="/partners" className="hover:text-primary-400 transition-colors">{t.nav.partners}</Link></li>
+              <li><Link href="/contact" className="hover:text-primary-400 transition-colors">{t.nav.contact}</Link></li>
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-white mb-4">Contact</h3>
+            <h3 className="font-semibold text-white mb-4">{t.footer.contact}</h3>
             <ul className="space-y-2">
               <li className="flex items-center space-x-2">
                 <Mail size={16} />
@@ -64,8 +66,8 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Metuah Hub. All rights reserved.</p>
-          <p className="text-sm mt-2">The 12th UTU Awards 2026</p>
+          <p>&copy; {new Date().getFullYear()} Metuah Hub. {t.footer.rights}</p>
+          <p className="text-sm mt-2">{t.hero.subtitle}</p>
         </div>
       </div>
     </footer>

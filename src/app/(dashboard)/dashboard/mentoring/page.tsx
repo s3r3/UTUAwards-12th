@@ -1,6 +1,7 @@
 'use client'
 
 import { BookOpen, Award, Shield, Package, Truck, CheckCircle2 } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
 const programs = [
   { name: 'Sertifikasi Halal', product: 'Kopi Gayo Premium', progress: 65, icon: Award, color: 'bg-green-500' },
@@ -9,9 +10,10 @@ const programs = [
 ]
 
 export default function MentoringPage() {
+  const t = useTranslations()
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Program Mentoring</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t.dashboard.mentoringProgram}</h1>
       <div className="grid gap-6">
         {programs.map((p, i) => (
           <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
@@ -21,7 +23,7 @@ export default function MentoringPage() {
                 <h3 className="font-semibold text-gray-900 dark:text-white">{p.name}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{p.product}</p>
                 <div className="flex items-center justify-between text-sm mb-1">
-                  <span className="text-gray-500 dark:text-gray-400">Progress</span>
+                  <span className="text-gray-500 dark:text-gray-400">{t.dashboard.progress}</span>
                   <span className="font-medium text-primary-600">{p.progress}%</span>
                 </div>
                 <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full">

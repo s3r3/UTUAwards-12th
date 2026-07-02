@@ -1,6 +1,7 @@
 'use client'
 
 import { Linkedin, Twitter, Mail } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
 const teamMembers = [
   {
@@ -34,6 +35,7 @@ const teamMembers = [
 ]
 
 export default function Team() {
+  const t = useTranslations()
   return (
     <section className="py-20 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -3,10 +3,10 @@
 import { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Zap } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 import {
   motion,
   useInView,
-  AnimatePresence,
   useMotionValue,
   useTransform,
   animate,
@@ -26,40 +26,6 @@ interface StatItem {
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
-const stats: StatItem[] = [
-  {
-    label: 'Total Produk',
-    value: '500+',
-    numericEnd: 500,
-    suffix: '+',
-    color: 'var(--primary-500)',
-    icon: '🌿',
-  },
-  {
-    label: 'UMKM Terdaftar',
-    value: '200+',
-    numericEnd: 200,
-    suffix: '+',
-    color: 'var(--ocean-500)',
-    icon: '🏪',
-  },
-  {
-    label: 'Program Aktif',
-    value: '15+',
-    numericEnd: 15,
-    suffix: '+',
-    color: 'var(--primary-400)',
-    icon: '🚀',
-  },
-  {
-    label: 'Negara Mitra',
-    value: '25+',
-    numericEnd: 25,
-    suffix: '+',
-    color: 'var(--ocean-400)',
-    icon: '🌏',
-  },
-]
 
 // ─── Particle config ─────────────────────────────────────────────────────────
 
@@ -79,46 +45,11 @@ const PARTICLES = Array.from({ length: 28 }, (_, i) => {
 
 // ─── Animated counter ────────────────────────────────────────────────────────
 
-function AnimatedCounter({
-  target,
-  suffix,
-  color,
-  triggered,
-}: {
-  target: number
-  suffix: string
-  color: string
-  triggered: boolean
-}) {
-  const count = useMotionValue(0)
-  const rounded = useTransform(count, (v) => Math.round(v))
-  const [display, setDisplay] = useState(0)
-
-  useEffect(() => {
-    const unsub = rounded.on('change', setDisplay)
-    return unsub
-  }, [rounded])
-
-  useEffect(() => {
-    if (!triggered) return
-    const controls = animate(count, target, {
-      duration: 2,
-      ease: [0.25, 0.46, 0.45, 0.94],
-    })
-    return () => controls.stop()
-  }, [triggered, target, count])
-
-  return (
-    <span style={{ color }}>
-      {display}
-      {suffix}
-    </span>
-  )
-}
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
 export default function Hero() {
+  const t = useTranslations()
   // Refs for GSAP blobs
   const blobGreenRef = useRef<HTMLDivElement>(null)
   const blobBlueRef = useRef<HTMLDivElement>(null)
@@ -126,7 +57,7 @@ export default function Hero() {
 
   // InView for counter animation
   const statsRef = useRef<HTMLDivElement>(null)
-  const statsInView = useInView(statsRef, { once: true, margin: '-80px' })
+  useInView(statsRef, { once: true, margin: '-80px' })
 
   // GSAP parallax on blobs — slow organic float with random offset
   useEffect(() => {
@@ -309,7 +240,7 @@ export default function Hero() {
                 />
               </span>
               <Zap size={14} style={{ color: 'var(--primary-600)' }} />
-              <span className="dark:text-primary-300">The 12th UTU Awards 2026</span>
+              <span className="dark:text-primary-300">{t.hero.subtitle}</span>
             </div>
           </motion.div>
 
@@ -319,7 +250,7 @@ export default function Hero() {
             className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight"
             style={{ fontFamily: 'var(--font-plus-jakarta), var(--font-inter), sans-serif' }}
           >
-            Mentransformasi Komoditas
+            {t.hero.title2}
             <br />
             <span
               className="bg-clip-text text-transparent"
@@ -330,15 +261,15 @@ export default function Hero() {
                 animation: 'gradientShift 5s linear infinite',
               }}
             >
-              Agro-Maritim Aceh
+              {t.hero.title3}
             </span>
             <br />
             <span className="text-3xl md:text-5xl lg:text-6xl text-gray-700 dark:text-gray-200">
-              Menjadi Pemain Utama
+              {t.hero.tag}
             </span>
             <br />
             <span className="text-3xl md:text-5xl lg:text-6xl text-gray-700 dark:text-gray-200">
-              Rantai Pasok Global
+              {t.hero.title4}
             </span>
           </motion.h1>
 
@@ -347,13 +278,7 @@ export default function Hero() {
             variants={fadeUp}
             className="text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-10 max-w-3xl mx-auto leading-relaxed"
           >
-            Platform digital ekosistem agro-maritim Aceh yang menghubungkan{' '}
-            <span className="text-gray-700 dark:text-gray-300 font-medium">UMKM</span>,{' '}
-            <span className="text-gray-700 dark:text-gray-300 font-medium">petani</span>,{' '}
-            <span className="text-gray-700 dark:text-gray-300 font-medium">nelayan</span>,{' '}
-            <span className="text-gray-700 dark:text-gray-300 font-medium">eksportir</span>, dan{' '}
-            <span className="text-gray-700 dark:text-gray-300 font-medium">mitra internasional</span>{' '}
-            dalam satu ekosistem terintegrasi.
+            {t.hero.desc}
           </motion.p>
 
           {/* CTA Buttons */}
@@ -373,7 +298,7 @@ export default function Hero() {
                   boxShadow: '0 8px 30px rgba(34,197,94,0.35)',
                 }}
               >
-                Explore Product
+                {t.hero.cta}
                 <ArrowRight
                   size={18}
                   className="group-hover:translate-x-1 transition-transform duration-200"
@@ -397,85 +322,17 @@ export default function Hero() {
                   className="w-2 h-2 rounded-full"
                   style={{ backgroundColor: 'var(--primary-500)' }}
                 />
-                Join Ecosystem
+                {t.hero.cta2}
               </motion.div>
             </Link>
           </motion.div>
 
-          {/* Stats grid */}
-          <motion.div
-            ref={statsRef}
-            variants={fadeUp}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
-          >
-            {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={statsInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                transition={{
-                  delay: i * 0.1 + 0.1,
-                  duration: 0.6,
-                  ease: [0.22, 1, 0.36, 1] as const,
-                }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                className="group relative rounded-2xl p-5 text-center overflow-hidden cursor-default"
-                style={{
-                  background: "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.8) 100%)",
-                  border: "1px solid rgba(255,255,255,0.9)",
-                  backdropFilter: "blur(20px)",
-                  WebkitBackdropFilter: "blur(20px)",
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.06)",
-                }}
-              >
-                {/* Dark mode background */}
-                <div
-                  className="absolute inset-0 rounded-2xl opacity-0 dark:opacity-100 transition-opacity duration-500"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(30,41,59,0.9) 100%)",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    backdropFilter: "blur(20px)",
-                  }}
-                />
-                {/* Hover glow accent */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"
-                  style={{
-                    background: `radial-gradient(circle at center, ${stat.color}18 0%, transparent 70%)`,
-                  }}
-                />
-                {/* Border accent on hover */}
-                <div
-                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{
-                    boxShadow: `inset 0 0 0 1px ${stat.color}40`,
-                  }}
-                />
-
-                <div className="relative z-10">
-                  <span className="text-3xl mb-2 block drop-shadow-sm">{stat.icon}</span>
-                  <div
-                    className="text-3xl md:text-4xl font-bold mb-1 tabular-nums dark:drop-shadow-glow"
-                    style={{ color: stat.color }}
-                  >
-                    <AnimatedCounter
-                      target={stat.numericEnd}
-                      suffix={stat.suffix}
-                      color={stat.color}
-                      triggered={statsInView}
-                    />
-                  </div>
-                  <div className="text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-widest">
-                    {stat.label}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+          
         </div>
       </motion.div>
 
-      {/* ── Scroll indicator ──{/* ── Scroll indicator ────────────────────────────────────────── */}
+
+{/* ── Scroll indicator ────────────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -522,3 +379,4 @@ export default function Hero() {
     </section>
   )
 }
+  

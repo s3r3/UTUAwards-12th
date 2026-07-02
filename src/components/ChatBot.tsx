@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X, Send, Bot, User, Sparkles } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
 interface Message {
   id: number
@@ -40,6 +41,7 @@ const suggestions = [
 ]
 
 export default function ChatBot() {
+  const t = useTranslations()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     { id: 0, text: 'Halo! 👋 Saya asisten Metuah Hub. Ada yang bisa saya bantu?', sender: 'bot' },
@@ -112,7 +114,7 @@ export default function ChatBot() {
                 <Bot size={18} className="text-white" />
               </div>
               <div className="flex-1">
-                <p className="font-bold text-white text-sm">Metuah Assistant</p>
+                <p className="font-bold text-white text-sm">{t.chatbot.assistant}</p>
                 <p className="text-[11px] text-white/70">Online • Siap membantu</p>
               </div>
               <Sparkles size={16} className="text-white/60" />

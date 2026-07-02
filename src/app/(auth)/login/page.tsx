@@ -6,8 +6,10 @@ import { useRouter } from 'next/navigation'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
+import { useTranslations } from '@/lib/i18n'
 
 export default function LoginPage() {
+  const t = useTranslations()
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -54,7 +56,7 @@ export default function LoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="Email"
+                placeholder="{t.auth.email}"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="pl-10"
@@ -94,7 +96,7 @@ export default function LoginPage() {
           </div>
 
           <Button type="submit" className="w-full" size="lg" isLoading={isLoading}>
-            Masuk
+            {t.auth.login}
           </Button>
         </form>
       </div>

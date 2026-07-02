@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from "@/lib/i18n"
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { Globe, MapPin, Building, Search } from 'lucide-react'
 
 const regions = [
-  { id: 'all', name: 'Semua' },
+  { id: 'all', name: '{t.partners.all}' },
   { id: 'ASIA', name: 'Asia' },
   { id: 'EUROPE', name: 'Eropa' },
   { id: 'MIDDLE_EAST', name: 'Timur Tengah' },
@@ -30,6 +31,7 @@ const partners = [
 ]
 
 export default function PartnersPage() {
+  const t = useTranslations()
   const [region, setRegion] = useState('all')
   const [search, setSearch] = useState('')
 
@@ -46,16 +48,16 @@ export default function PartnersPage() {
       <section className="pt-28 pb-12 gradient-hero">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            Mitra <span className="bg-gradient-to-r from-primary-600 to-ocean-600 bg-clip-text text-transparent">Internasional</span>
+            {t.partners.pageTitle} <span className="bg-gradient-to-r from-primary-600 to-ocean-600 bg-clip-text text-transparent">{t.partners.pageTitleHighlight}</span>
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
-            Jaringan mitra global yang menghubungkan produk agro-maritim Aceh dengan pasar dunia.
+            {t.partners.pageDesc}
           </p>
           <div className="max-w-xl mx-auto relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
             <input
               type="text"
-              placeholder="Cari mitra atau negara..."
+              placeholder="{t.partners.searchPlaceholder}"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:outline-none"
@@ -107,7 +109,7 @@ export default function PartnersPage() {
           </div>
 
           {filtered.length === 0 && (
-            <p className="text-center text-gray-500 dark:text-gray-400 py-16">Tidak ada mitra ditemukan.</p>
+            <p className="text-center text-gray-500 dark:text-gray-400 py-16">{t.partners.noPartners}</p>
           )}
         </div>
       </section>

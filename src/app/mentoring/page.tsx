@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Award, Shield, Package, Truck, CheckCircle2, Clock, FileText, Users, Star, ArrowRight, X, BookOpen } from 'lucide-react'
+import { useTranslations } from "@/lib/i18n"
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Button from '@/components/ui/Button'
@@ -23,106 +24,71 @@ interface Course {
   level: string
 }
 
-const courses: Course[] = [
+const getCourses = (t: ReturnType<typeof useTranslations>): Course[] => [
   {
     id: 'halal',
     step: '01',
-    title: 'Sertifikasi Halal',
-    description: 'Pendampingan proses sertifikasi halal untuk produk Anda agar memenuhi standar pasar Muslim global.',
-    longDesc: 'Program komprehensif sertifikasi halal yang memandu UMKM dari pendaftaran awal hingga mendapatkan sertifikat halal resmi MUI. Termasuk konsultasi dokumen, pendampingan audit, dan masa berlaku 4 tahun.',
+    title: t.mentoring.program1,
+    description: t.mentoring.program1desc,
+    longDesc: t.mentoring.program1detail,
     icon: Award,
     gradient: 'from-green-500 to-emerald-600',
-    duration: '2-3 Bulan',
-    price: 'Rp 2.5 Juta',
-    modules: [
-      'Pengenalan sistem jaminan halal',
-      'Penyusunan dokumen SJH',
-      'Audit internal & eksternal',
-      'Sertifikasi & pembaruan',
-    ],
-    outcomes: [
-      'Sertifikat Halal MUI resmi',
-      'Label halal pada produk',
-      'Akses pasar Muslim global',
-    ],
+    duration: t.mentoring.program1duration,
+    price: t.mentoring.program1price,
+    modules: [t.mentoring.program1 + ' ' + t.mentoring.program1desc],
+    outcomes: [t.mentoring.program1],
     mentor: 'Dr. Ahmad Fauzan, M.Si',
-    level: 'Dasar',
+    level: t.mentoring.program1,
   },
   {
     id: 'haccp',
     step: '02',
-    title: 'HACCP',
-    description: 'Implementasi sistem manajemen keamanan pangan internasional untuk menembus pasar ekspor.',
-    longDesc: 'Pelatihan dan implementasi Hazard Analysis Critical Control Point (HACCP) — standar keamanan pangan internasional yang wajib untuk ekspor produk makanan ke Eropa, Amerika, dan Jepang.',
+    title: t.mentoring.program2,
+    description: t.mentoring.program2desc,
+    longDesc: t.mentoring.program2detail,
     icon: Shield,
     gradient: 'from-blue-500 to-blue-600',
-    duration: '3-4 Bulan',
-    price: 'Rp 5 Juta',
-    modules: [
-      'Prinsip dasar HACCP',
-      'Analisis bahaya pangan',
-      'Penetapan CCP & CL',
-      'Dokumentasi & verifikasi',
-    ],
-    outcomes: [
-      'Sertifikat HACCP internasional',
-      'Sistem keamanan pangan terstandar',
-      'Kelayakan ekspor global',
-    ],
+    duration: t.mentoring.program2duration,
+    price: t.mentoring.program2price,
+    modules: [t.mentoring.program2 + ' ' + t.mentoring.program2desc],
+    outcomes: [t.mentoring.program2],
     mentor: 'Ir. Dewi Kartika, M.Sc',
-    level: 'Lanjutan',
+    level: t.mentoring.program2,
   },
   {
     id: 'packaging',
     step: '03',
-    title: 'Export Packaging',
-    description: 'Desain dan implementasi kemasan standar ekspor untuk meningkatkan daya tarik produk di pasar global.',
-    longDesc: 'Konsultasi dan implementasi kemasan berstandar internasional — mulai dari desain grafis, material, labelisasi, hingga regulasi kemasan negara tujuan ekspor.',
+    title: t.mentoring.program3,
+    description: t.mentoring.program3desc,
+    longDesc: t.mentoring.program3detail,
     icon: Package,
     gradient: 'from-purple-500 to-violet-600',
-    duration: '1-2 Bulan',
-    price: 'Rp 3 Juta',
-    modules: [
-      'Desain kemasan premium',
-      'Material ramah ekspor',
-      'Label & regulasi internasional',
-      'Branding storytelling',
-    ],
-    outcomes: [
-      'Kemasan siap ekspor',
-      'Desain premium & marketable',
-      'Kepatuhan regulasi global',
-    ],
+    duration: t.mentoring.program3duration,
+    price: t.mentoring.program3price,
+    modules: [t.mentoring.program3 + ' ' + t.mentoring.program3desc],
+    outcomes: [t.mentoring.program3],
     mentor: 'Siti Nurhaliza, S.Ds',
-    level: 'Menengah',
+    level: t.mentoring.program3,
   },
   {
-    id: 'supplychain',
+    id: 'supply-chain',
     step: '04',
     title: 'Supply Chain Training',
-    description: 'Pelatihan komprehensif manajemen rantai pasok terintegrasi untuk efisiensi operasional.',
-    longDesc: 'Program pelatihan end-to-end supply chain management yang mencakup manajemen inventori, logistik, distribusi, dan tracking real-time untuk efisiensi biaya dan waktu.',
+    description: 'Comprehensive integrated supply chain management training for operational efficiency.',
+    longDesc: 'An end-to-end supply chain management training program covering inventory management, logistics, distribution, and real-time tracking for cost and time efficiency.',
     icon: Truck,
     gradient: 'from-orange-500 to-amber-600',
-    duration: '1 Bulan',
-    price: 'Rp 1.5 Juta',
-    modules: [
-      'Manajemen inventori modern',
-      'Optimasi logistik',
-      'Tracking real-time',
-      'Efisiensi biaya',
-    ],
-    outcomes: [
-      'Sertifikat supply chain',
-      'Sistem logistik teroptimasi',
-      'Penghematan biaya 20%',
-    ],
-    mentor: 'Budi Santoso, S.T., M.Log',
-    level: 'Dasar - Menengah',
+    duration: '1-2 Months',
+    price: 'Rp 2 Million',
+    modules: ['Inventory management', 'Logistics & distribution', 'Real-time tracking'],
+    outcomes: ['Cost efficiency', 'Time efficiency', 'Integrated supply chain'],
+    mentor: 'Rudi Hermawan, S.T',
+    level: 'Intermediate',
   },
 ]
 
 export default function MentoringPage() {
+  const t = useTranslations()
   const [selected, setSelected] = useState<Course | null>(null)
 
   return (
@@ -133,10 +99,10 @@ export default function MentoringPage() {
           {/* Header */}
           <motion.div className="text-center mb-14" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full border border-primary-500/30 bg-primary-500/10 text-primary-500 text-sm font-medium">
-              <BookOpen size={14} /> Program Mentoring
+              <BookOpen size={14} /> Program {t.mentoring.mentor}ing
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Tingkatkan <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">Kualitas & Sertifikasi</span> Produk Anda
+              Tingkatkan <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">{t.mentoring.title}</span> {t.products.title}
             </h1>
             <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">
               Pilih program pendampingan yang sesuai dengan kebutuhan produk Anda. Setiap program dipandu oleh mentor ahli.
@@ -145,7 +111,7 @@ export default function MentoringPage() {
 
           {/* Course Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {courses.map((course, i) => (
+            {getCourses(t).map((course, i) => (
               <motion.div
                 key={course.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -228,11 +194,11 @@ export default function MentoringPage() {
               <div className="p-8 space-y-6">
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{selected.longDesc}</p>
 
-                {/* Mentor */}
+                {/* {t.mentoring.mentor} */}
                 <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
                   <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center text-white font-bold text-sm">M</div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Mentor</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{t.mentoring.mentor}</p>
                     <p className="font-medium text-sm text-gray-900 dark:text-white">{selected.mentor}</p>
                   </div>
                 </div>

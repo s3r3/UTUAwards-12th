@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import * as THREE from 'three'
+import { useTranslations } from '@/lib/i18n'
 
 const Globe = dynamic(() => import('react-globe.gl'), { ssr: false })
 
@@ -39,6 +40,7 @@ const arcsData = markerData
   }))
 
 export default function WorldGlobe() {
+  const t = useTranslations()
   const globeRef = useRef<any>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [dimensions, setDimensions] = useState({ width: 600, height: 450 })
@@ -81,7 +83,7 @@ export default function WorldGlobe() {
     <div className="w-full h-full min-h-[400px] flex items-center justify-center">
       <div className="flex flex-col items-center gap-3 text-gray-400">
         <div className="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin" />
-        <span className="text-sm animate-pulse">Memuat peta global...</span>
+        <span className="text-sm animate-pulse">{t.worldGlobe.loading}</span>
       </div>
     </div>
   )

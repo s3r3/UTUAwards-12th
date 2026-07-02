@@ -1,11 +1,12 @@
 'use client'
 
 import { User, Building, Award, Globe, ArrowDown } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
-const steps = [
+const getSteps = (t: ReturnType<typeof useTranslations>) => [
   {
     title: 'Producer',
-    description: 'Petani, nelayan, dan UMKM mendaftarkan produk',
+    description: t.workflow.step1desc,
     icon: User,
     color: 'bg-green-500',
   },
@@ -30,6 +31,7 @@ const steps = [
 ]
 
 export default function Workflow() {
+  const t = useTranslations()
   return (
     <section className="py-20 bg-gray-50 dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,7 +49,7 @@ export default function Workflow() {
           <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-green-500 via-blue-500 to-orange-500 transform -translate-y-1/2" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {steps.map((step, index) => (
+            {getSteps(t).map((step, index) => (
               <div key={index} className="relative">
                 <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all hover:-translate-y-2">
                   <div className={`w-16 h-16 rounded-2xl ${step.color} flex items-center justify-center text-white mx-auto mb-4`}>
@@ -62,7 +64,7 @@ export default function Workflow() {
                 </div>
 
                 {/* Arrow */}
-                {index < steps.length - 1 && (
+                {index < getSteps(t).length - 1 && (
                   <div className="lg:hidden flex justify-center my-4">
                     <ArrowDown className="text-primary-500 animate-bounce" size={24} />
                   </div>

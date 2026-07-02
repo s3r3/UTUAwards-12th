@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Bot, X, Send, Sparkles, TrendingUp, Lightbulb, Target, ChevronRight } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
 interface Message {
   id: number
@@ -44,6 +45,7 @@ const quickTips = [
 ]
 
 export default function DashboardChatBot() {
+  const t = useTranslations()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     { id: 0, text: 'Halo! 👋 Saya asisten bisnis Metuah Hub. Siap bantu Anda mengembangkan usaha agro-maritim!', sender: 'bot', type: 'tip' },
@@ -116,9 +118,9 @@ export default function DashboardChatBot() {
                 <div className="flex-1">
                   <p className="font-bold text-white text-sm flex items-center gap-2">
                     Bisnis Assistant
-                    <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full">BETA</span>
+                    <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full">{t.chatbot.beta}</span>
                   </p>
-                  <p className="text-[11px] text-white/70">AI untuk pengembangan bisnis Anda</p>
+                  <p className="text-[11px] text-white/70">{t.chatbot.bizAssistant}</p>
                 </div>
                 <Target size={16} className="text-white/50" />
               </div>

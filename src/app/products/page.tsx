@@ -5,6 +5,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
 import { Search, Coffee, Waves, Leaf, Package, Star, MapPin, ArrowRight } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
 const categories = [
   { id: 'all', name: 'Semua', icon: Package },
@@ -34,6 +35,7 @@ const statusColor: Record<string, string> = {
 }
 
 export default function ProductsPage() {
+  const t = useTranslations()
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('all')
 
@@ -50,17 +52,17 @@ export default function ProductsPage() {
       <section className="pt-28 pb-12 gradient-hero">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Katalog <span className="bg-gradient-to-r from-primary-600 to-ocean-600 bg-clip-text text-transparent">Produk</span>
+            {t.products.title} <span className="bg-gradient-to-r from-primary-600 to-ocean-600 bg-clip-text text-transparent">{t.products.titleHighlight}</span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
-            Temukan produk unggulan agro-maritim Aceh yang siap bersaing di pasar global.
+            {t.hero.desc}
           </p>
 
           <div className="max-w-xl mx-auto relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
             <input
               type="text"
-              placeholder="Cari produk..."
+              placeholder={t.products.searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:outline-none"
@@ -115,7 +117,7 @@ export default function ProductsPage() {
           </div>
 
           {filtered.length === 0 && (
-            <p className="text-center text-gray-500 dark:text-gray-400 py-16">Tidak ada produk ditemukan.</p>
+            <p className="text-center text-gray-500 dark:text-gray-400 py-16">{t.products.notFound}</p>
           )}
         </div>
       </section>

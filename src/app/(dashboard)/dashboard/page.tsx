@@ -8,6 +8,7 @@ import Button from '@/components/ui/Button'
 import { StatsSkeleton } from '@/components/ui/Skeleton'
 import { ScrollReveal, StaggerContainer, StaggerItem, HoverCard } from '@/components/AnimatedPage'
 import MarketWidget from '@/components/dashboard/MarketWidget'
+import { useTranslations } from '@/lib/i18n'
 
 interface Product {
   id: string
@@ -22,6 +23,7 @@ const statusStyle = (s: string) =>
   'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
 
 export default function DashboardPage() {
+  const t = useTranslations()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -60,13 +62,13 @@ export default function DashboardPage() {
             className="flex items-center gap-2 text-xs text-primary-600 dark:text-primary-400 mb-1"
           >
             <Sparkles size={12} />
-            <span>Dashboard</span>
+            <span>{t.dashboard.overviewTitle}</span>
           </motion.div>
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
             Selamat Datang{', '}
-            <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">Metuah Hub</span>
+            <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">{t.dashboard.overviewSubtitle}</span>
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Kelola produk dan pantau perkembangan ekosistem Anda</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{t.dashboard.overviewDesc}</p>
         </div>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -74,7 +76,7 @@ export default function DashboardPage() {
           transition={{ delay: 0.2 }}
         >
           <Link href="/dashboard/products">
-            <Button className="gap-2 shadow-lg shadow-primary-500/20"><Plus size={16} /> Tambah Produk</Button>
+            <Button className="gap-2 shadow-lg shadow-primary-500/20"><Plus size={16} /> {t.dashboard.addProduct}</Button>
           </Link>
         </motion.div>
       </motion.div>
@@ -161,10 +163,10 @@ export default function DashboardPage() {
                   >
                     <Package size={28} className="text-gray-400" />
                   </motion.div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">Belum ada produk</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-5">Daftarkan produk agro-maritim pertama Anda</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">{t.dashboard.noProducts}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-5">{t.dashboard.noProductsDesc}</p>
                   <Link href="/dashboard/products">
-                    <Button size="sm" className="gap-1.5 shadow-md"><Plus size={14} /> Tambah Produk</Button>
+                    <Button size="sm" className="gap-1.5 shadow-md"><Plus size={14} /> {t.dashboard.addProduct}</Button>
                   </Link>
                 </motion.div>
               ) : (
@@ -222,10 +224,10 @@ export default function DashboardPage() {
               className="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 dark:border-gray-800/60 shadow-sm"
             >
               <h2 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2 text-sm">
-                <BookOpen size={18} className="text-ocean-500" /> Program Mentoring
+                <BookOpen size={18} className="text-ocean-500" /> {t.dashboard.mentoringProgram}
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {['Sertifikasi Halal', 'HACCP', 'Export Packaging', 'Supply Chain'].map((name, i) => (
+                {[t.mentoring.program1, t.mentoring.program2, t.mentoring.program3, 'Supply Chain Training'].map((name, i) => (
                   <motion.div
                     key={name}
                     initial={{ opacity: 0, y: 10 }}
@@ -257,7 +259,7 @@ export default function DashboardPage() {
                     whileTap={{ scale: 0.98 }}
                     className="text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
                   >
-                    Lihat semua program →
+                    {t.common.next} →
                   </motion.button>
                 </Link>
               </div>
@@ -289,8 +291,8 @@ export default function DashboardPage() {
               />
               <div className="relative z-10">
                 <BarChart3 size={24} className="mb-3 opacity-90" />
-                <h3 className="font-bold text-lg mb-1">Pantau Harga Pasar</h3>
-                <p className="text-sm text-white/80 mb-4">Ikuti pergerakan harga komoditas agro-maritim Aceh di pasar global secara real-time.</p>
+                <h3 className="font-bold text-lg mb-1">{t.dashboard.marketPrice}</h3>
+                <p className="text-sm text-white/80 mb-4">{t.dashboard.marketPriceDesc}</p>
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}

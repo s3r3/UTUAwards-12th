@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { useTranslations } from '@/lib/i18n'
 import {
   Search,
   Coffee,
@@ -261,6 +262,7 @@ const cardVariants = {
 }
 
 export default function ProductCatalog() {
+  const t = useTranslations()
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-60px' })
 
@@ -455,8 +457,8 @@ export default function ProductCatalog() {
                 className="col-span-full text-center py-20 text-gray-400 dark:text-gray-600"
               >
                 <Package size={48} className="mx-auto mb-3 opacity-30" />
-                <p className="text-lg font-medium">Produk tidak ditemukan</p>
-                <p className="text-sm mt-1">Coba kata kunci lain atau kategori berbeda</p>
+                <p className="text-lg font-medium">{t.products.notFound}</p>
+                <p className="text-sm mt-1">{t.products.notFoundHint}</p>
               </motion.div>
             )}
           </motion.div>

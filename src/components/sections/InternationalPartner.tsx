@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
+import { useTranslations } from "@/lib/i18n"
 import { motion, useInView } from 'framer-motion'
 import { Building2, MapPin, Globe } from 'lucide-react'
 import WorldGlobe from './WorldGlobe'
@@ -22,6 +23,7 @@ const regions = [
 ]
 
 export default function InternationalPartner() {
+  const t = useTranslations()
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-60px' })
 
@@ -44,10 +46,10 @@ export default function InternationalPartner() {
             Jaringan Global
           </div>
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Mitra <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">Internasional</span>
+            Mitra <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">{t.partners.title}</span>
           </h2>
           <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">
-            Produk UMKM Aceh telah menembus pasar di berbagai benua melalui jaringan mitra global kami
+            {t.partners.desc}
           </p>
         </motion.div>
 
@@ -100,11 +102,11 @@ export default function InternationalPartner() {
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-white dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-800 text-center">
                 <div className="text-2xl font-bold text-primary-500">25+</div>
-                <div className="text-xs text-gray-500 mt-1">Negara Tujuan</div>
+                <div className="text-xs text-gray-500 mt-1">{t.worldGlobe.partnerCountries}</div>
               </div>
               <div className="bg-white dark:bg-gray-900 rounded-2xl p-4 border border-gray-100 dark:border-gray-800 text-center">
                 <div className="text-2xl font-bold text-ocean-500">50+</div>
-                <div className="text-xs text-gray-500 mt-1">Buyer Aktif</div>
+                <div className="text-xs text-gray-500 mt-1">{t.worldGlobe.activeBuyers}</div>
               </div>
             </div>
           </motion.div>

@@ -1,3 +1,6 @@
+'use client'
+
+import { useTranslations } from "@/lib/i18n"
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { TrendingUp, DollarSign, BarChart3, PieChart, Users, Rocket, Target, Zap } from 'lucide-react'
@@ -25,6 +28,7 @@ const advantages = [
 ]
 
 export default function BusinessPage() {
+  const t = useTranslations()
   return (
     <main className="min-h-screen">
       <Navbar />
@@ -32,10 +36,10 @@ export default function BusinessPage() {
       <section className="pt-28 pb-20 gradient-hero">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            Model <span className="bg-gradient-to-r from-primary-600 to-ocean-600 bg-clip-text text-transparent">Bisnis</span>
+            {t.business.pageTitle} <span className="bg-gradient-to-r from-primary-600 to-ocean-600 bg-clip-text text-transparent">{t.business.pageTitleHighlight}</span>
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Strategi monetisasi dan proyeksi pertumbuhan Metuah Hub sebagai platform ekosistem agro-maritim digital.
+            {t.business.pageDesc}
           </p>
         </div>
       </section>
@@ -43,7 +47,7 @@ export default function BusinessPage() {
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
-            <DollarSign className="text-primary-500" /> Sumber Pendapatan
+            <DollarSign className="text-primary-500" /> {t.business.revenueTitle}
           </h2>
           <div className="space-y-4">
             {revenueStreams.map((s, i) => (
@@ -67,7 +71,7 @@ export default function BusinessPage() {
       <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
-            <TrendingUp className="text-primary-500" /> Proyeksi Pertumbuhan
+            <TrendingUp className="text-primary-500" /> {t.business.growthTitle}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {projections.map((p, i) => (
@@ -85,7 +89,7 @@ export default function BusinessPage() {
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
-            <BarChart3 className="text-primary-500" /> Keunggulan Kompetitif
+            <BarChart3 className="text-primary-500" /> {t.business.advantageTitle}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {advantages.map((a, i) => (

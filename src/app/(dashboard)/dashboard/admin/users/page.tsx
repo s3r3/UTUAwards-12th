@@ -2,6 +2,7 @@
 
 import { Users, Search, Shield, UserX } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslations } from '@/lib/i18n'
 
 const users = [
   { id: 1, name: 'Ahmad Fauzan', email: 'ahmad@example.com', role: 'USER', products: 5 },
@@ -10,11 +11,12 @@ const users = [
 ]
 
 export default function AdminUsersPage() {
+  const t = useTranslations()
   const [search, setSearch] = useState('')
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Kelola Pengguna</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t.dashboard.adminUsers}</h1>
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
         <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
@@ -25,11 +27,11 @@ export default function AdminUsersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-                <th className="pb-3 font-medium">Nama</th>
-                <th className="pb-3 font-medium">Email</th>
-                <th className="pb-3 font-medium">Role</th>
-                <th className="pb-3 font-medium">Produk</th>
-                <th className="pb-3 font-medium text-right">Aksi</th>
+                <th className="pb-3 font-medium">{t.dashboard.name}</th>
+                <th className="pb-3 font-medium">{t.dashboard.email}</th>
+                <th className="pb-3 font-medium">{t.dashboard.role}</th>
+                <th className="pb-3 font-medium">{t.dashboard.product}</th>
+                <th className="pb-3 font-medium text-right">{t.dashboard.action}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">

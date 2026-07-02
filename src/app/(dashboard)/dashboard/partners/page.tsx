@@ -1,6 +1,7 @@
 'use client'
 
 import { Globe, Building2, MapPin } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
 const partners = [
   { company: 'PT. Global Trade Asia', country: 'Malaysia', location: 'Kuala Lumpur', status: 'Active' },
@@ -10,9 +11,10 @@ const partners = [
 ]
 
 export default function PartnersPage() {
+  const t = useTranslations()
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Mitra Internasional</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t.dashboard.internationalPartners}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {partners.map((p, i) => (
           <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm flex items-start gap-4">

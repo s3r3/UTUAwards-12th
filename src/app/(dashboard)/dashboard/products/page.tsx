@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import Modal from '@/components/ui/Modal'
 import { CardSkeleton } from '@/components/ui/Skeleton'
+import { useTranslations } from '@/lib/i18n'
 
 interface Product {
   id: string
@@ -38,6 +39,7 @@ const statusBadge: Record<string, string> = {
 const initialForm = { name: '', category: 'COFFEE', description: '', origin: '', image: '', legality: '' }
 
 export default function MyProductsPage() {
+  const t = useTranslations()
   const [products, setProducts] = useState<Product[]>([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
@@ -128,7 +130,7 @@ export default function MyProductsPage() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Produk Saya</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.dashboard.myProducts}</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
             {products.length} produk terdaftar
           </p>
@@ -149,7 +151,7 @@ export default function MyProductsPage() {
               ☰
             </button>
           </div>
-          <Button onClick={openAdd} className="gap-2"><Plus size={16} /> Tambah Produk</Button>
+          <Button onClick={openAdd} className="gap-2"><Plus size={16} /> {t.dashboard.addProduct}</Button>
         </div>
       </div>
 
@@ -176,11 +178,11 @@ export default function MyProductsPage() {
           <div className="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center mx-auto mb-4">
             <Package size={32} className="text-gray-400" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Belum Ada Produk</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{t.dashboard.noProductsFound}</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto">
-            Daftarkan produk agro-maritim Aceh Anda untuk mulai menjangkau pasar global melalui Metuah Hub.
+            {t.dashboard.noProductsDesc}
           </p>
-          <Button onClick={openAdd} className="gap-2"><Plus size={16} /> Tambah Produk Pertama</Button>
+          <Button onClick={openAdd} className="gap-2"><Plus size={16} /> {t.dashboard.addProduct} Pertama</Button>
         </div>
       )}
 
@@ -189,7 +191,7 @@ export default function MyProductsPage() {
         <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl">
           <Search size={32} className="mx-auto text-gray-300 mb-3" />
           <p className="text-gray-500 font-medium">Produk &quot;{search}&quot; tidak ditemukan</p>
-          <button onClick={() => setSearch('')} className="text-sm text-primary-600 mt-1 hover:underline">Hapus filter</button>
+          <button onClick={() => setSearch('')} className="text-sm text-primary-600 mt-1 hover:underline">{t.dashboard.clearFilter}</button>
         </div>
       )}
 
@@ -266,12 +268,12 @@ export default function MyProductsPage() {
       )}
 
       {/* Add/Edit Modal */}
-      <Modal open={modal !== null} onClose={() => setModal(null)} title={editing ? 'Edit Produk' : 'Tambah Produk Baru'} size="xl">
+      <Modal open={modal !== null} onClose={() => setModal(null)} title={editing ? 'Edit Produk' : '{t.dashboard.addProduct} Baru'} size="xl">
         <div className="space-y-5">
           <Input id="name" label="Nama Produk" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Contoh: Kopi Arabica Gayo Premium" required />
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Kategori</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.dashboard.category}</label>
             <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}
               className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:outline-none">
               {categories.map((c) => <option key={c.value} value={c.value}>{c.emoji} {c.label}</option>)}
@@ -279,7 +281,7 @@ export default function MyProductsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Gambar Produk</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.dashboard.productImage}</label>
             <div className="flex gap-3">
               <div className="flex-1">
                 <Input
@@ -298,7 +300,7 @@ export default function MyProductsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deskripsi</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.dashboard.description}</label>
             <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
               placeholder="Ceritakan tentang produk Anda..."
               className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:outline-none resize-none"
@@ -311,23 +313,23 @@ export default function MyProductsPage() {
           </div>
 
           <div className="flex justify-end gap-3 pt-2 border-t border-gray-100 dark:border-gray-700">
-            <Button variant="outline" onClick={() => setModal(null)}>Batal</Button>
-            <Button onClick={handleSave} isLoading={saving}>{editing ? 'Simpan Perubahan' : 'Tambah Produk'}</Button>
+            <Button variant="outline" onClick={() => setModal(null)}>{t.dashboard.cancel}</Button>
+            <Button onClick={handleSave} isLoading={saving}>{editing ? 'Simpan Perubahan' : '{t.dashboard.addProduct}'}</Button>
           </div>
         </div>
       </Modal>
 
       {/* Delete Confirmation */}
-      <Modal open={deleteId !== null} onClose={() => setDeleteId(null)} title="Hapus Produk" size="sm">
+      <Modal open={deleteId !== null} onClose={() => setDeleteId(null)} title="{t.dashboard.deleteProduct} Produk" size="sm">
         <div className="text-center">
           <div className="w-14 h-14 rounded-2xl bg-red-100 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-4">
             <Trash2 size={28} className="text-red-500" />
           </div>
-          <p className="text-gray-900 dark:text-white font-medium mb-1">Yakin ingin menghapus?</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Produk yang dihapus tidak dapat dikembalikan.</p>
+          <p className="text-gray-900 dark:text-white font-medium mb-1">{t.dashboard.deleteConfirm}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{t.dashboard.deleteWarning}</p>
           <div className="flex justify-center gap-3">
-            <Button variant="outline" onClick={() => setDeleteId(null)}>Batal</Button>
-            <Button className="!bg-red-600 hover:!bg-red-700" onClick={() => deleteId && handleDelete(deleteId)}>Hapus</Button>
+            <Button variant="outline" onClick={() => setDeleteId(null)}>{t.dashboard.cancel}</Button>
+            <Button className="!bg-red-600 hover:!bg-red-700" onClick={() => deleteId && handleDelete(deleteId)}>{t.dashboard.deleteProduct}</Button>
           </div>
         </div>
       </Modal>
@@ -349,9 +351,9 @@ export default function MyProductsPage() {
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400">{detail.description}</p>
             <div className="grid grid-cols-2 gap-3 text-sm">
-              <div><span className="text-gray-500">Asal:</span> <span className="text-gray-900 dark:text-white font-medium">{detail.origin}</span></div>
-              <div><span className="text-gray-500">Tanggal:</span> <span className="text-gray-900 dark:text-white font-medium">{new Date(detail.createdAt).toLocaleDateString('id-ID')}</span></div>
-              {detail.legality && <div className="col-span-2"><span className="text-gray-500">Legalitas:</span> <span className="text-gray-900 dark:text-white font-medium">{detail.legality}</span></div>}
+              <div><span className="text-gray-500">{t.dashboard.origin}</span> <span className="text-gray-900 dark:text-white font-medium">{detail.origin}</span></div>
+              <div><span className="text-gray-500">{t.dashboard.date}</span> <span className="text-gray-900 dark:text-white font-medium">{new Date(detail.createdAt).toLocaleDateString('id-ID')}</span></div>
+              {detail.legality && <div className="col-span-2"><span className="text-gray-500">{t.dashboard.legality}</span> <span className="text-gray-900 dark:text-white font-medium">{detail.legality}</span></div>}
             </div>
           </div>
         )}

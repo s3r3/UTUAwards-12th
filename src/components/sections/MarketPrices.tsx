@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { TrendingUp, TrendingDown, Minus, RefreshCw, Activity, DollarSign, BarChart3 } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
 interface CommodityPrice {
   id: string
@@ -32,6 +33,7 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
 }
 
 export default function MarketPrices() {
+  const t = useTranslations()
   const [prices, setPrices] = useState<CommodityPrice[]>([])
   const [loading, setLoading] = useState(true)
   const [lastUpdate, setLastUpdate] = useState<string>('')
@@ -173,7 +175,7 @@ export default function MarketPrices() {
                     <Sparkline data={item.history} color={color} />
                     <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[9px] text-gray-400 dark:text-gray-600 mt-0.5">
                       <span>30 hari</span>
-                      <span>hari ini</span>
+                      <span>{t.marketPrices.today}</span>
                     </div>
                   </div>
                 </motion.div>

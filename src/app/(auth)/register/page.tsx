@@ -6,8 +6,10 @@ import { useRouter } from 'next/navigation'
 import { Mail, Lock, Eye, EyeOff, User } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
+import { useTranslations } from '@/lib/i18n'
 
 export default function RegisterPage() {
+  const t = useTranslations()
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -44,7 +46,7 @@ export default function RegisterPage() {
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Sudah punya akun?{' '}
             <Link href="/login" className="font-medium text-primary-600 hover:text-primary-500">
-              Masuk di sini
+              {t.auth.haveAccount}
             </Link>
           </p>
         </div>

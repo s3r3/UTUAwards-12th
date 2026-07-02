@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useAnimation, stagger, animate } from 'framer-motion'
 import { Package, FileCheck, BookOpen, Globe, TrendingUp, Activity } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
 const stats = [
   {
@@ -191,6 +192,7 @@ const cardVariants = {
 }
 
 export default function DashboardPreview() {
+  const t = useTranslations()
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
 

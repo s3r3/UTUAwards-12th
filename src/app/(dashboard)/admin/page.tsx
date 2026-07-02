@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import { Users, Package, Globe, BookOpen, Search, CheckCircle, XCircle, Clock } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
 const adminStats = [
   { label: 'Total Users', value: 245, icon: Users, color: 'bg-primary-500' },
-  { label: 'Total Produk', value: 512, icon: Package, color: 'bg-ocean-500' },
+  { label: 'Total {t.dashboard.product}', value: 512, icon: Package, color: 'bg-ocean-500' },
   { label: 'Mitra Aktif', value: 25, icon: Globe, color: 'bg-purple-500' },
   { label: 'Program Mentoring', value: 15, icon: BookOpen, color: 'bg-yellow-500' },
 ]
@@ -17,11 +18,12 @@ const pendingProducts = [
 ]
 
 export default function AdminPage() {
+  const t = useTranslations()
   const [search, setSearch] = useState('')
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Admin Panel</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t.dashboard.adminPanel}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {adminStats.map((s, i) => (
@@ -38,7 +40,7 @@ export default function AdminPage() {
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
           <h2 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-            <Clock size={20} className="text-yellow-500" /> Produk Menunggu Approval
+            <Clock size={20} className="text-yellow-500" /> {t.dashboard.product} Menunggu Approval
           </h2>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
@@ -55,11 +57,11 @@ export default function AdminPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-                <th className="pb-3 font-medium">Produk</th>
-                <th className="pb-3 font-medium">Pemilik</th>
-                <th className="pb-3 font-medium">Kategori</th>
-                <th className="pb-3 font-medium">Tanggal</th>
-                <th className="pb-3 font-medium text-right">Aksi</th>
+                <th className="pb-3 font-medium">{t.dashboard.product}</th>
+                <th className="pb-3 font-medium">{t.dashboard.owner}</th>
+                <th className="pb-3 font-medium">{t.dashboard.category}</th>
+                <th className="pb-3 font-medium">{t.dashboard.date}</th>
+                <th className="pb-3 font-medium text-right">{t.dashboard.action}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
