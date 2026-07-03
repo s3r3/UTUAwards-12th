@@ -9,7 +9,7 @@ interface CommodityPrice {
   id: string
   name: string
   nameId: string
-  emoji: string
+  image: string
   price: number
   unit: string
   change: number
@@ -81,16 +81,16 @@ export default function MarketPrices() {
           transition={{ duration: 0.6 }}
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full border border-primary-500/30 bg-primary-500/10 text-primary-500 text-sm font-medium">
-            <BarChart3 size={14} /> Pantauan Pasar
+            <BarChart3 size={14} /> {t.marketPrices.title}
           </div>
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Harga Pasar{' '}
+            {t.marketPrices.title}{' '}
             <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">
-              Komoditas
+              {t.marketPrices.titleHighlight}
             </span>
           </h2>
           <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">
-            Pantau harga pasar internasional komoditas agro-maritim Aceh secara real-time
+            {t.marketPrices.desc}
           </p>
         </motion.div>
 
@@ -98,13 +98,13 @@ export default function MarketPrices() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2 text-xs text-gray-400">
             <Activity size={12} />
-            <span>Terakhir diperbarui: {lastUpdate ? new Date(lastUpdate).toLocaleTimeString('id-ID') : '-'}</span>
+            <span>{t.marketPrices.lastUpdate}: {lastUpdate ? new Date(lastUpdate).toLocaleTimeString('id-ID') : '-'}</span>
           </div>
           <button
             onClick={() => { setLoading(true); fetchPrices() }}
             className="flex items-center gap-1.5 text-xs text-primary-600 hover:text-primary-500 transition-colors"
           >
-            <RefreshCw size={12} className={loading ? 'animate-spin' : ''} /> Perbarui
+            <RefreshCw size={12} className={loading ? 'animate-spin' : ''} /> {t.marketPrices.refresh}
           </button>
         </div>
 
@@ -142,8 +142,8 @@ export default function MarketPrices() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style={{ backgroundColor: `${color}15` }}>
-                        {item.emoji}
+                      <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0" style={{ backgroundColor: `${color}15` }}>
+                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-gray-900 dark:text-white">{item.name}</p>

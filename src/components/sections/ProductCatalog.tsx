@@ -37,7 +37,7 @@ const products = [
     origin: 'Gayo Lues',
     price: 'Rp 150.000/kg',
     rating: 4.9,
-    emoji: '☕',
+    image: '/images/kopi_arabica.png',
     emojiColor: 'from-amber-500 to-orange-600',
     description:
       'Kopi arabica single origin dari dataran tinggi Gayo Lues, ditanam pada ketinggian 1.200-1.500 mdpl. Cita rasa fruity dengan aroma floral yang khas dan aftertaste yang panjang.',
@@ -51,7 +51,7 @@ const products = [
     origin: 'Aceh Selatan',
     price: 'Rp 250.000/liter',
     rating: 4.8,
-    emoji: '🌿',
+    image: '/images/PatchouliOil.png',
     emojiColor: 'from-[#22c55e] to-emerald-600',
     description:
       'Minyak nilam murni (Patchouli Oil) diekstrak secara tradisional dari tanaman nilam pilihan Aceh Selatan. Kadar PA ≥ 30%, ideal untuk industri parfum dan kosmetik premium.',
@@ -65,7 +65,7 @@ const products = [
     origin: 'Aceh Timur',
     price: 'Rp 85.000/kg',
     rating: 4.7,
-    emoji: '🦐',
+    image: '/images/VannameiShrimp.png',
     emojiColor: 'from-[#0ea5e9] to-cyan-500',
     description:
       'Udang vannamei segar dari tambak terintegrasi di pesisir Aceh Timur. Dibudidayakan tanpa antibiotik, tersertifikasi HACCP, siap untuk pasar ekspor.',
@@ -79,7 +79,7 @@ const products = [
     origin: 'Aceh Besar',
     price: 'Rp 75.000/box',
     rating: 4.9,
-    emoji: '🌶️',
+    image: '/images/rempahcustomAceh.png',
     emojiColor: 'from-red-500 to-rose-600',
     description:
       'Campuran rempah autentik Aceh yang telah diracik oleh maestro kuliner lokal. Terdiri dari 12 jenis rempah pilihan, dikemas higienis dalam box premium.',
@@ -93,7 +93,7 @@ const products = [
     origin: 'Bener Meriah',
     price: 'Rp 120.000/kg',
     rating: 4.6,
-    emoji: '☕',
+    image: '/images/cofferobusta.png',
     emojiColor: 'from-stone-600 to-amber-700',
     description:
       'Kopi robusta dari Bener Meriah dengan karakter bold dan earthy yang kuat. Cocok untuk espresso blend atau pasar Asia Timur yang menyukai kopi bertubuh penuh.',
@@ -107,7 +107,7 @@ const products = [
     origin: 'Pidie',
     price: 'Rp 95.000/kg',
     rating: 4.8,
-    emoji: '🐟',
+    image: '/images/ikantongkolasap.png',
     emojiColor: 'from-purple-500 to-indigo-600',
     description:
       'Ikan tongkol asap tradisional dari nelayan Pidie dengan metode pengasapan kayu bakar pilihan. Tekstur padat, cita rasa gurih yang khas, bebas pengawet kimia.',
@@ -169,9 +169,9 @@ function ProductModal({
         >
           {/* Product image area */}
           <div
-            className={`relative h-52 bg-gradient-to-br ${product.emojiColor} flex items-center justify-center`}
+            className={`relative h-52 bg-gradient-to-br ${product.emojiColor} flex items-center justify-center overflow-hidden`}
           >
-            <span className="text-8xl filter drop-shadow-xl">{product.emoji}</span>
+            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
             <button
               onClick={onClose}
               className="absolute top-4 right-4 p-2 rounded-xl bg-black/20 hover:bg-black/40 text-white transition-colors"
@@ -409,7 +409,7 @@ export default function ProductCatalog() {
                       whileHover={{ scale: 1.15 }}
                       transition={{ type: 'spring', stiffness: 300 }}
                     >
-                      {product.emoji}
+                      <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                     </motion.span>
                     {/* Subtle overlay on hover */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />

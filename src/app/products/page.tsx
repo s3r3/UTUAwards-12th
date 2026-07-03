@@ -17,14 +17,14 @@ const categories = [
 ]
 
 const products = [
-  { id: 1, name: 'Kopi Arabica Gayo Premium', category: 'COFFEE', origin: 'Gayo Lues', price: 'Rp 150.000/kg', rating: 4.9, status: 'APPROVED', desc: 'Kopi arabica specialty grade 1 dari dataran tinggi Gayo.' },
-  { id: 2, name: 'Minyak Nilam Aceh', category: 'PATCHOULI', origin: 'Aceh Selatan', price: 'Rp 250.000/liter', rating: 4.8, status: 'APPROVED', desc: 'Minyak nilam kualitas ekspor dengan kadar patchouli alcohol tinggi.' },
-  { id: 3, name: 'Udang Vannamei Fresh', category: 'SEAFOOD', origin: 'Aceh Timur', price: 'Rp 85.000/kg', rating: 4.7, status: 'VERIFIED', desc: 'Udang vannamei segar dari tambak berkualitas.' },
-  { id: 4, name: 'Rempah Kustom Aceh', category: 'SPICES', origin: 'Aceh Besar', price: 'Rp 75.000/box', rating: 4.9, status: 'APPROVED', desc: 'Campuran rempah khas Aceh untuk masakan tradisional.' },
-  { id: 5, name: 'Kopi Robusta Gayo', category: 'COFFEE', origin: 'Bener Meriah', price: 'Rp 120.000/kg', rating: 4.6, status: 'APPROVED', desc: 'Robusta pilihan dari perkebunan organik Bener Meriah.' },
-  { id: 6, name: 'Ikan Tongkol Asap', category: 'PROCESSED', origin: 'Pidie', price: 'Rp 95.000/kg', rating: 4.8, status: 'VERIFIED', desc: 'Tongkol asap tradisional dengan cita rasa khas Aceh.' },
-  { id: 7, name: 'Lada Hitam Aceh', category: 'SPICES', origin: 'Aceh Tenggara', price: 'Rp 180.000/kg', rating: 4.7, status: 'APPROVED', desc: 'Lada hitam premium dari perkebunan rakyat.' },
-  { id: 8, name: 'Kepiting Rajungan', category: 'SEAFOOD', origin: 'Aceh Utara', price: 'Rp 120.000/kg', rating: 4.5, status: 'REVIEW', desc: 'Rajungan segar berkualitas ekspor.' },
+  { id: 1, name: 'Kopi Arabica Gayo Premium', category: 'COFFEE', origin: 'Gayo Lues', price: 'Rp 150.000/kg', rating: 4.9, status: 'APPROVED', desc: 'Kopi arabica specialty grade 1 dari dataran tinggi Gayo.', image: '/images/kopi_arabica.png' },
+  { id: 2, name: 'Minyak Nilam Aceh', category: 'PATCHOULI', origin: 'Aceh Selatan', price: 'Rp 250.000/liter', rating: 4.8, status: 'APPROVED', desc: 'Minyak nilam kualitas ekspor dengan kadar patchouli alcohol tinggi.', image: '/images/PatchouliOil.png' },
+  { id: 3, name: 'Udang Vannamei Fresh', category: 'SEAFOOD', origin: 'Aceh Timur', price: 'Rp 85.000/kg', rating: 4.7, status: 'VERIFIED', desc: 'Udang vannamei segar dari tambak berkualitas.', image: '/images/VannameiShrimp.png' },
+  { id: 4, name: 'Rempah Kustom Aceh', category: 'SPICES', origin: 'Aceh Besar', price: 'Rp 75.000/box', rating: 4.9, status: 'APPROVED', desc: 'Campuran rempah khas Aceh untuk masakan tradisional.', image: '/images/rempahcustomAceh.png' },
+  { id: 5, name: 'Kopi Robusta Gayo', category: 'COFFEE', origin: 'Bener Meriah', price: 'Rp 120.000/kg', rating: 4.6, status: 'APPROVED', desc: 'Robusta pilihan dari perkebunan organik Bener Meriah.', image: '/images/cofferobusta.png' },
+  { id: 6, name: 'Ikan Tongkol Asap', category: 'PROCESSED', origin: 'Pidie', price: 'Rp 95.000/kg', rating: 4.8, status: 'VERIFIED', desc: 'Tongkol asap tradisional dengan cita rasa khas Aceh.', image: '/images/ikantongkolasap.png' },
+  { id: 7, name: 'Lada Hitam Aceh', category: 'SPICES', origin: 'Aceh Tenggara', price: 'Rp 180.000/kg', rating: 4.7, status: 'APPROVED', desc: 'Lada hitam premium dari perkebunan rakyat.', image: '/images/ladahitamAceh.png' },
+  { id: 8, name: 'Kepiting Rajungan', category: 'SEAFOOD', origin: 'Aceh Utara', price: 'Rp 120.000/kg', rating: 4.5, status: 'REVIEW', desc: 'Rajungan segar berkualitas ekspor.', image: '/images/kepitingranjungan.png' },
 ]
 
 const statusColor: Record<string, string> = {
@@ -92,8 +92,8 @@ export default function ProductsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {filtered.map((p) => (
               <Link key={p.id} href={`/products/${p.id}`} className="block bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 group">
-                <div className="h-48 bg-gradient-to-br from-primary-200 to-ocean-200 dark:from-primary-900 dark:to-ocean-900 flex items-center justify-center">
-                  <Package className="text-primary-500" size={48} />
+                <div className="h-48 bg-gradient-to-br from-primary-200 to-ocean-200 dark:from-primary-900 dark:to-ocean-900 flex items-center justify-center overflow-hidden">
+                  <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="p-5">
                   <div className="flex items-center justify-between mb-2">

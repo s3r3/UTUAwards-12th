@@ -6,7 +6,7 @@ import { TrendingUp, TrendingDown, BarChart3, RefreshCw } from 'lucide-react'
 interface CommodityPrice {
   id: string
   name: string
-  emoji: string
+  image: string
   price: number
   unit: string
   change: number
@@ -25,7 +25,7 @@ export default function MarketWidget() {
         const json = await res.json()
         if (json.success) {
           setPrices(json.data.map((d: any) => ({
-            id: d.id, name: d.name, emoji: d.emoji,
+            id: d.id, name: d.name, image: d.image,
             price: d.price, unit: d.unit, change: d.change, changePercent: d.changePercent,
           })).slice(0, 4))
         }
@@ -56,7 +56,7 @@ export default function MarketWidget() {
         {prices.map((p) => (
           <div key={p.id} className="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
             <div className="flex items-center gap-2">
-              <span className="text-lg">{p.emoji}</span>
+              <img src={p.image} alt={p.name} className="w-8 h-8 rounded object-cover" />
               <div>
                 <p className="text-xs font-medium text-gray-900 dark:text-white">{p.name}</p>
                 <p className="text-[10px] text-gray-400">{p.unit}</p>

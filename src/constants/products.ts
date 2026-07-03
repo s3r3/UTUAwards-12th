@@ -17,6 +17,7 @@ export interface CategoryMeta {
   description: string
   descriptionEn: string
   icon: string
+  image?: string
 }
 
 export const PRODUCT_CATEGORIES: CategoryMeta[] = [
@@ -30,6 +31,7 @@ export const PRODUCT_CATEGORIES: CategoryMeta[] = [
     description: 'Kopi Arabika & Robusta premium dari dataran tinggi Gayo, Aceh Tengah',
     descriptionEn: 'Premium Arabica & Robusta coffee from the Gayo Highlands, Central Aceh',
     icon: 'Coffee',
+    image: '/images/kopi_arabica.png',
   },
   {
     value: 'PATCHOULI',
@@ -41,6 +43,7 @@ export const PRODUCT_CATEGORIES: CategoryMeta[] = [
     description: 'Minyak atsiri nilam kualitas ekspor — komponen utama parfum dunia',
     descriptionEn: 'Export-grade patchouli essential oil — a key ingredient in world-class perfumes',
     icon: 'Leaf',
+    image: '/images/PatchouliOil.png',
   },
   {
     value: 'SEAFOOD',
@@ -52,6 +55,7 @@ export const PRODUCT_CATEGORIES: CategoryMeta[] = [
     description: 'Udang, ikan, cumi & kepiting segar dari perairan Selat Malaka dan Samudera Hindia',
     descriptionEn: 'Fresh shrimp, fish, squid & crab from the Malacca Strait and Indian Ocean',
     icon: 'Fish',
+    image: '/images/VannameiShrimp.png',
   },
   {
     value: 'SPICES',
@@ -63,6 +67,7 @@ export const PRODUCT_CATEGORIES: CategoryMeta[] = [
     description: 'Lada, cengkeh, kayu manis & kunyit asli Aceh dengan aroma khas',
     descriptionEn: 'Acehnese pepper, cloves, cinnamon & turmeric with distinctive aroma',
     icon: 'Flame',
+    image: '/images/Cinnamon.png',
   },
   {
     value: 'PROCESSED',
@@ -74,6 +79,7 @@ export const PRODUCT_CATEGORIES: CategoryMeta[] = [
     description: 'Produk olahan UMKM Aceh siap ekspor: kopi kemasan, kerupuk, dodol, dan lainnya',
     descriptionEn: 'Acehnese SME export-ready processed goods: packaged coffee, crackers, dodol, etc.',
     icon: 'Package',
+    image: '/images/ikantongkolasap.png',
   },
 ]
 
@@ -175,7 +181,7 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     exportDestinations: ['USA', 'Japan', 'Germany', 'South Korea', 'Australia'],
     priceRangeUSD: '$8–$15/kg (green bean)',
     annualProductionTon: 4500,
-    image: '/images/products/kopi-gayo.jpg',
+    image: '/images/kopi_arabica.png',
   },
   {
     id: 'prod-002',
@@ -194,7 +200,7 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     exportDestinations: ['France', 'USA', 'India', 'UK', 'Netherlands'],
     priceRangeUSD: '$40–$55/kg',
     annualProductionTon: 1200,
-    image: '/images/products/nilam.jpg',
+    image: '/images/PatchouliOil.png',
   },
   {
     id: 'prod-003',
@@ -213,7 +219,7 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     exportDestinations: ['Japan', 'China', 'USA', 'UAE', 'Saudi Arabia'],
     priceRangeUSD: '$5–$12/kg',
     annualProductionTon: 800,
-    image: '/images/products/udang.jpg',
+    image: '/images/VannameiShrimp.png',
   },
   {
     id: 'prod-004',
@@ -232,7 +238,7 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     exportDestinations: ['India', 'USA', 'Germany', 'Singapore', 'Netherlands'],
     priceRangeUSD: '$3–$6/kg',
     annualProductionTon: 320,
-    image: '/images/products/lada.jpg',
+    image: '/images/ladahitamAceh.png',
   },
   {
     id: 'prod-005',
@@ -251,7 +257,7 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     exportDestinations: ['Vietnam', 'Germany', 'Italy', 'Malaysia'],
     priceRangeUSD: '$2–$4/kg',
     annualProductionTon: 2800,
-    image: '/images/products/robusta.jpg',
+    image: '/images/cofferobusta.png',
   },
   {
     id: 'prod-006',
@@ -269,7 +275,7 @@ export const SAMPLE_PRODUCTS: SampleProduct[] = [
     certifications: ['BPOM MD', 'Halal MUI', 'IRT'],
     exportDestinations: ['Malaysia', 'Singapore', 'Saudi Arabia', 'Netherlands (diaspora)'],
     priceRangeUSD: '$8–$20/box',
-    image: '/images/products/dodol.jpg',
+    image: '/images/VannameiShrimp.png',
   },
 ]
 

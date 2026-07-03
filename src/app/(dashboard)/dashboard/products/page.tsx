@@ -21,11 +21,11 @@ interface Product {
 }
 
 const categories = [
-  { value: 'COFFEE', label: 'Kopi Gayo', emoji: '☕' },
-  { value: 'PATCHOULI', label: 'Nilam Aceh', emoji: '🌿' },
-  { value: 'SEAFOOD', label: 'Seafood', emoji: '🦐' },
-  { value: 'SPICES', label: 'Rempah', emoji: '🌶️' },
-  { value: 'PROCESSED', label: 'Produk Olahan', emoji: '🏭' },
+  { value: 'COFFEE', label: 'Kopi Gayo', image: '/images/kopi_arabica.png' },
+  { value: 'PATCHOULI', label: 'Nilam Aceh', image: '/images/PatchouliOil.png' },
+  { value: 'SEAFOOD', label: 'Seafood', image: '/images/VannameiShrimp.png' },
+  { value: 'SPICES', label: 'Rempah', image: '/images/rempahcustomAceh.png' },
+  { value: 'PROCESSED', label: 'Produk Olahan', image: '/images/ikantongkolasap.png' },
 ]
 
 const statusBadge: Record<string, string> = {
@@ -209,7 +209,7 @@ export default function MyProductsPage() {
                   {p.image ? (
                     <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-5xl opacity-40">{cat?.emoji || '📦'}</span>
+                    <img src={cat?.image || '/images/kopi_arabica.png'} alt="" className="w-16 h-16 opacity-40 object-cover rounded-xl" />
                   )}
                   <span className={`absolute top-2 right-2 text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusBadge[p.status] || statusBadge.PENDING}`}>
                     {p.status}
@@ -249,7 +249,7 @@ export default function MyProductsPage() {
               return (
                 <div key={p.id} className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center text-xl flex-shrink-0">
-                    {p.image ? <img src={p.image} alt="" className="w-full h-full object-cover rounded-xl" /> : cat?.emoji || '📦'}
+                    {p.image ? <img src={p.image} alt="" className="w-full h-full object-cover rounded-xl" /> : <img src={cat?.image || "/images/kopi_arabica.png"} alt="" className="w-full h-full object-cover rounded-xl" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm text-gray-900 dark:text-white truncate">{p.name}</p>
@@ -276,7 +276,7 @@ export default function MyProductsPage() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.dashboard.category}</label>
             <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}
               className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:outline-none">
-              {categories.map((c) => <option key={c.value} value={c.value}>{c.emoji} {c.label}</option>)}
+              {categories.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
             </select>
           </div>
 
@@ -342,7 +342,7 @@ export default function MyProductsPage() {
               {detail.image ? (
                 <img src={detail.image} alt={detail.name} className="w-full h-full object-cover" />
               ) : (
-                <span className="text-7xl opacity-30">{getCategoryMeta(detail.category)?.emoji || '📦'}</span>
+                <img src={getCategoryMeta(detail.category)?.image || "/images/kopi_arabica.png"} alt="" className="w-24 h-24 opacity-30 object-cover rounded-xl" />
               )}
             </div>
             <div className="flex flex-wrap gap-2">
