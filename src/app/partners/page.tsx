@@ -86,7 +86,7 @@ export default function PartnersPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((p, i) => (
-              <div key={i} className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 hover:shadow-xl transition-all hover:-translate-y-1">
+              <div key={i} className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 hover:shadow-xl transition-all hover:-translate-y-1 border border-gray-100 dark:border-gray-700">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center text-white shrink-0">
                     <Building size={24} />

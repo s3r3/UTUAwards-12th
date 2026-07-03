@@ -29,96 +29,21 @@ const categories = [
   { id: 'PROCESSED', name: 'Produk Olahan', icon: Package, color: 'from-purple-500 to-violet-600' },
 ]
 
-const products = [
-  {
-    id: 1,
-    name: 'Kopi Arabica Gayo Premium',
-    category: 'COFFEE',
-    origin: 'Gayo Lues',
-    price: 'Rp 150.000/kg',
-    rating: 4.9,
-    image: '/images/kopi_arabica.png',
-    emojiColor: 'from-amber-500 to-orange-600',
-    description:
-      'Kopi arabica single origin dari dataran tinggi Gayo Lues, ditanam pada ketinggian 1.200-1.500 mdpl. Cita rasa fruity dengan aroma floral yang khas dan aftertaste yang panjang.',
-    certifications: ['Organic', 'Fair Trade', 'Rainforest Alliance'],
-    stock: 250,
-  },
-  {
-    id: 2,
-    name: 'Minyak Nilam Aceh',
-    category: 'PATCHOULI',
-    origin: 'Aceh Selatan',
-    price: 'Rp 250.000/liter',
-    rating: 4.8,
-    image: '/images/PatchouliOil.png',
-    emojiColor: 'from-[#22c55e] to-emerald-600',
-    description:
-      'Minyak nilam murni (Patchouli Oil) diekstrak secara tradisional dari tanaman nilam pilihan Aceh Selatan. Kadar PA ≥ 30%, ideal untuk industri parfum dan kosmetik premium.',
-    certifications: ['ISO 9001', 'Halal MUI'],
-    stock: 80,
-  },
-  {
-    id: 3,
-    name: 'Udang Vannamei Fresh',
-    category: 'SEAFOOD',
-    origin: 'Aceh Timur',
-    price: 'Rp 85.000/kg',
-    rating: 4.7,
-    image: '/images/VannameiShrimp.png',
-    emojiColor: 'from-[#0ea5e9] to-cyan-500',
-    description:
-      'Udang vannamei segar dari tambak terintegrasi di pesisir Aceh Timur. Dibudidayakan tanpa antibiotik, tersertifikasi HACCP, siap untuk pasar ekspor.',
-    certifications: ['HACCP', 'ASC'],
-    stock: 500,
-  },
-  {
-    id: 4,
-    name: 'Rempah Kustom Aceh',
-    category: 'SPICES',
-    origin: 'Aceh Besar',
-    price: 'Rp 75.000/box',
-    rating: 4.9,
-    image: '/images/rempahcustomAceh.png',
-    emojiColor: 'from-red-500 to-rose-600',
-    description:
-      'Campuran rempah autentik Aceh yang telah diracik oleh maestro kuliner lokal. Terdiri dari 12 jenis rempah pilihan, dikemas higienis dalam box premium.',
-    certifications: ['Halal MUI', 'BPOM'],
-    stock: 300,
-  },
-  {
-    id: 5,
-    name: 'Kopi Robusta Gayo',
-    category: 'COFFEE',
-    origin: 'Bener Meriah',
-    price: 'Rp 120.000/kg',
-    rating: 4.6,
-    image: '/images/cofferobusta.png',
-    emojiColor: 'from-stone-600 to-amber-700',
-    description:
-      'Kopi robusta dari Bener Meriah dengan karakter bold dan earthy yang kuat. Cocok untuk espresso blend atau pasar Asia Timur yang menyukai kopi bertubuh penuh.',
-    certifications: ['Organic', 'Fair Trade'],
-    stock: 180,
-  },
-  {
-    id: 6,
-    name: 'Ikan Tongkol Asap',
-    category: 'PROCESSED',
-    origin: 'Pidie',
-    price: 'Rp 95.000/kg',
-    rating: 4.8,
-    image: '/images/ikantongkolasap.png',
-    emojiColor: 'from-purple-500 to-indigo-600',
-    description:
-      'Ikan tongkol asap tradisional dari nelayan Pidie dengan metode pengasapan kayu bakar pilihan. Tekstur padat, cita rasa gurih yang khas, bebas pengawet kimia.',
-    certifications: ['Halal MUI', 'P-IRT'],
-    stock: 120,
-  },
-]
-
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Product = (typeof products)[0]
+interface Product {
+  id: number | string
+  name: string
+  category: string
+  origin: string
+  price: string
+  rating: number
+  image: string
+  emojiColor: string
+  description: string
+  certifications: string[]
+  stock: number
+}
 
 // ─── Modal ───────────────────────────────────────────────────────────────────
 
@@ -262,13 +187,58 @@ const cardVariants = {
 }
 
 export default function ProductCatalog() {
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch('/api/products')
+        const json = await res.json()
+        if (json.success) {
+          setProducts(json.data.map((p: any) => ({
+            id: p.id,
+            name: p.name,
+            category: p.category,
+            origin: p.origin || 'Aceh',
+            price: p.price || 'Hubungi',
+            rating: 4.5,
+            image: p.image || '/images/kopi_arabica.png',
+            emojiColor: categoryColor(p.category),
+            description: p.description || '',
+            certifications: ['Terdaftar'],
+            stock: 0,
+          })))
+        }
+      } catch (e) {
+        console.error('Failed to fetch products', e)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchProducts()
+  }, [])
+
+
   const t = useTranslations()
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-60px' })
 
   const [inputValue, setInputValue] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('all')
+  
+  const categoryColor = (cat: string) => {
+    const map: Record<string, string> = {
+      COFFEE: 'from-amber-500 to-orange-600',
+      PATCHOULI: 'from-[#22c55e] to-emerald-600',
+      SEAFOOD: 'from-[#0ea5e9] to-cyan-500',
+      SPICES: 'from-red-500 to-rose-600',
+      PROCESSED: 'from-purple-500 to-indigo-600',
+    }
+    return map[cat] || 'from-gray-500 to-gray-600'
+  }
+
+const [selectedCategory, setSelectedCategory] = useState('all')
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   // Debounce search

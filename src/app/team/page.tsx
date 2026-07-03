@@ -6,17 +6,14 @@ import Footer from '@/components/layout/Footer'
 import { Linkedin, Twitter, Mail } from 'lucide-react'
 
 const team = [
-  { name: 'Ahmad Fauzan', role: 'CEO & Founder', bio: 'Pengusaha muda dengan 10 tahun pengalaman di bidang agro-maritim Aceh.', social: { linkedin: '#', twitter: '#' } },
-  { name: 'Siti Nurhaliza', role: 'CTO', bio: 'Expert dalam teknologi dan sistem informasi pertanian.', social: { linkedin: '#', twitter: '#' } },
-  { name: 'Budi Santoso', role: 'Head of Operations', bio: 'Spesialis supply chain dan logistik agro-maritim.', social: { linkedin: '#', twitter: '#' } },
-  { name: 'Dewi Kartika', role: 'Head of Partnership', bio: 'Berpengalaman dalam hubungan internasional dan ekspor-impor.', social: { linkedin: '#', twitter: '#' } },
-  { name: 'Rizki Ramadhan', role: 'Head of Product', bio: 'Pengembang produk digital dengan fokus pada UX/UI.', social: { linkedin: '#', twitter: '#' } },
-  { name: 'Nurul Aini', role: 'Head of Marketing', bio: 'Strategi pemasaran digital untuk produk agro-maritim.', social: { linkedin: '#', twitter: '#' } },
+  { name: 'Muhammad Farid', role: 'Ketua', bio: 'Mahasiswa Universitas Jabal Ghafur', social: { linkedin: '#', twitter: '#' } },
+  { name: 'Putra Ramadhan', role: 'Anggota', bio: 'Mahasiswa Universitas Jabal Ghafur', social: { linkedin: '#', twitter: '#' } },
+  { name: 'Budi Santoso', role: 'Anggota', bio: 'Mahasiswa Universitas Jabal Ghafur', social: { linkedin: '#', twitter: '#' } }
 ]
 
 const advisors = [
-  { name: 'Prof. Dr. Ibrahim', role: 'Advisor - Agriculture', bio: 'Guru besar pertanian Universitas Syiah Kuala.' },
-  { name: 'Dr. Marina Putri', role: 'Advisor - Maritime', bio: 'Pakar kelautan dan perikanan Indonesia.' },
+  { name: 'Tri Mulya Dharma, S.Kom., M.T', role: 'Advisor', bio: 'Dosen Teknik Informatika Jabal Ghafur' },
+  
 ]
 
 export default function TeamPage() {
@@ -41,7 +38,7 @@ export default function TeamPage() {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">{t.team.coreTeam}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {team.map((m, i) => (
-              <div key={i} className="group bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center hover:shadow-xl transition-all hover:-translate-y-2">
+              <div key={i} className="group bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center hover:shadow-xl transition-all hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
                 <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-400 to-ocean-400 flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   {m.name.split(' ').map(n => n[0]).join('')}
                 </div>

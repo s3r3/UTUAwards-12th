@@ -72,7 +72,7 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">{t.about.values}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {getValues(t).map((v, i) => (
-              <div key={i} className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow text-center">
+              <div key={i} className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow text-center border border-gray-100 dark:border-gray-700">
                 <div className="w-14 h-14 rounded-xl gradient-primary flex items-center justify-center mx-auto mb-4 text-white">
                   <v.icon size={28} />
                 </div>

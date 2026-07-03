@@ -91,7 +91,7 @@ export default function ProductsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {filtered.map((p) => (
-              <Link key={p.id} href={`/products/${p.id}`} className="block bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 group">
+              <Link key={p.id} href={`/products/${p.id}`} className="block bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 group border border-gray-100 dark:border-gray-700">
                 <div className="h-48 bg-gradient-to-br from-primary-200 to-ocean-200 dark:from-primary-900 dark:to-ocean-900 flex items-center justify-center overflow-hidden">
                   <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
                 </div>

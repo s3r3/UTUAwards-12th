@@ -93,7 +93,7 @@ export default function BusinessPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {advantages.map((a, i) => (
-              <div key={i} className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center hover:shadow-xl transition-shadow">
+              <div key={i} className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center hover:shadow-xl transition-shadow border border-gray-100 dark:border-gray-700">
                 <div className="w-14 h-14 rounded-xl gradient-primary flex items-center justify-center text-white mx-auto mb-4">
                   <a.icon size={28} />
                 </div>

@@ -203,13 +203,13 @@ export default function MyProductsPage() {
               <div key={p.id} className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-lg hover:border-primary-500/30 transition-all">
                 {/* Image */}
                 <div
-                  className="relative h-36 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center cursor-pointer"
+                  className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center cursor-pointer overflow-hidden"
                   onClick={() => setDetail(p)}
                 >
                   {p.image ? (
                     <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
                   ) : (
-                    <img src={cat?.image || '/images/kopi_arabica.png'} alt="" className="w-16 h-16 opacity-40 object-cover rounded-xl" />
+                    <img src={cat?.image || '/images/kopi_arabica.png'} alt="" className="w-full h-full object-cover opacity-70" />
                   )}
                   <span className={`absolute top-2 right-2 text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusBadge[p.status] || statusBadge.PENDING}`}>
                     {p.status}
@@ -248,7 +248,7 @@ export default function MyProductsPage() {
               const cat = getCategoryMeta(p.category)
               return (
                 <div key={p.id} className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center text-xl flex-shrink-0">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center text-xl flex-shrink-0 overflow-hidden">
                     {p.image ? <img src={p.image} alt="" className="w-full h-full object-cover rounded-xl" /> : <img src={cat?.image || "/images/kopi_arabica.png"} alt="" className="w-full h-full object-cover rounded-xl" />}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -268,7 +268,7 @@ export default function MyProductsPage() {
       )}
 
       {/* Add/Edit Modal */}
-      <Modal open={modal !== null} onClose={() => setModal(null)} title={editing ? 'Edit Produk' : '{t.dashboard.addProduct} Baru'} size="xl">
+      <Modal open={modal !== null} onClose={() => setModal(null)} title={editing ? 'Edit Produk' : t.dashboard.addProduct + ' Baru'} size="xl">
         <div className="space-y-5">
           <Input id="name" label="Nama Produk" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Contoh: Kopi Arabica Gayo Premium" required />
 
@@ -283,17 +283,38 @@ export default function MyProductsPage() {
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.dashboard.productImage}</label>
             <div className="flex gap-3">
-              <div className="flex-1">
+              <div className="flex-1 space-y-2">
                 <Input
                   id="image" placeholder="URL gambar (opsional)" value={form.image}
                   onChange={(e) => { setForm({ ...form, image: e.target.value }); setPreviewImg(e.target.value) }}
                 />
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
+                  <span className="text-xs text-gray-400">atau upload</span>
+                  <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700" />
+                </div>
+                <label className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-primary-400 dark:hover:border-primary-500 cursor-pointer text-sm text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  <ImageIcon size={18} />
+                  Pilih dari galeri
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) {
+                      const reader = new FileReader()
+                      reader.onload = (ev) => {
+                        const dataUrl = ev.target?.result as string
+                        setForm({ ...form, image: dataUrl })
+                        setPreviewImg(dataUrl)
+                      }
+                      reader.readAsDataURL(file)
+                    }
+                  }} />
+                </label>
               </div>
-              <div className="w-20 h-20 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden border border-gray-200 dark:border-gray-600">
+              <div className="w-24 h-24 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden border border-gray-200 dark:border-gray-600 flex-shrink-0">
                 {previewImg ? (
                   <img src={previewImg} alt="preview" className="w-full h-full object-cover" onError={() => setPreviewImg('')} />
                 ) : (
-                  <ImageIcon size={20} className="text-gray-400" />
+                  <ImageIcon size={24} className="text-gray-400" />
                 )}
               </div>
             </div>
@@ -314,13 +335,13 @@ export default function MyProductsPage() {
 
           <div className="flex justify-end gap-3 pt-2 border-t border-gray-100 dark:border-gray-700">
             <Button variant="outline" onClick={() => setModal(null)}>{t.dashboard.cancel}</Button>
-            <Button onClick={handleSave} isLoading={saving}>{editing ? 'Simpan Perubahan' : '{t.dashboard.addProduct}'}</Button>
+            <Button onClick={handleSave} isLoading={saving}>{editing ? 'Simpan Perubahan' : t.dashboard.addProduct}</Button>
           </div>
         </div>
       </Modal>
 
       {/* Delete Confirmation */}
-      <Modal open={deleteId !== null} onClose={() => setDeleteId(null)} title="{t.dashboard.deleteProduct} Produk" size="sm">
+      <Modal open={deleteId !== null} onClose={() => setDeleteId(null)} title={t.dashboard.deleteProduct + " Produk"} size="sm">
         <div className="text-center">
           <div className="w-14 h-14 rounded-2xl bg-red-100 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-4">
             <Trash2 size={28} className="text-red-500" />
@@ -342,7 +363,7 @@ export default function MyProductsPage() {
               {detail.image ? (
                 <img src={detail.image} alt={detail.name} className="w-full h-full object-cover" />
               ) : (
-                <img src={getCategoryMeta(detail.category)?.image || "/images/kopi_arabica.png"} alt="" className="w-24 h-24 opacity-30 object-cover rounded-xl" />
+                <img src={getCategoryMeta(detail.category)?.image || "/images/kopi_arabica.png"} alt="" className="w-full h-full object-cover opacity-70" />
               )}
             </div>
             <div className="flex flex-wrap gap-2">

@@ -1,6 +1,7 @@
 'use client'
 
 import { Linkedin, Twitter, Mail } from 'lucide-react'
+import Image from 'next/image'
 import { useTranslations } from '@/lib/i18n'
 
 const teamMembers = [
@@ -55,9 +56,7 @@ export default function Team() {
               className="group bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-center hover:shadow-xl transition-all hover:-translate-y-2"
             >
               <div className="relative mx-auto w-32 h-32 rounded-full overflow-hidden mb-4">
-                <div className="w-full h-full bg-gradient-to-br from-primary-400 to-ocean-400 flex items-center justify-center text-white text-3xl font-bold">
-                  {member.name.split(' ').map(n => n[0]).join('')}
-                </div>
+                <Image src={member.image} alt={member.name} fill className="object-cover" />
               </div>
               <h3 className="font-semibold text-lg text-gray-900 dark:text-white mb-1">
                 {member.name}
