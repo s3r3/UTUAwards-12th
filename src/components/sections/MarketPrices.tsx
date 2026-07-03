@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { TrendingUp, TrendingDown, Minus, RefreshCw, Activity, DollarSign, BarChart3 } from 'lucide-react'
+import { TrendingUp, TrendingDown, RefreshCw, Activity, BarChart3 } from 'lucide-react'
+import Image from 'next/image'
 import { useTranslations } from '@/lib/i18n'
 
 interface CommodityPrice {
@@ -55,9 +56,12 @@ export default function MarketPrices() {
     }
   }
 
-  useEffect(() => { fetchPrices() }, [])
+  useEffect(() => {
+    const timer = setTimeout(() => fetchPrices(), 0)
+    return () => clearTimeout(timer)
+  }, [])
 
-  const categoryColor = (id: string) => {
+  const categoryColor =  (id: string) => {
     const map: Record<string, string> = {
       coffee: '#22c55e', patchouli: '#0ea5e9', shrimp: '#f59e0b',
       pepper: '#ef4444', robusta: '#16a34a', cinnamon: '#8b5cf6',
@@ -142,8 +146,8 @@ export default function MarketPrices() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0" style={{ backgroundColor: `${color}15` }}>
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                      <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0 relative" style={{ backgroundColor: `${color}15` }}>
+                        <Image src={item.image || "/images/kopi_arabica.png"} alt={item.name} fill className="object-cover" />
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-gray-900 dark:text-white">{item.name}</p>

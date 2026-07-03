@@ -8,6 +8,7 @@ interface CommodityPrice {
   name: string
   nameId: string
   emoji: string
+  image: string
   price: number
   unit: string
   change: number
@@ -40,6 +41,7 @@ const commodities: CommodityPrice[] = [
     name: 'Coffee Arabica',
     nameId: 'Kopi Arabika Gayo',
     emoji: '☕',
+    image: '/images/kopi_arabica.png',
     price: generatePrice(4.85),
     unit: 'USD/kg',
     change: 0,
@@ -55,6 +57,7 @@ const commodities: CommodityPrice[] = [
     name: 'Patchouli Oil',
     nameId: 'Minyak Nilam Aceh',
     emoji: '🌿',
+    image: '/images/PatchouliOil.png',
     price: generatePrice(48.50),
     unit: 'USD/kg',
     change: 0,
@@ -70,6 +73,7 @@ const commodities: CommodityPrice[] = [
     name: 'Vannamei Shrimp',
     nameId: 'Udang Vannamei',
     emoji: '🦐',
+    image: '/images/VannameiShrimp.png',
     price: generatePrice(8.20),
     unit: 'USD/kg',
     change: 0,
@@ -85,6 +89,7 @@ const commodities: CommodityPrice[] = [
     name: 'Black Pepper',
     nameId: 'Lada Hitam Aceh',
     emoji: '🌶️',
+    image: '/images/ladahitamAceh.png',
     price: generatePrice(4.50),
     unit: 'USD/kg',
     change: 0,
@@ -100,6 +105,7 @@ const commodities: CommodityPrice[] = [
     name: 'Coffee Robusta',
     nameId: 'Kopi Robusta Gayo',
     emoji: '☕',
+    image: '/images/cofferobusta.png',
     price: generatePrice(2.95),
     unit: 'USD/kg',
     change: 0,
@@ -115,6 +121,7 @@ const commodities: CommodityPrice[] = [
     name: 'Cinnamon',
     nameId: 'Kayu Manis Aceh',
     emoji: '🌰',
+    image: '/images/Cinnamon.png',
     price: generatePrice(3.80),
     unit: 'USD/kg',
     change: 0,

@@ -1,28 +1,14 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Zap } from 'lucide-react'
 import { useTranslations } from '@/lib/i18n'
-import {
-  motion,
-  useInView,
-  useMotionValue,
-  useTransform,
-  animate,
-} from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import gsap from 'gsap'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
-interface StatItem {
-  label: string
-  value: string
-  numericEnd: number
-  suffix: string
-  color: string
-  icon: string
-}
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
