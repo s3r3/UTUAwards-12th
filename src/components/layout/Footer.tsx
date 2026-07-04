@@ -14,14 +14,14 @@ export default function Footer() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4 ">
               <Image
-                src="/footer/footerputih.png"
+                src="/footer/footerhitam.png"
                 alt="Acelora"
                 width={160}
                 height={45}
                 className="block dark:hidden h-9 w-auto"
               />
               <Image
-                src="/footer/footerhitam.png"
+                src="/footer/footerputih.png"
                 alt="Acelora"
                 width={160}
                 height={45}
