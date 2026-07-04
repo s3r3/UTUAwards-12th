@@ -1,11 +1,11 @@
-export const APP_NAME = 'Metuah Hub'
+export const APP_NAME = 'Acelora'
 export const APP_TAGLINE = 'Mentransformasi Komoditas Agro-Maritim Aceh Menjadi Pemain Utama Rantai Pasok Global'
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 export const APP_DESCRIPTION = 'Platform digital ekosistem agro-maritim Aceh yang menghubungkan UMKM, petani, nelayan, eksportir, dan mitra internasional dalam satu ekosistem terintegrasi.'
 
 export const COMPANY = {
-  name: 'Metuah Hub',
-  email: 'info@metuahhub.id',
+  name: 'Acelora',
+  email: 'info@acelora.id',
   phone: '+62 651 123456',
   address: 'Jl. T. Nyak Arief No. 1, Banda Aceh, Aceh 23111, Indonesia',
   competition: 'The 12th UTU Awards 2026',

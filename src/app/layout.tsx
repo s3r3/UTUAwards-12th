@@ -16,31 +16,31 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://meutuah.id'),
+  metadataBase: new URL('https://acelora.id'),
   title: {
-    default: 'Metuah Hub – Agro-Maritim Aceh Ecosystem',
-    template: '%s | Metuah Hub',
+    default: 'Acelora – Agro-Maritim Aceh Ecosystem',
+    template: '%s | Acelora',
   },
   description:
     'Platform digital ekosistem agro-maritim Aceh yang menghubungkan UMKM, petani, nelayan, eksportir, dan mitra internasional dalam satu ekosistem terintegrasi.',
   keywords: [
     'Aceh', 'agro-maritim', 'UMKM', 'ekspor', 'kopi gayo', 'nilam', 'seafood',
-    'rempah', 'rantai pasok', 'global supply chain', 'Metuah Hub',
+    'rempah', 'rantai pasok', 'global supply chain', 'Acelora',
   ],
-  authors: [{ name: 'Metuah Hub Team', url: 'https://meutuah.id' }],
-  creator: 'Metuah Hub Team',
-  publisher: 'Metuah Hub',
+  authors: [{ name: 'Acelora Team', url: 'https://acelora.id' }],
+  creator: 'Acelora Team',
+  publisher: 'Acelora',
   robots: { index: true, follow: true },
   openGraph: {
-    title: 'Metuah Hub – Agro-Maritim Aceh Ecosystem',
+    title: 'Acelora – Agro-Maritim Aceh Ecosystem',
     description:
       'Platform digital ekosistem agro-maritim Aceh yang menghubungkan UMKM, petani, nelayan, eksportir, dan mitra internasional.',
-    type: 'website', url: 'https://meutuah.id', locale: 'id_ID', siteName: 'Metuah Hub',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Metuah Hub' }],
+    type: 'website', url: 'https://acelora.id', locale: 'id_ID', siteName: 'Acelora',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Acelora' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Metuah Hub – Agro-Maritim Aceh Ecosystem',
+    title: 'Acelora – Agro-Maritim Aceh Ecosystem',
     description:
       'Platform digital ekosistem agro-maritim Aceh yang menghubungkan UMKM, petani, nelayan, eksportir, dan mitra internasional.',
     images: ['/og-image.png'],

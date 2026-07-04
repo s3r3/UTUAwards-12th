@@ -1,5 +1,5 @@
 /**
- * Product catalogue constants for Metuah Hub
+ * Product catalogue constants for Acelora
  * Covers Aceh agro-maritime commodities
  */
 

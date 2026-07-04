@@ -27,7 +27,7 @@ const markerData: Marker[] = [
   { lat: -33.8688, lng: 151.2093, label: 'Sydney', company: 'Sydney Seafood Pty', country: 'Australia', products: ['Seafood'], size: 0.4, color: '#0ea5e9' },
   { lat: 48.8566, lng: 2.3522, label: 'Paris', company: 'Euro Fragrance SARL', country: 'Prancis', products: ['Nilam Aceh'], size: 0.4, color: '#f59e0b' },
   { lat: 1.3521, lng: 103.8198, label: 'Singapore', company: 'Southeast Spices Pte', country: 'Singapura', products: ['Rempah', 'Kopi Gayo'], size: 0.4, color: '#8b5cf6' },
-  { lat: -6.2088, lng: 106.8456, label: 'Jakarta', company: 'Metuah Hub HQ', country: 'Indonesia', products: ['Pusat Ekosistem'], size: 0.7, color: '#22c55e' },
+  { lat: -6.2088, lng: 106.8456, label: 'Jakarta', company: 'Acelora HQ', country: 'Indonesia', products: ['Pusat Ekosistem'], size: 0.7, color: '#22c55e' },
   { lat: 51.5074, lng: -0.1278, label: 'London', company: 'UK Agro Trading Ltd', country: 'Inggris', products: ['Kopi Gayo', 'Nilam Aceh'], size: 0.5, color: '#0ea5e9' },
 ]
 

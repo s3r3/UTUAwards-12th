@@ -9,8 +9,8 @@ import { useTranslations } from '@/lib/i18n'
 export default function SettingsPage() {
   const t = useTranslations()
   const { theme, setTheme } = useUIStore()
-  const [name, setName] = useState('User Metuah')
-  const [email, setEmail] = useState('user@metuahhub.id')
+  const [name, setName] = useState('User Acelora')
+  const [email, setEmail] = useState('user@acelora.id')
 
   return (
     <div>

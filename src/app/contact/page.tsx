@@ -49,8 +49,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-white">Email</h3>
-                    <p className="text-gray-600 dark:text-gray-400">info@metuahhub.id</p>
-                    <p className="text-gray-600 dark:text-gray-400">partnership@metuahhub.id</p>
+                    <p className="text-gray-600 dark:text-gray-400">info@acelora.id</p>
+                    <p className="text-gray-600 dark:text-gray-400">partnership@acelora.id</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -59,7 +59,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-white">{t.contact.phone}</h3>
-                    <p className="text-gray-600 dark:text-gray-400">+62 651 123456</p>
+                    <p className="text-gray-600 dark:text-gray-400">+62 821 8525 3073</p>
                     <p className="text-gray-600 dark:text-gray-400">+62 812 3456 7890</p>
                   </div>
                 </div>
@@ -70,9 +70,9 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 dark:text-white">{t.contact.address}</h3>
                     <p className="text-gray-600 dark:text-gray-400">
-                      Jl. T. Nyak Arief No. 1<br />
-                      Banda Aceh, Aceh 23111<br />
-                      Indonesia
+                      Jalan Gle Gapui,<br />
+                      Sigli<br />
+                      Aceh Indonesia
                     </p>
                   </div>
                 </div>

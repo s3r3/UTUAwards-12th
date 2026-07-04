@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { Menu, X, Sun, Moon, Globe } from 'lucide-react'
 import { useUIStore } from '@/store/ui.store'
 import { useI18NStore, useTranslations } from '@/lib/i18n'
@@ -75,32 +76,22 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2 group">
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg"
-                style={{
-                  background: 'linear-gradient(135deg, var(--primary-500) 0%, var(--ocean-500) 100%)',
-                  boxShadow: '0 4px 15px rgba(34,197,94,0.35)',
-                }}
-              >
-                <span className="text-white font-bold text-lg leading-none">M</span>
-              </motion.div>
-              <div className="flex flex-col leading-none">
-                <span
-                  className="font-bold text-lg bg-clip-text text-transparent"
-                  style={{
-                    backgroundImage: 'linear-gradient(90deg, var(--primary-600), var(--ocean-500), var(--primary-600))',
-                    backgroundSize: '200% auto',
-                    animation: 'gradientShift 4s linear infinite',
-                  }}
-                >
-                  Metuah Hub
-                </span>
-                <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium tracking-widest uppercase">
-                  Agro-Maritim Aceh
-                </span>
-              </div>
+              <Image
+                src="/logo/logoaceloraputih.png"
+                alt="Acelora"
+                width={140}
+                height={40}
+                className="block dark:hidden h-8 w-auto"
+                priority
+              />
+              <Image
+                src="/logo/logoacelorahitam.png"
+                alt="Acelora"
+                width={140}
+                height={40}
+                className="hidden dark:block h-8 w-auto"
+                priority
+              />
             </Link>
 
             {/* Desktop Menu */}

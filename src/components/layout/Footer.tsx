@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Github, Twitter, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
 import { useTranslations } from '@/lib/i18n'
 
@@ -11,11 +12,21 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-                <span className="text-white font-bold text-xl">M</span>
-              </div>
-              <span className="font-bold text-xl text-white">Metuah Hub</span>
+            <div className="flex items-center mb-4 ">
+              <Image
+                src="/footer/footerputih.png"
+                alt="Acelora"
+                width={160}
+                height={45}
+                className="block dark:hidden h-9 w-auto"
+              />
+              <Image
+                src="/footer/footerhitam.png"
+                alt="Acelora"
+                width={160}
+                height={45}
+                className="hidden dark:block h-9 w-auto"
+              />
             </div>
             <p className="text-gray-400 mb-4 max-w-md">
               {t.footer.tagline}
@@ -51,7 +62,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center space-x-2">
                 <Mail size={16} />
-                <span>info@metuahhub.id</span>
+                <span>info@acelora.id</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Phone size={16} />
@@ -66,7 +77,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Metuah Hub. {t.footer.rights}</p>
+          <p>&copy; {new Date().getFullYear()} Acelora. {t.footer.rights}</p>
           <p className="text-sm mt-2">{t.hero.subtitle}</p>
         </div>
       </div>

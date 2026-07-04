@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -170,7 +171,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <span className="text-white font-bold text-lg">M</span>
             </motion.div>
             <div>
-              <span className="font-bold text-sm text-gray-900 dark:text-white">Metuah Hub</span>
+              <Image
+                src="/logo/logoacelorahitam.png"
+                alt="Acelora"
+                width={100}
+                height={30}
+                className="block dark:hidden h-6 w-auto"
+              />
+              <Image
+                src="/logo/logoaceloraputih.png"
+                alt="Acelora"
+                width={100}
+                height={30}
+                className="hidden dark:block h-6 w-auto"
+              />
               <p className="text-[9px] text-gray-400 dark:text-gray-500 tracking-widest uppercase">Dashboard</p>
             </div>
           </Link>
@@ -226,7 +240,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           {/* Breadcrumb */}
           <div className="hidden sm:flex items-center gap-2 text-xs text-gray-400">
-            <span>Metuah Hub</span>
+            <Image
+                src="/logo/logoacelorahitam.png"
+                alt="Acelora"
+                width={80}
+                height={24}
+                className="block dark:hidden h-5 w-auto"
+              />
+              <Image
+                src="/logo/logoaceloraputih.png"
+                alt="Acelora"
+                width={80}
+                height={24}
+                className="hidden dark:block h-5 w-auto"
+              />
             <ChevronRight size={12} />
             <span className="text-gray-600 dark:text-gray-300 font-medium">
               {sidebarItems.find(i => i.href === pathname)?.name || 'Dashboard'}

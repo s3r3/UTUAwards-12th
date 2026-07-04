@@ -187,7 +187,16 @@ const cardVariants = {
 }
 
 export default function ProductCatalog() {
-  const [products, setProducts] = useState<Product[]>([])
+  const fallbackProducts: Product[] = [
+  { id: 1, name: 'Kopi Arabica Gayo Premium', category: 'COFFEE', origin: 'Gayo Lues', price: 'Rp 150.000/kg', rating: 4.9, image: '/images/kopi_arabica.png', emojiColor: 'from-amber-500 to-orange-600', description: 'Kopi arabica single origin dari dataran tinggi Gayo Lues.', certifications: ['Organic', 'Fair Trade'], stock: 250 },
+  { id: 2, name: 'Minyak Nilam Aceh', category: 'PATCHOULI', origin: 'Aceh Selatan', price: 'Rp 250.000/liter', rating: 4.8, image: '/images/PatchouliOil.png', emojiColor: 'from-[#22c55e] to-emerald-600', description: 'Minyak nilam murni kualitas ekspor.', certifications: ['ISO 9001', 'Halal MUI'], stock: 80 },
+  { id: 3, name: 'Udang Vannamei Fresh', category: 'SEAFOOD', origin: 'Aceh Timur', price: 'Rp 85.000/kg', rating: 4.7, image: '/images/VannameiShrimp.png', emojiColor: 'from-[#0ea5e9] to-cyan-500', description: 'Udang vannamei segar dari tambak terintegrasi.', certifications: ['HACCP', 'ASC'], stock: 500 },
+  { id: 4, name: 'Rempah Kustom Aceh', category: 'SPICES', origin: 'Aceh Besar', price: 'Rp 75.000/box', rating: 4.9, image: '/images/rempahcustomAceh.png', emojiColor: 'from-red-500 to-rose-600', description: 'Campuran rempah autentik Aceh.', certifications: ['Halal MUI', 'BPOM'], stock: 300 },
+  { id: 5, name: 'Kopi Robusta Gayo', category: 'COFFEE', origin: 'Bener Meriah', price: 'Rp 120.000/kg', rating: 4.6, image: '/images/cofferobusta.png', emojiColor: 'from-stone-600 to-amber-700', description: 'Kopi robusta dengan karakter bold dan earthy.', certifications: ['Organic', 'Fair Trade'], stock: 180 },
+  { id: 6, name: 'Ikan Tongkol Asap', category: 'PROCESSED', origin: 'Pidie', price: 'Rp 95.000/kg', rating: 4.8, image: '/images/ikantongkolasap.png', emojiColor: 'from-purple-500 to-indigo-600', description: 'Ikan tongkol asap tradisional.', certifications: ['Halal MUI', 'P-IRT'], stock: 120 },
+]
+
+const [products, setProducts] = useState<Product[]>(fallbackProducts)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -195,7 +204,7 @@ export default function ProductCatalog() {
       try {
         const res = await fetch('/api/products')
         const json = await res.json()
-        if (json.success) {
+        if (json.success && json.data.length > 0) {
           setProducts(json.data.map((p: any) => ({
             id: p.id,
             name: p.name,
@@ -211,7 +220,7 @@ export default function ProductCatalog() {
           })))
         }
       } catch (e) {
-        console.error('Failed to fetch products', e)
+        console.error('Failed to fetch products, using fallback', e)
       } finally {
         setLoading(false)
       }

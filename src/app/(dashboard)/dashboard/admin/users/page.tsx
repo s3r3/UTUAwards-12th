@@ -7,7 +7,7 @@ import { useTranslations } from '@/lib/i18n'
 const users = [
   { id: 1, name: 'Ahmad Fauzan', email: 'ahmad@example.com', role: 'USER', products: 5 },
   { id: 2, name: 'Siti Nurhaliza', email: 'siti@example.com', role: 'USER', products: 3 },
-  { id: 3, name: 'Admin Metuah', email: 'admin@metuahhub.id', role: 'ADMIN', products: 0 },
+  { id: 3, name: 'Admin Acelora', email: 'admin@acelora.id', role: 'ADMIN', products: 0 },
 ]
 
 export default function AdminUsersPage() {

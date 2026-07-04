@@ -312,7 +312,7 @@ export default function DashboardPreview() {
           </span>
           <span className="hidden md:flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#0ea5e9]" />
-            Sumber: platform Metuah Hub
+            Sumber: platform Acelora
           </span>
         </motion.div>
       </div>

@@ -1,6 +1,6 @@
 /**
  * Fade animation variants for Framer Motion
- * Used throughout Metuah Hub for entrance and exit animations
+ * Used throughout Acelora for entrance and exit animations
  */
 
 import type { Variants, Transition } from 'framer-motion'

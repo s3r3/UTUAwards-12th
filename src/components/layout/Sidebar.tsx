@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useAuthStore } from '@/store/auth.store'
 import {
@@ -31,11 +32,21 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
   return (
     <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transform transition-transform md:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
       <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-            <span className="text-white font-bold">M</span>
-          </div>
-          <span className="font-bold text-gray-900 dark:text-white">Metuah Hub</span>
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/logo/logoacelorahitam.png"
+            alt="Acelora"
+            width={120}
+            height={35}
+            className="block dark:hidden h-7 w-auto"
+          />
+          <Image
+            src="/logo/logoaceloraputih.png"
+            alt="Acelora"
+            width={120}
+            height={35}
+            className="hidden dark:block h-7 w-auto"
+          />
         </Link>
         <button onClick={onClose} className="md:hidden p-1 text-gray-500">
           <X size={20} />

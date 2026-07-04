@@ -220,7 +220,7 @@ export default function Mentoring() {
               Siap Tingkatkan Produk Anda ke Pasar Global?
             </h3>
             <p className="text-white/80 mb-6 max-w-xl mx-auto">
-              Daftarkan produk Anda sekarang dan dapatkan konsultasi awal gratis dengan tim ahli Metuah Hub
+              Daftarkan produk Anda sekarang dan dapatkan konsultasi awal gratis dengan tim ahli Acelora
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <motion.button

@@ -11,7 +11,7 @@ const getSteps = (t: ReturnType<typeof useTranslations>) => [
     color: 'bg-green-500',
   },
   {
-    title: 'Metuah Hub',
+    title: 'Acelora',
     description: 'Verifikasi kualitas dan sertifikasi produk',
     icon: Building,
     color: 'bg-blue-500',

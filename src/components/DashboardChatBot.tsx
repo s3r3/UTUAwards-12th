@@ -17,13 +17,13 @@ interface Message {
 const bizResponses: [RegExp, string, string?][] = [
   [/produk|product|jual|komoditas/i, 'Untuk meningkatkan penjualan produk Anda:\n\n📌 Tambah foto produk berkualitas tinggi\n📌 Lengkapi deskripsi & legalitas\n📌 Ikuti program mentoring sertifikasi\n📌 Aktifkan premium listing untuk exposure lebih\n\nProduk dengan sertifikasi Halal + HACCP punya peluang ekspor 3x lebih besar!', 'tip'],
   [/mentor|sertifikasi|pelatihan|course/i, 'Program mentoring yang cocok untuk skala bisnis Anda:\n\n✅ Level Dasar: Sertifikasi Halal (2-3 bulan)\n✅ Level Menengah: Export Packaging (1-2 bulan)\n✅ Level Lanjutan: HACCP (3-4 bulan)\n✅ Optimasi: Supply Chain Training (1 bulan)\n\nMulai dari yang paling relevan dengan produk Anda!', 'insight'],
-  [/ekspor|export|luar negeri|global|lokal/i, 'Strategi ekspor untuk UMKM Aceh 🚀\n\n1️⃣ Urus sertifikasi (Halal, HACCP, BPOM)\n2️⃣ Standarisasi kemasan ekspor\n3️⃣ Daftar di katalog Metuah Hub\n4️⃣ Ikut pameran dagang internasional\n\nTim kami siap mendampingi Anda di setiap langkah!', 'tip'],
+  [/ekspor|export|luar negeri|global|lokal/i, 'Strategi ekspor untuk UMKM Aceh 🚀\n\n1️⃣ Urus sertifikasi (Halal, HACCP, BPOM)\n2️⃣ Standarisasi kemasan ekspor\n3️⃣ Daftar di katalog Acelora\n4️⃣ Ikut pameran dagang internasional\n\nTim kami siap mendampingi Anda di setiap langkah!', 'tip'],
   [/harga|modal|biaya|cost|untung|revenue/i, 'Tips optimasi keuangan bisnis 💰\n\n📊 Hitung HPP (Harga Pokok Produksi) dengan benar\n📊 Tentukan margin keuntungan 20-30%\n📊 Manfaatkan program mentoring untuk efisiensi\n📊 Gunakan fitur premium listing untuk eksposur\n\nBEP rata-rata UMKM di platform kami: Bulan ke-6!', 'insight'],
-  [/pesaing|kompetitor|saingan/i, 'Cara memenangkan persaingan pasar:\n\n🔥 Unique selling point: Ceritakan keunikan produk Aceh Anda\n🔥 Sertifikasi: Keunggulan kompetitif utama\n🔥 Branding: Kemasan premium + storytelling\n🔥 Jaringan: Manfaatkan mitra internasional Metuah Hub\n\nProduk dengan cerita lokal yang autentik punya nilai jual 40% lebih tinggi!', 'tip'],
+  [/pesaing|kompetitor|saingan/i, 'Cara memenangkan persaingan pasar:\n\n🔥 Unique selling point: Ceritakan keunikan produk Aceh Anda\n🔥 Sertifikasi: Keunggulan kompetitif utama\n🔥 Branding: Kemasan premium + storytelling\n🔥 Jaringan: Manfaatkan mitra internasional Acelora\n\nProduk dengan cerita lokal yang autentik punya nilai jual 40% lebih tinggi!', 'tip'],
   [/ekspansi|kembang|scale|besar|capex/i, 'Strategi pengembangan bisnis 📈\n\n📌 Tahap 1: Optimasi produk & sertifikasi (3-6 bulan)\n📌 Tahap 2: Perluas jaringan mitra (6-12 bulan)\n📌 Tahap 3: Ekspor ke 2-3 negara tujuan\n📌 Tahap 4: Scale up produksi & staffing\n\nKami siap mendampingi di setiap tahap melalui program mentoring!', 'tip'],
   [/legal|izin|bpom|halal|pirt/i, 'Informasi legalitas produk:\n\n📋 P-IRT: Untuk produk pangan skala kecil\n📋 BPOM MD: Untuk produk pangan skala menengah/besar\n📋 Sertifikat Halal MUI: Wajib untuk produk makanan\n📋 HACCP: Standar internasional keamanan pangan\n\nRekomendasi: Urut dari P-IRT → Halal → BPOM → HACCP', 'insight'],
-  [/promosi|marketing|iklan|branding/i, 'Strategi promosi untuk UMKM 🎯\n\n📱 Manfaatkan media sosial (IG, TikTok)\n📱 Ceritakan proses produksi (storytelling)\n📱 Gunakan kemasan fotogenik\n📱 Aktif di marketplace Mitra Metuah Hub\n\nTips: Produk dengan cerita asal-usul Aceh punya engagement 3x lebih tinggi!', 'tip'],
-  [/hasil|omset|pendapatan|laba|profit/i, 'Proyeksi bisnis setelah bergabung di Metuah Hub:\n\n📊 Rata-rata peningkatan penjualan: 150% (6 bulan)\n📊 Jangkauan pasar: dari lokal → 25+ negara\n📊 Efisiensi biaya logistik: hingga 30%\n📊 Nilai tambah sertifikasi: 40% harga premium\n\nMulai perjalanan Anda sekarang! 🚀', 'insight'],
+  [/promosi|marketing|iklan|branding/i, 'Strategi promosi untuk UMKM 🎯\n\n📱 Manfaatkan media sosial (IG, TikTok)\n📱 Ceritakan proses produksi (storytelling)\n📱 Gunakan kemasan fotogenik\n📱 Aktif di marketplace Mitra Acelora\n\nTips: Produk dengan cerita asal-usul Aceh punya engagement 3x lebih tinggi!', 'tip'],
+  [/hasil|omset|pendapatan|laba|profit/i, 'Proyeksi bisnis setelah bergabung di Acelora:\n\n📊 Rata-rata peningkatan penjualan: 150% (6 bulan)\n📊 Jangkauan pasar: dari lokal → 25+ negara\n📊 Efisiensi biaya logistik: hingga 30%\n📊 Nilai tambah sertifikasi: 40% harga premium\n\nMulai perjalanan Anda sekarang! 🚀', 'insight'],
   [/terima kasih|makasih|thanks|help/i, 'Sama-sama! Senang bisa membantu bisnis Anda berkembang 🌟\n\nAda lagi yang ingin ditanyakan?\n\n💡 Tips: Coba tanya "strategi ekspor" atau "cara optimasi produk"', 'tip'],
 ]
 
@@ -48,7 +48,7 @@ export default function DashboardChatBot() {
   const t = useTranslations()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
-    { id: 0, text: 'Halo! 👋 Saya asisten bisnis Metuah Hub. Siap bantu Anda mengembangkan usaha agro-maritim!', sender: 'bot', type: 'tip' },
+    { id: 0, text: 'Halo! 👋 Saya asisten bisnis Acelora. Siap bantu Anda mengembangkan usaha agro-maritim!', sender: 'bot', type: 'tip' },
   ])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)

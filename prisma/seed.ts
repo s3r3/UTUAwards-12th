@@ -8,15 +8,15 @@ async function main() {
   const userPassword = await bcrypt.hash('user123', 12)
 
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@metuahhub.id' },
+    where: { email: 'admin@acelora.id' },
     update: {},
-    create: { name: 'Admin Metuah', email: 'admin@metuahhub.id', password: adminPassword, role: 'ADMIN' },
+    create: { name: 'Admin Acelora', email: 'admin@acelora.id', password: adminPassword, role: 'ADMIN' },
   })
 
   const user = await prisma.user.upsert({
-    where: { email: 'user@metuahhub.id' },
+    where: { email: 'user@acelora.id' },
     update: {},
-    create: { name: 'User Metuah', email: 'user@metuahhub.id', password: userPassword, role: 'USER' },
+    create: { name: 'User Acelora', email: 'user@acelora.id', password: userPassword, role: 'USER' },
   })
 
   const products = [
@@ -51,8 +51,8 @@ async function main() {
   }
 
   console.log('Seed completed')
-  console.log(`Admin: admin@metuahhub.id / admin123`)
-  console.log(`User: user@metuahhub.id / user123`)
+  console.log(`Admin: admin@acelora.id / admin123`)
+  console.log(`User: user@acelora.id / user123`)
 }
 
 main()

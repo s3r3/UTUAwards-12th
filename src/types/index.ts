@@ -1,4 +1,4 @@
-// Type definitions for Metuah Hub
+// Type definitions for Acelora
 
 export interface User {
   id: string;

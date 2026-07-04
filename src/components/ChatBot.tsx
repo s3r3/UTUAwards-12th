@@ -14,27 +14,27 @@ interface Message {
 // ─── Rule-based responses ──────────────────────────────────────────────
 // ponytail: replace with real AI API (OpenAI/Gemini) when API key available
 const responses: [RegExp, string][] = [
-  [/halo|hi|hai|helo|hey|siang|pagi|malam/i, 'Halo! 👋 Selamat datang di Metuah Hub. Ada yang bisa saya bantu?'],
-  [/buat apa|tentang|apa itu|fungsi|kegunaan/i, 'Metuah Hub adalah platform digital ekosistem agro-maritim Aceh 🚀 \n\nKami menghubungkan UMKM, petani, nelayan, dan eksportir Aceh ke pasar global. Mulai dari sertifikasi produk, mentoring, hingga koneksi ke buyer internasional.'],
+  [/halo|hi|hai|helo|hey|siang|pagi|malam/i, 'Halo! 👋 Selamat datang di Acelora. Ada yang bisa saya bantu?'],
+  [/buat apa|tentang|apa itu|fungsi|kegunaan/i, 'Acelora adalah platform digital ekosistem agro-maritim Aceh 🚀 \n\nKami menghubungkan UMKM, petani, nelayan, dan eksportir Aceh ke pasar global. Mulai dari sertifikasi produk, mentoring, hingga koneksi ke buyer internasional.'],
   [/daftar|register|produk|mendaftar/i, 'Tentu! Anda bisa mendaftarkan produk agro-maritim Aceh Anda di sini 🌿\n\nCaranya:\n1. Buat akun (gratis)\n2. Masuk ke dashboard\n3. Klik "Tambah Produk"\n4. Isi data produk\n\nTim kami akan review & bantu sertifikasi!'],
-  [/kaya|untung|revenue|pendapatan|bisnis|model/i, 'Metuah Hub punya model bisnis yang menguntungkan untuk semua pihak 💰\n\n• Komisi 3% per transaksi\n• Premium listing untuk produk unggulan\n• Konsultasi B2B\n• Kemitraan pemerintah\n\nUMKM dapat akses pasar global tanpa biaya besar!'],
-  [/siapa|tim|creator|pembuat/i, 'Metuah Hub dibuat oleh tim profesional yang berpengalaman di bidang agro-maritim dan teknologi 👨‍💻\n\nDipimpin oleh Ahmad Fauzan (CEO) bersama para ahli di bidang operasi, kemitraan internasional, dan teknologi.'],
+  [/kaya|untung|revenue|pendapatan|bisnis|model/i, 'Acelora punya model bisnis yang menguntungkan untuk semua pihak 💰\n\n• Komisi 3% per transaksi\n• Premium listing untuk produk unggulan\n• Konsultasi B2B\n• Kemitraan pemerintah\n\nUMKM dapat akses pasar global tanpa biaya besar!'],
+  [/siapa|tim|creator|pembuat/i, 'Acelora dibuat oleh tim profesional yang berpengalaman di bidang agro-maritim dan teknologi 👨‍💻\n\nDipimpin oleh Ahmad Fauzan (CEO) bersama para ahli di bidang operasi, kemitraan internasional, dan teknologi.'],
   [/mentor|course|pelatihan|sertifikasi/i, 'Kami punya 4 program mentoring unggulan 📚\n\n✅ Sertifikasi Halal\n✅ HACCP (standar pangan internasional)\n✅ Export Packaging\n✅ Supply Chain Training\n\nSetiap program didampingi mentor ahli!'],
   [/mitra|partner|global|luar negeri|ekspor/i, 'Produk UMKM Aceh sudah tembus pasar global! 🌍\n\nMitra kami tersebar di:\n• Asia (Malaysia, Jepang, Singapura)\n• Eropa (Belanda, Prancis, Inggris)\n• Timur Tengah (UAE)\n• Amerika (USA)\n\nLebih dari 25 negara tujuan ekspor!'],
-  [/kontak|telepon|email|alamat|hubungi/i, 'Hubungi kami 📞\n\nEmail: info@metuahhub.id\nTelp: +62 651 123456\nAlamat: Banda Aceh, Indonesia\n\nAtau kirim pesan lewat halaman Contact!'],
+  [/kontak|telepon|email|alamat|hubungi/i, 'Hubungi kami 📞\n\nEmail: info@acelora.id\nTelp: +62 651 123456\nAlamat: Banda Aceh, Indonesia\n\nAtau kirim pesan lewat halaman Contact!'],
   [/harga|biaya|bayar|cost|gratis/i, 'Pendaftaran akun GRATIS! 🎉\n\nBiaya dikenakan saat:\n• Program mentoring (mulai Rp1.5jt)\n• Premium listing produk\n• Konsultasi B2B\n\nUntuk info lengkap, hubungi tim kami!'],
-  [/makasih|terima kasih|thank|thanks/i, 'Sama-sama! 😊 Senang bisa membantu. \n\nAda lagi yang ingin ditanyakan seputar Metuah Hub?'],
+  [/makasih|terima kasih|thank|thanks/i, 'Sama-sama! 😊 Senang bisa membantu. \n\nAda lagi yang ingin ditanyakan seputar Acelora?'],
 ]
 
 function getBotResponse(input: string): string {
   for (const [pattern, response] of responses) {
     if (pattern.test(input)) return response
   }
-  return 'Maaf, saya belum paham pertanyaan Anda 🤔\n\nCoba tanyakan:\n• "Apa itu Metuah Hub?"\n• "Cara daftar produk"\n• "Info mentoring"\n• "Mitra internasional"\n• "Kontak kami"'
+  return 'Maaf, saya belum paham pertanyaan Anda 🤔\n\nCoba tanyakan:\n• "Apa itu Acelora?"\n• "Cara daftar produk"\n• "Info mentoring"\n• "Mitra internasional"\n• "Kontak kami"'
 }
 
 const suggestions = [
-  'Apa itu Metuah Hub?',
+  'Apa itu Acelora?',
   'Cara daftar produk',
   'Info mentoring',
   'Mitra internasional',
@@ -44,7 +44,7 @@ export default function ChatBot() {
   const t = useTranslations()
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
-    { id: 0, text: 'Halo! 👋 Saya asisten Metuah Hub. Ada yang bisa saya bantu?', sender: 'bot' },
+    { id: 0, text: 'Halo! 👋 Saya asisten Acelora. Ada yang bisa saya bantu?', sender: 'bot' },
   ])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
@@ -200,7 +200,7 @@ export default function ChatBot() {
                 </button>
               </form>
               <p className="text-[10px] text-gray-400 dark:text-gray-500 text-center mt-1.5">
-                Asisten virtual Metuah Hub
+                Asisten virtual Acelora
               </p>
             </div>
           </motion.div>

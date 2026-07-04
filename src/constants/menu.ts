@@ -1,5 +1,5 @@
 /**
- * Navigation menu constants for Metuah Hub
+ * Navigation menu constants for Acelora
  */
 
 export interface MenuItem {
@@ -151,8 +151,8 @@ export const MAIN_MENU: MenuItem[] = [
     label: 'Tim',
     labelEn: 'Team',
     href: '/team',
-    description: 'Kenali tim di balik Metuah Hub',
-    descriptionEn: 'Meet the team behind Metuah Hub',
+    description: 'Kenali tim di balik Acelora',
+    descriptionEn: 'Meet the team behind Acelora',
     icon: 'Users',
   },
   {

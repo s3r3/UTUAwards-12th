@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { Mail, Lock, Eye, EyeOff, User } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
@@ -34,11 +35,23 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <Link href="/" className="inline-flex items-center space-x-2 mb-6">
-            <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-              <span className="text-white font-bold text-xl">M</span>
-            </div>
-            <span className="font-bold text-xl text-gray-900 dark:text-white">Metuah Hub</span>
+          <Link href="/" className="inline-flex items-center justify-center mb-6">
+            <Image
+              src="/logo/logoacelorahitam.png"
+              alt="Acelora"
+              width={180}
+              height={50}
+              className="block dark:hidden h-10 w-auto"
+              priority
+            />
+            <Image
+              src="/logo/logoaceloraputih.png"
+              alt="Acelora"
+              width={180}
+              height={50}
+              className="hidden dark:block h-10 w-auto"
+              priority
+            />
           </Link>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
             Daftar Akun Baru
