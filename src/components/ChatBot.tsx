@@ -50,6 +50,7 @@ export default function ChatBot() {
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const nextId = useRef(1)
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -61,7 +62,7 @@ export default function ChatBot() {
 
   const handleSend = async (text: string) => {
     if (!text.trim()) return
-    const userMsg: Message = { id: Date.now(), text: text.trim(), sender: 'user' }
+    const userMsg: Message = { id: nextId.current++, text: text.trim(), sender: 'user' }
     setMessages((prev) => [...prev, userMsg])
     setInput('')
     setIsTyping(true)
@@ -72,7 +73,7 @@ export default function ChatBot() {
 
     setTimeout(() => {
       setIsTyping(false)
-      const botMsg: Message = { id: Date.now() + 1, text: reply, sender: 'bot' }
+      const botMsg: Message = { id: nextId.current++, text: reply, sender: 'bot' }
       setMessages((prev) => [...prev, botMsg])
     }, delay)
   }

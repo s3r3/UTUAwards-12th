@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useTranslations } from '@/lib/i18n'
 import {
@@ -96,7 +97,7 @@ function ProductModal({
           <div
             className={`relative h-52 bg-gradient-to-br ${product.emojiColor} flex items-center justify-center overflow-hidden`}
           >
-            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+            <Image src={product.image} alt={product.name} fill className="object-cover" />
             <button
               onClick={onClose}
               className="absolute top-4 right-4 p-2 rounded-xl bg-black/20 hover:bg-black/40 text-white transition-colors"
@@ -196,8 +197,18 @@ export default function ProductCatalog() {
   { id: 6, name: 'Ikan Tongkol Asap', category: 'PROCESSED', origin: 'Pidie', price: 'Rp 95.000/kg', rating: 4.8, image: '/images/ikantongkolasap.png', emojiColor: 'from-purple-500 to-indigo-600', description: 'Ikan tongkol asap tradisional.', certifications: ['Halal MUI', 'P-IRT'], stock: 120 },
 ]
 
+  const categoryColor = (cat: string) => {
+    const map: Record<string, string> = {
+      COFFEE: 'from-amber-500 to-orange-600',
+      PATCHOULI: 'from-[#22c55e] to-emerald-600',
+      SEAFOOD: 'from-[#0ea5e9] to-cyan-500',
+      SPICES: 'from-red-500 to-rose-600',
+      PROCESSED: 'from-purple-500 to-indigo-600',
+    }
+    return map[cat] || 'from-gray-500 to-gray-600'
+  }
 const [products, setProducts] = useState<Product[]>(fallbackProducts)
-  const [loading, setLoading] = useState(true)
+  const [, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -205,7 +216,8 @@ const [products, setProducts] = useState<Product[]>(fallbackProducts)
         const res = await fetch('/api/products')
         const json = await res.json()
         if (json.success && json.data.length > 0) {
-          setProducts(json.data.map((p: any) => ({
+          const approved = json.data.filter((p: Record<string, unknown>) => p.status === 'APPROVED')
+          setProducts(approved.map((p: Record<string, unknown>) => ({
             id: p.id,
             name: p.name,
             category: p.category,
@@ -213,7 +225,7 @@ const [products, setProducts] = useState<Product[]>(fallbackProducts)
             price: p.price || 'Hubungi',
             rating: 4.5,
             image: p.image || '/images/kopi_arabica.png',
-            emojiColor: categoryColor(p.category),
+            emojiColor: categoryColor(p.category as string),
             description: p.description || '',
             certifications: ['Terdaftar'],
             stock: 0,
@@ -236,16 +248,6 @@ const [products, setProducts] = useState<Product[]>(fallbackProducts)
   const [inputValue, setInputValue] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   
-  const categoryColor = (cat: string) => {
-    const map: Record<string, string> = {
-      COFFEE: 'from-amber-500 to-orange-600',
-      PATCHOULI: 'from-[#22c55e] to-emerald-600',
-      SEAFOOD: 'from-[#0ea5e9] to-cyan-500',
-      SPICES: 'from-red-500 to-rose-600',
-      PROCESSED: 'from-purple-500 to-indigo-600',
-    }
-    return map[cat] || 'from-gray-500 to-gray-600'
-  }
 
 const [selectedCategory, setSelectedCategory] = useState('all')
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
@@ -383,13 +385,7 @@ const [selectedCategory, setSelectedCategory] = useState('all')
                   <div
                     className={`relative h-44 bg-gradient-to-br ${product.emojiColor} overflow-hidden flex items-center justify-center`}
                   >
-                    <motion.span
-                      className="text-7xl filter drop-shadow-lg"
-                      whileHover={{ scale: 1.15 }}
-                      transition={{ type: 'spring', stiffness: 300 }}
-                    >
-                      <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-                    </motion.span>
+                    <Image src={product.image} alt={product.name} fill className="object-cover" />
                     {/* Subtle overlay on hover */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                   </div>

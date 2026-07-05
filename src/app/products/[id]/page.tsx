@@ -3,11 +3,11 @@
 'use client'
 
 import { use, useState, useMemo } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, MapPin, Star, Package, ShoppingBag, ChevronRight, Store, ArrowUpDown } from 'lucide-react'
+import { ArrowLeft, MapPin, Star, Package, ShoppingBag, Store, ArrowUpDown } from 'lucide-react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import Button from '@/components/ui/Button'
 import { useTranslations } from '@/lib/i18n'
 
 const products = [
@@ -33,10 +33,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   const { id } = use(params)
   const product = products.find(p => p.id === id)
 
-  if (!product) return (
-    <main className="min-h-screen"><Navbar /><div className="pt-32 text-center"><Package size={48} className="mx-auto text-gray-300 mb-4" /><h2 className="text-xl font-bold text-gray-900">{t.dashboard.productNotFound}</h2><Link href="/products" className="text-primary-600 mt-2 inline-block">{t.dashboard.back}</Link></div><Footer /></main>
-  )
-
   const [sortBy, setSortBy] = useState<'cheapest' | 'expensive'>('cheapest')
 
   const sortedSuppliers = useMemo(() => {
@@ -50,15 +46,15 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     return s
   }, [product, sortBy])
 
-  // Price range text
-  const minPrice = product ? Math.min(...product.suppliers.map(s => s.price)) : 0
-  const maxPrice = product ? Math.max(...product.suppliers.map(s => s.price)) : 0
-
   const formatPrice = (num: number) => {
     return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
   }
 
+  const minPrice = product ? Math.min(...product.suppliers.map(s => s.price)) : 0
+  const maxPrice = product ? Math.max(...product.suppliers.map(s => s.price)) : 0
+
   if (!product) return (
+
     <main className="min-h-screen"><Navbar /><div className="pt-32 text-center"><Package size={48} className="mx-auto text-gray-300 mb-4" /><h2 className="text-xl font-bold text-gray-900">{t.dashboard.productNotFound}</h2><Link href="/products" className="text-primary-600 mt-2 inline-block">{t.dashboard.back}</Link></div><Footer /></main>
   )
 
@@ -71,9 +67,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
           {/* Produk Header */}
           <div className="bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-800 mb-10">
-            <div className="h-56 bg-gradient-to-br from-primary-400 to-ocean-500 flex items-center justify-center relative overflow-hidden">
+            <div className="relative h-56 bg-gradient-to-br from-primary-400 to-ocean-500 flex items-center justify-center overflow-hidden">
+              <Image src={product.image} alt={product.name} fill className="object-cover" priority />
               <div className="absolute inset-0 bg-black/10" />
-              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
             </div>
             <div className="p-6 md:p-8">
               <div className="flex flex-wrap items-start justify-between gap-4 mb-4">

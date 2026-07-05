@@ -46,7 +46,7 @@ export default function InternationalPartner() {
             Jaringan Global
           </div>
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Mitra <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">{t.partners.title}</span>
+             <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">{t.partners.title}</span>
           </h2>
           <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">
             {t.partners.desc}

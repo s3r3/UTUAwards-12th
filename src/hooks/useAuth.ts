@@ -14,11 +14,12 @@ export function useAuth() {
     } else {
       setLoading(false)
       if (session?.user) {
+        const u = session.user as Record<string, unknown>
         setUser({
-          id: (session.user as any).id,
-          name: session.user.name || '',
-          email: session.user.email || '',
-          role: (session.user as any).role || 'USER',
+          id: (u.id as string) || '',
+          name: (u.name as string) || '',
+          email: (u.email as string) || '',
+          role: (u.role as string) || 'USER',
         })
       } else {
         setUser(null)

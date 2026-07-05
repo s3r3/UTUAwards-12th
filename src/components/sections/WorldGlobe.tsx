@@ -1,11 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
-import dynamic from 'next/dynamic'
-import * as THREE from 'three'
-import { useTranslations } from '@/lib/i18n'
-
-const Globe = dynamic(() => import('react-globe.gl'), { ssr: false })
+import { useState, useRef, useEffect } from 'react'
 
 interface Marker {
   lat: number
@@ -31,93 +26,112 @@ const markerData: Marker[] = [
   { lat: 51.5074, lng: -0.1278, label: 'London', company: 'UK Agro Trading Ltd', country: 'Inggris', products: ['Kopi Gayo', 'Nilam Aceh'], size: 0.5, color: '#0ea5e9' },
 ]
 
+function project(lat: number, lng: number, w: number, h: number) {
+  const x = (lng + 180) * (w / 360)
+  const latRad = lat * Math.PI / 180
+  const mercN = Math.PI - 0.5 * Math.log((1 + Math.sin(latRad)) / (1 - Math.sin(latRad)))
+  const y = h * mercN / (2 * Math.PI)
+  return { x, y }
+}
+
+function arcPath(
+  from: { lat: number; lng: number },
+  to: { lat: number; lng: number },
+  w: number, h: number
+) {
+  const p1 = project(from.lat, from.lng, w, h)
+  const p2 = project(to.lat, to.lng, w, h)
+  const midX = (p1.x + p2.x) / 2
+  const dist = Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2)
+  const bulge = Math.max(dist * 0.08, 20)
+  return `M ${p1.x} ${p1.y} Q ${midX} ${(p1.y + p2.y) / 2 - bulge} ${p2.x} ${p2.y}`
+}
+
 const arcsData = markerData
   .filter((m) => m.label !== 'Jakarta')
-  .map((m) => ({
-    startLat: -6.2088, startLng: 106.8456,
-    endLat: m.lat, endLng: m.lng,
-    color: m.color,
-  }))
+  .map((m) => ({ from: { lat: -6.2088, lng: 106.8456 }, to: { lat: m.lat, lng: m.lng }, color: m.color }))
 
 export default function WorldGlobe() {
-  const t = useTranslations()
-  const globeRef = useRef<any>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const [dimensions, setDimensions] = useState({ width: 600, height: 450 })
+  const [dims, setDims] = useState({ w: 800, h: 450 })
   const [hovered, setHovered] = useState<Marker | null>(null)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
     const ro = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect
-        if (width > 0 && height > 0) setDimensions({ width, height })
+      for (const e of entries) {
+        const { width, height } = e.contentRect
+        if (width > 0 && height > 0) setDims({ w: Math.round(width), h: Math.round(height) })
       }
     })
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
 
-  useEffect(() => {
-    if (!globeRef.current) return
-    const c = globeRef.current.controls()
-    if (c) {
-      c.autoRotate = true
-      c.autoRotateSpeed = 1.2
-      c.enableZoom = false
-      c.enablePan = false
-      c.minPolarAngle = Math.PI / 3
-      c.maxPolarAngle = Math.PI / 2
-    }
-  }, [mounted])
-
-  const handlePointHover = useCallback((point: object | null) => {
-    setHovered(point as Marker | null)
-  }, [])
-
-  if (!mounted) return (
-    <div className="w-full h-full min-h-[400px] flex items-center justify-center">
-      <div className="flex flex-col items-center gap-3 text-gray-400">
-        <div className="w-8 h-8 border-2 border-primary-500/30 border-t-primary-500 rounded-full animate-spin" />
-        <span className="text-sm animate-pulse">{t.worldGlobe.loading}</span>
-      </div>
-    </div>
-  )
+  const W = dims.w
+  const H = Math.round(dims.w / 2)
 
   return (
-    <div ref={containerRef} className="relative w-full h-full min-h-[400px]">
-      <Globe
-        ref={globeRef}
-        width={dimensions.width}
-        height={dimensions.height}
-        globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
-        bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-        backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-        atmosphereColor="#22c55e"
-        atmosphereAltitude={0.12}
-        pointsData={markerData}
-        pointLat="lat"
-        pointLng="lng"
-        pointColor="color"
-        pointRadius="size"
-        pointAltitude={0.01}
-        pointResolution={32}
-        pointsMerge={false}
-        onPointHover={handlePointHover}
-        arcsData={arcsData}
-        arcColor="color"
-        arcDashLength={0.4}
-        arcDashGap={0.2}
-        arcDashAnimateTime={2500}
-        arcStroke={0.5}
-        arcAltitude={0.3}
-      />
+    <div ref={containerRef} className="relative w-full h-full aspect-[2/1] max-h-[500px]">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+        {/* Map background */}
+        <image href="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg" width={W} height={H} />
 
-      {/* Bottom tooltip */}
+        {/* Grid lines */}
+        <g stroke="rgba(255,255,255,0.06)" strokeWidth={0.5}>
+          {[-120, -60, 0, 60, 120].map((lng) => {
+            const { x } = project(0, lng, W, H)
+            return <line key={lng} x1={x} y1={0} x2={x} y2={H} />
+          })}
+          {[-60, -30, 0, 30, 60].map((lat) => {
+            const { y } = project(lat, 0, W, H)
+            return <line key={lat} x1={0} y1={y} x2={W} y2={y} />
+          })}
+        </g>
+
+        {/* Arcs */}
+        {arcsData.map((a, i) => (
+          <path
+            key={i}
+            d={arcPath(a.from, a.to, W, H)}
+            fill="none"
+            stroke={a.color}
+            strokeWidth={1.2}
+            strokeOpacity={0.5}
+            strokeDasharray="6 4"
+          >
+            <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.5s" repeatCount="indefinite" />
+          </path>
+        ))}
+
+        {/* Markers */}
+        {markerData.map((m) => {
+          const { x, y } = project(m.lat, m.lng, W, H)
+          const r = Math.max(m.size * 10, 8)
+          const isHovered = hovered?.label === m.label
+          return (
+            <g key={m.label} onMouseEnter={() => setHovered(m)} onMouseLeave={() => setHovered(null)} onClick={() => setHovered(hovered?.label === m.label ? null : m)} style={{ cursor: 'pointer' }}>
+              {/* Glow */}
+              <circle cx={x} cy={y} r={r * 2} fill={m.color} opacity={isHovered ? 0.3 : 0.1}>
+                {isHovered && <animate attributeName="r" values={r * 1.5 + ';' + r * 3 + ';' + r * 1.5} dur="1.5s" repeatCount="indefinite" />}
+              </circle>
+              {/* Dot */}
+              <circle cx={x} cy={y} r={r} fill={m.color} stroke="white" strokeWidth={isHovered ? 2 : 1.5} />
+              {/* Label on hover */}
+              {isHovered && (
+                <text x={x} y={y - r - 8} textAnchor="middle" fill="white" fontSize={12} fontWeight={600}
+                  stroke="rgba(0,0,0,0.5)" strokeWidth={3} paintOrder="stroke"
+                >
+                  {m.label}
+                </text>
+              )}
+            </g>
+          )
+        })}
+      </svg>
+
+      {/* Tooltip */}
       {hovered && (
         <div className="absolute bottom-4 left-4 right-4 z-50 pointer-events-none bg-gray-900/95 text-white rounded-xl px-4 py-3 shadow-2xl backdrop-blur-md border border-white/10">
           <div className="flex items-center gap-2">

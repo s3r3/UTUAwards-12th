@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import Button from '@/components/ui/Button'
@@ -14,6 +15,7 @@ export default function LoginPage() {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -23,10 +25,23 @@ export default function LoginPage() {
     e.preventDefault()
     setIsLoading(true)
     
-    setTimeout(() => {
+    try {
+      const result = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      })
+      
+      if (result?.ok) {
+        router.push('/dashboard')
+      } else {
+        setError('Email atau password salah')
+      }
+    } catch {
+      setError('Terjadi kesalahan, coba lagi')
+    } finally {
       setIsLoading(false)
-      router.push('/dashboard')
-    }, 1500)
+    }
   }
 
   return (
@@ -35,7 +50,7 @@ export default function LoginPage() {
         <div className="text-center">
           <Link href="/" className="inline-flex items-center justify-center mb-6">
             <Image
-              src="/logo/logoacelorahitam.png"
+              src="/logo/logoaceloraputih.png"
               alt="Acelora"
               width={180}
               height={50}
@@ -43,7 +58,7 @@ export default function LoginPage() {
               priority
             />
             <Image
-              src="/logo/logoaceloraputih.png"
+              src="/logo/logoacelorahitam.png"
               alt="Acelora"
               width={180}
               height={50}
@@ -63,6 +78,7 @@ export default function LoginPage() {
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          {error && <div className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 rounded-lg p-3 text-center">{error}</div>}
           <div className="space-y-4">
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />

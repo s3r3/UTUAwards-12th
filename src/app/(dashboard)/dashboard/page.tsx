@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Package, FileCheck, BookOpen, Globe, TrendingUp, ArrowUpRight, Plus, ShoppingBag, BarChart3, Sparkles } from 'lucide-react'
+import { Package, FileCheck, BookOpen, Globe, ArrowUpRight, Plus, BarChart3, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import Button from '@/components/ui/Button'
 import { StatsSkeleton } from '@/components/ui/Skeleton'
@@ -171,7 +171,7 @@ export default function DashboardPage() {
                 </motion.div>
               ) : (
                 <StaggerContainer className="space-y-2">
-                  {products.slice(0, 5).map((p, i) => (
+                  {products.slice(0, 5).map((p) => (
                     <StaggerItem key={p.id}>
                       <Link href={`/products/${p.id}`}>
                         <motion.div

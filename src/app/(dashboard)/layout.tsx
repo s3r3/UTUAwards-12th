@@ -8,7 +8,9 @@ import {
   LayoutDashboard, Package, BookOpen, Globe, Settings, LogOut, Menu, X,
   ChevronRight, Sparkles,
 } from 'lucide-react'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useSyncExternalStore } from 'react'
+import { useAuth } from '@/hooks/useAuth'
+import { signOut } from 'next-auth/react'
 import { useAuthStore } from '@/store/auth.store'
 import DashboardChatBot from '@/components/DashboardChatBot'
 
@@ -18,6 +20,12 @@ const sidebarItems = [
   { name: 'Mentoring', href: '/dashboard/mentoring', icon: BookOpen },
   { name: 'Mitra', href: '/dashboard/partners', icon: Globe },
   { name: 'Pengaturan', href: '/dashboard/settings', icon: Settings },
+]
+
+const adminItems = [
+  { name: 'Panel Admin', href: '/dashboard/admin', icon: LayoutDashboard },
+  { name: 'Kelola Produk', href: '/dashboard/admin/products', icon: Package },
+  { name: 'Kelola Pengguna', href: '/dashboard/admin/users', icon: Globe },
 ]
 
 function FloatingOrbs() {
@@ -128,13 +136,13 @@ function SidebarNav({ items, pathname, onNavigate }: { items: typeof sidebarItem
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(() => () => {}, () => true, () => false)
+  useAuth()
   const { user, logout } = useAuthStore()
   const mainRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => { setMounted(true) }, [])
-
   // Close sidebar on route change (mobile)
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setSidebarOpen(false) }, [pathname])
 
   return (
@@ -194,6 +202,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
 
         <SidebarNav items={sidebarItems} pathname={pathname} onNavigate={() => setSidebarOpen(false)} />
+        
+        {user?.role === 'ADMIN' && (
+          <div className="px-3 pt-4 mt-2 border-t border-gray-200/80 dark:border-gray-800/80">
+            <p className="px-3 text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Admin</p>
+            <SidebarNav items={adminItems} pathname={pathname} onNavigate={() => setSidebarOpen(false)} />
+          </div>
+        )}
 
         {/* User info bottom */}
         <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-200/80 dark:border-gray-800/80 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm">
@@ -214,7 +229,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <motion.button
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
-            onClick={logout}
+            onClick={() => { logout(); signOut({ callbackUrl: "/login" }) }}
             className="flex items-center gap-2.5 w-full px-3 py-2 rounded-xl text-xs font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
           >
             <LogOut size={15} /> Keluar

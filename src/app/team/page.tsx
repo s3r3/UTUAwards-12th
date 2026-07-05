@@ -7,12 +7,11 @@ import { Linkedin, Twitter, Mail } from 'lucide-react'
 
 const team = [
   { name: 'Muhammad Farid', role: 'Ketua', bio: 'Mahasiswa Universitas Jabal Ghafur', social: { linkedin: '#', twitter: '#' } },
-  { name: 'Putra Ramadhan', role: 'Anggota', bio: 'Mahasiswa Universitas Jabal Ghafur', social: { linkedin: '#', twitter: '#' } },
-  { name: 'Budi Santoso', role: 'Anggota', bio: 'Mahasiswa Universitas Jabal Ghafur', social: { linkedin: '#', twitter: '#' } }
+  { name: 'Putra Ramadhan', role: 'Anggota', bio: 'Mahasiswa Universitas Jabal Ghafur', social: { linkedin: '#', twitter: '#' } }
 ]
 
 const advisors = [
-  { name: 'Tri Mulya Dharma, S.Kom., M.T', role: 'Advisor', bio: 'Dosen Teknik Informatika Jabal Ghafur' },
+  { name: 'Tri Mulya Dharma, S.Kom., M.T', role: 'Advisor', bio: 'Dosen Teknik Informatika Jabal Ghafur' }
   
 ]
 

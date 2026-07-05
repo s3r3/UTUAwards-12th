@@ -1,12 +1,14 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Package, Plus, Search, Edit3, Trash2, X, ImageIcon, Loader2, MapPin, Tag } from 'lucide-react'
+import Image from 'next/image'
+import { Package, Plus, Search, Edit3, Trash2, ImageIcon, MapPin, Tag } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 import Modal from '@/components/ui/Modal'
 import { CardSkeleton } from '@/components/ui/Skeleton'
 import { useTranslations } from '@/lib/i18n'
+import { useAuthStore } from '@/store/auth.store'
 
 interface Product {
   id: string
@@ -40,6 +42,7 @@ const initialForm = { name: '', category: 'COFFEE', description: '', origin: '',
 
 export default function MyProductsPage() {
   const t = useTranslations()
+  const { user } = useAuthStore()
   const [products, setProducts] = useState<Product[]>([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
@@ -53,19 +56,28 @@ export default function MyProductsPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   const fetchProducts = useCallback(async () => {
-    setLoading(true)
     try {
       const res = await fetch('/api/products')
       const json = await res.json()
       if (json.success) setProducts(json.data)
     } catch (e) {
       console.error('Failed to fetch products', e)
-    } finally {
-      setLoading(false)
     }
   }, [])
 
-  useEffect(() => { fetchProducts() }, [fetchProducts])
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/products')
+        const json = await res.json()
+        if (json.success) setProducts(json.data)
+      } catch (e) {
+        console.error('Failed to fetch products', e)
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [])
 
   const openAdd = () => {
     setEditing(null)
@@ -89,7 +101,7 @@ export default function MyProductsPage() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, ownerId: 'seed-owner' }),
+        body: JSON.stringify({ ...form, ownerId: user?.id || 'seed-owner' }),
       })
       const json = await res.json()
       if (json.success) {
@@ -207,9 +219,9 @@ export default function MyProductsPage() {
                   onClick={() => setDetail(p)}
                 >
                   {p.image ? (
-                    <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                    <Image src={p.image} alt={p.name} fill className="object-cover" unoptimized sizes="(max-width: 768px) 100vw, 33vw" />
                   ) : (
-                    <img src={cat?.image || '/images/kopi_arabica.png'} alt="" className="w-full h-full object-cover opacity-70" />
+                    <Image src={cat?.image || '/images/kopi_arabica.png'} alt="" fill className="object-cover opacity-70" unoptimized sizes="(max-width: 768px) 100vw, 33vw" />
                   )}
                   <span className={`absolute top-2 right-2 text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusBadge[p.status] || statusBadge.PENDING}`}>
                     {p.status}
@@ -248,8 +260,8 @@ export default function MyProductsPage() {
               const cat = getCategoryMeta(p.category)
               return (
                 <div key={p.id} className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center text-xl flex-shrink-0 overflow-hidden">
-                    {p.image ? <img src={p.image} alt="" className="w-full h-full object-cover rounded-xl" /> : <img src={cat?.image || "/images/kopi_arabica.png"} alt="" className="w-full h-full object-cover rounded-xl" />}
+                  <div className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center text-xl flex-shrink-0 overflow-hidden">
+                    {p.image ? <Image src={p.image} alt="" fill className="object-cover rounded-xl" unoptimized sizes="56px" /> : <Image src={cat?.image || "/images/kopi_arabica.png"} alt="" fill className="object-cover rounded-xl" unoptimized sizes="56px" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm text-gray-900 dark:text-white truncate">{p.name}</p>
@@ -310,9 +322,9 @@ export default function MyProductsPage() {
                   }} />
                 </label>
               </div>
-              <div className="w-24 h-24 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden border border-gray-200 dark:border-gray-600 flex-shrink-0">
+              <div className="relative w-24 h-24 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden border border-gray-200 dark:border-gray-600 flex-shrink-0">
                 {previewImg ? (
-                  <img src={previewImg} alt="preview" className="w-full h-full object-cover" onError={() => setPreviewImg('')} />
+                  <Image src={previewImg || ''} alt="preview" fill className="object-cover" unoptimized onError={() => setPreviewImg('')} sizes="96px" />
                 ) : (
                   <ImageIcon size={24} className="text-gray-400" />
                 )}
@@ -359,11 +371,11 @@ export default function MyProductsPage() {
       <Modal open={detail !== null} onClose={() => setDetail(null)} title={detail?.name || ''} size="lg">
         {detail && (
           <div className="space-y-4">
-            <div className="h-48 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center overflow-hidden">
+            <div className="relative h-48 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center overflow-hidden">
               {detail.image ? (
-                <img src={detail.image} alt={detail.name} className="w-full h-full object-cover" />
+                <Image src={detail.image} alt={detail.name} fill className="object-cover" unoptimized sizes="(max-width: 768px) 100vw, 50vw" />
               ) : (
-                <img src={getCategoryMeta(detail.category)?.image || "/images/kopi_arabica.png"} alt="" className="w-full h-full object-cover opacity-70" />
+                <Image src={getCategoryMeta(detail.category)?.image || "/images/kopi_arabica.png"} alt="" fill className="object-cover opacity-70" unoptimized sizes="(max-width: 768px) 100vw, 50vw" />
               )}
             </div>
             <div className="flex flex-wrap gap-2">

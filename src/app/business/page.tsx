@@ -3,7 +3,7 @@
 import { useTranslations } from "@/lib/i18n"
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { TrendingUp, DollarSign, BarChart3, PieChart, Users, Rocket, Target, Zap } from 'lucide-react'
+import { TrendingUp, DollarSign, BarChart3, Users, Rocket, Target, Zap } from 'lucide-react'
 
 const revenueStreams = [
   { name: 'Komisi Transaksi', pct: 35, desc: 'Fee per transaksi yang berhasil melalui platform' },
@@ -49,21 +49,37 @@ export default function BusinessPage() {
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
             <DollarSign className="text-primary-500" /> {t.business.revenueTitle}
           </h2>
-          <div className="space-y-4">
-            {revenueStreams.map((s, i) => (
-              <div key={i} className="flex items-center justify-between p-5 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                <div className="flex-1">
-                  <h4 className="font-semibold text-gray-900 dark:text-white">{s.name}</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{s.desc}</p>
-                </div>
-                <div className="ml-4 text-right min-w-[120px]">
-                  <div className="text-lg font-bold text-primary-600 dark:text-primary-400">{s.pct}%</div>
-                  <div className="w-28 h-2 bg-gray-200 dark:bg-gray-700 rounded-full mt-2">
-                    <div className="h-full gradient-primary rounded-full" style={{ width: `${s.pct}%` }} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="flex justify-center">
+              <div className="relative w-64 h-64">
+                <div
+                  className="w-full h-full rounded-full"
+                  style={{
+                    background: 'conic-gradient(#22c55e 0% 35%, #0ea5e9 35% 60%, #f59e0b 60% 80%, #8b5cf6 80% 95%, #ef4444 95% 100%)',
+                  }}
+                />
+                <div className="absolute inset-6 bg-white dark:bg-gray-900 rounded-full flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">100%</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">Total Revenue</div>
                   </div>
                 </div>
               </div>
-            ))}
+            </div>
+            <div className="space-y-4">
+              {revenueStreams.map((s, i) => (
+                <div key={i} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: ["#22c55e", "#0ea5e9", "#f59e0b", "#8b5cf6", "#ef4444"][i] }} />
+                    <div>
+                      <h4 className="font-semibold text-gray-900 dark:text-white text-sm">{s.name}</h4>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{s.desc}</p>
+                    </div>
+                  </div>
+                  <div className="text-lg font-bold text-primary-600 dark:text-primary-400 ml-4">{s.pct}%</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

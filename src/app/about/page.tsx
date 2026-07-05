@@ -11,13 +11,6 @@ const getValues = (t: ReturnType<typeof useTranslations>) => [
   { icon: Anchor, title: t.about.val4title, desc: t.about.val4desc },
 ]
 
-const getMilestones = (t: ReturnType<typeof useTranslations>) => [
-  { year: '2024', event: t.about.m1 },
-  { year: '2025', event: t.about.m2 },
-  { year: '2026', event: t.about.m3 },
-  { year: '2027', event: t.about.m4 },
-]
-
 export default function AboutPage() {
   const t = useTranslations()
   return (
@@ -83,21 +76,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">{t.about.roadmap}</h2>
-          <div className="relative border-l-2 border-primary-300 dark:border-primary-700 ml-4">
-            {getMilestones(t).map((m, i) => (
-              <div key={i} className="mb-8 ml-8 relative">
-                <div className="absolute -left-[2.6rem] top-1 w-5 h-5 rounded-full gradient-primary border-4 border-white dark:border-gray-900" />
-                <span className="text-sm font-semibold text-primary-600 dark:text-primary-400">{m.year}</span>
-                <p className="text-gray-700 dark:text-gray-300 mt-1">{m.event}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
 
       <Footer />
     </main>

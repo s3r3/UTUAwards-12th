@@ -51,7 +51,7 @@ export function useParallaxOpacity(scrollY: MotionValue<number>, inputRange: [nu
 
 export function killParallaxTweens(tweens: gsap.core.Tween[]) {
   tweens.forEach((tween) => {
-    const st = (tween as any).scrollTrigger
+    const st = (tween as gsap.core.Tween & { scrollTrigger?: ScrollTrigger.Instance }).scrollTrigger
     if (st) st.kill()
     tween.kill()
   })

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { TrendingUp, TrendingDown, BarChart3, RefreshCw } from 'lucide-react'
 
 interface CommodityPrice {
@@ -24,12 +25,12 @@ export default function MarketWidget() {
         const res = await fetch('/api/market-prices')
         const json = await res.json()
         if (json.success) {
-          setPrices(json.data.map((d: any) => ({
+          setPrices(json.data.map((d: CommodityPrice) => ({
             id: d.id, name: d.name, image: d.image,
             price: d.price, unit: d.unit, change: d.change, changePercent: d.changePercent,
           })).slice(0, 4))
         }
-      } catch (e) { setError(true) }
+      } catch { setError(true) }
       finally { setLoading(false) }
     })()
   }, [])
@@ -56,7 +57,7 @@ export default function MarketWidget() {
         {prices.map((p) => (
           <div key={p.id} className="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
             <div className="flex items-center gap-2">
-              <img src={p.image} alt={p.name} className="w-8 h-8 rounded object-cover" />
+              <Image src={p.image} alt={p.name} width={32} height={32} className="w-8 h-8 rounded object-cover" />
               <div>
                 <p className="text-xs font-medium text-gray-900 dark:text-white">{p.name}</p>
                 <p className="text-[10px] text-gray-400">{p.unit}</p>
