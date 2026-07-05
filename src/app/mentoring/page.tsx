@@ -14,7 +14,7 @@ interface Course {
   title: string
   description: string
   longDesc: string
-  icon: React.ComponentType<{ size?: number }>
+  icon: React.FC<{ size?: number; className?: string }>
   gradient: string
   duration: string
   price: string
