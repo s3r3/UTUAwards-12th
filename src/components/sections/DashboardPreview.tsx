@@ -7,7 +7,7 @@ import { useTranslations } from '@/lib/i18n'
 
 const getStats = (t: ReturnType<typeof useTranslations>) => [
   {
-    label: t.dashboard.statProducts,
+    label: t.dashboardPreview.statProducts,
     value: 500,
     suffix: '+',
     icon: Package,
@@ -18,7 +18,7 @@ const getStats = (t: ReturnType<typeof useTranslations>) => [
     chartColor: '#22c55e',
   },
   {
-    label: t.dashboard.statReview,
+    label: t.dashboardPreview.statReview,
     value: 45,
     suffix: '',
     icon: FileCheck,
@@ -29,7 +29,7 @@ const getStats = (t: ReturnType<typeof useTranslations>) => [
     chartColor: '#eab308',
   },
   {
-    label: t.dashboard.statActive,
+    label: t.dashboardPreview.statActive,
     value: 15,
     suffix: '',
     icon: BookOpen,
