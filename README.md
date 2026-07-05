@@ -1,153 +1,177 @@
-# Metuah Hub — Agro-Maritim Aceh Ecosystem
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="/logo/logo-light.svg">
+    <img alt="Acelora" src="/logo/logo-dark.svg" width="220">
+  </picture>
+</p>
 
-> Platform digital ekosistem agro-maritim Aceh untuk The 12th UTU Awards 2026
+<h1 align="center">Acelora</h1>
+<h3 align="center">Agro-Maritim Aceh Ecosystem</h3>
 
-Metuah Hub menghubungkan UMKM, petani, nelayan, eksportir, dan mitra internasional dalam satu ekosistem terintegrasi — dari sertifikasi halal, HACCP, kemasan ekspor, hingga koneksi ke buyer global.
+<p align="center">
+  <a href="https://acelora.id"><img src="https://img.shields.io/badge/web-acelora.id-22c55e?style=flat-square" alt="Website"></a>
+  <img src="https://img.shields.io/badge/Next.js-16.2.9-000?style=flat-square&logo=next.js" alt="Next.js">
+  <img src="https://img.shields.io/badge/React-19.2-61dafb?style=flat-square&logo=react" alt="React">
+  <img src="https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Prisma-7.8-2d3748?style=flat-square&logo=prisma" alt="Prisma">
+  <img src="https://img.shields.io/badge/PostgreSQL-4169e1?style=flat-square&logo=postgresql" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/Tailwind-3.4-06b6d4?style=flat-square&logo=tailwindcss" alt="Tailwind">
+  <img src="https://img.shields.io/badge/Framer%20Motion-12-0055ff?style=flat-square&logo=framer" alt="Framer Motion">
+  <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License">
+</p>
 
-## Tech Stack
+<p align="center">
+  Platform digital ekosistem agro-maritim Aceh yang menghubungkan UMKM, petani, nelayan, eksportir,<br>
+  dan mitra internasional dalam satu ekosistem terintegrasi.
+</p>
+
+<p align="center">
+  <sub>🏆 The 12th UTU Awards 2026</sub>
+</p>
+
+<br>
+
+## ✨ Fitur
+
+<details open>
+<summary><b>Landing Page</b></summary>
+
+| Bagian | Highlights |
+|--------|------------|
+| **Hero** | Parallax multi-layer, floating blobs, animated counters, gradient text |
+| **Dashboard Preview** | Live stats, sparkline charts, real-time visual |
+| **Market Prices** | dynamic pricing trends |
+| **Product Catalog** | Search, filter, kategori, modal detail |
+| **Mentoring** | Timeline interaktif, CTA |
+| **International Partner** | Partner grid, 3D globe interaktif (Three.js) |
+| **Workflow** | Producer → Metuah Hub → Certification → Global Market |
+| **Financial** | Cost/revenue metrics, aliran pendapatan |
+| **Team** | Kartu anggota tim |
+</details>
+
+<details>
+<summary><b>Dashboard</b></summary>
+
+- **Overview** — Statistik, produk terbaru, progress mentoring
+- **My Products** — CRUD table produk
+- **Mentoring** — Tracking progress
+- **Partners** — Daftar mitra
+- **Settings** — Profil & toggle tema
+- **Admin Panel** — Approve produk, manage users
+</details>
+
+<details>
+<summary><b>Animasi & Interaksi</b></summary>
+
+- Parallax scroll multi-layer (Framer Motion)
+- Organic blob float (GSAP)
+- Stagger reveal, fade, scale transitions
+- Smooth scroll (Lenis)
+- 3D interactive globe (react-globe.gl)
+- Floating particles
+- Responsive di semua perangkat
+- Menghormati preferensi <code>prefers-reduced-motion</code>
+</details>
+
+<br>
+
+## 🛠️ Tech Stack
+
+<div align="center">
 
 | Layer | Teknologi |
 |-------|-----------|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS v3 |
-| Animation | Framer Motion v12, GSAP |
-| Smooth Scroll | Lenis |
-| State | Zustand |
-| Auth | NextAuth v5 (Auth.js) |
-| Database | PostgreSQL (Supabase / local) |
-| ORM | Prisma v6 |
-| Validation | Zod + React Hook Form |
-| Data Fetching | TanStack Query |
-| Icons | Lucide React |
+| **Framework** | Next.js 16 (App Router) |
+| **Language** | TypeScript 5 |
+| **Styling** | Tailwind CSS v3 |
+| **Animations** | Framer Motion v12, GSAP v3, Lenis |
+| **3D** | Three.js, react-globe.gl |
+| **State** | Zustand |
+| **Auth** | NextAuth v5 (Auth.js) |
+| **Database** | PostgreSQL (Supabase / local) |
+| **ORM** | Prisma v7 |
+| **Validation** | Zod + React Hook Form |
+| **Data Fetching** | TanStack React Query |
+| **Icons** | Lucide React |
+| **Linting** | ESLint 9 |
 
-## Struktur Folder
+</div>
+
+<br>
+
+## 📁 Struktur
 
 ```
 src/
-├── animations/     # Framer Motion + GSAP utilities
-├── app/            # Next.js App Router pages & API
-├── components/     # UI, layout, & section components
-├── constants/      # Menu, products, config
-├── contexts/       # Auth context (SessionProvider)
-├── hooks/          # useAuth, useScroll, useProducts
-├── lib/            # Prisma client, utils
-├── locales/        # id.json, en.json
-├── navigation/     # Route constants
-├── services/       # Auth, product, partner services
-├── store/          # Zustand stores (auth, product, ui)
-├── types/          # TypeScript types
-└── utils/          # Validation, helpers
+├── animations/       # Framer Motion + GSAP utilities
+├── app/              # Next.js App Router pages & API routes
+├── components/
+│   ├── layout/       # Navbar, Footer, Sidebar
+│   ├── sections/     # Hero, DashboardPreview, Workflow, Team …
+│   └── ui/           # Button, Card, Input, Modal, Skeleton
+├── constants/        # Menu, produk, config
+├── contexts/         # SessionProvider
+├── hooks/            # useAuth, custom hooks
+├── lib/              # Prisma client, GSAP registry, i18n
+├── locales/          # id.json, en.json
+├── navigation/       # Route definitions
+├── services/         # Auth, produk, partner services
+├── store/            # Zustand stores
+├── types/            # TypeScript definitions
+└── utils/            # Validation, helpers
 ```
 
-## Fitur
+<br>
 
-### Landing Page
-- **Hero** — Parallax, animated counters, floating blobs
-- **Dashboard Preview** — Live stats with sparklines
-- **Product Catalog** — Search, filter, categories, detail modal
-- **Mentoring** — Timeline cards, CTA
-- **International Partners** — Partner grid
-- **Workflow** — Producer → Metuah Hub → Certification → Global Market
-- **Financial** — Cost/revenue metrics, revenue streams
-- **Team** — Team member cards
-
-### Dashboard (User)
-- Overview — Stats, recent products, mentoring progress
-- My Products — CRUD table
-- Mentoring — Progress tracking
-- Partners — Partner list
-- Settings — Profile & theme toggle
-- Profile — User info
-
-### Dashboard (Admin)
-- Admin Panel — Stats overview, product approval
-- Manage Products — Approve/reject products
-- Manage Users — User list
-
-### API
-- `GET/POST /api/products` — List & create products
-- `GET/PUT /api/products/[id]` — Get & update product
-- `GET/POST /api/partners` — List & create partners
-- `GET/POST /api/mentoring` — List & create mentoring
-- `POST /api/auth/register` — Register user
-- `GET/POST /api/auth/[...nextauth]` — NextAuth v5
-
-## Memulai
-
-### Prasyarat
-
-- Node.js 18+
-- PostgreSQL (local) atau Supabase account
-- npm / yarn
-
-### 1. Clone & Install
+## 🚀 Mulai Cepat
 
 ```bash
-git clone <repo-url>
-cd meutuah
+# 1. Install
 npm install --legacy-peer-deps
+
+# 2. Set environment variables
+cp .env.example .env
+# isi DATABASE_URL, NEXTAUTH_SECRET, etc.
+
+# 3. Setup database
+npx prisma db push
+npx tsx prisma/seed.ts
+
+# 4. Development
+npm run dev
+# → http://localhost:3000
 ```
 
-### 2. Environment Variables
+> **Akun default:** — Admin: `admin@metuahhub.id` / `admin123` — User: `user@metuahhub.id` / `user123`
 
-Salin `.env.example` ke `.env` dan isi:
+<br>
+
+## 🌐 Environment
 
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/meutuah?schema=public"
-NEXTAUTH_SECRET="generate-random-secret"
+DATABASE_URL="postgresql://user:pass@localhost:5432/meutuah"
+NEXTAUTH_SECRET="openssl rand -base64 32"
 NEXTAUTH_URL="http://localhost:3000"
-NEXT_PUBLIC_APP_NAME="Metuah Hub"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
-### 3. Database
+<br>
 
-```bash
-# Push schema to database
-npx prisma db push
+## 📦 Deploy
 
-# Seed with sample data
-npx tsx prisma/seed.ts
-```
-
-Akun default:
-- Admin: `admin@metuahhub.id` / `admin123`
-- User: `user@metuahhub.id` / `user123`
-
-### 4. Development
-
-```bash
-npm run dev
-# Open http://localhost:3000
-```
-
-### 5. Build
-
-```bash
-npm run build
-npm start
-```
-
-## Deployment (Vercel + Supabase)
-
-### Supabase
+### Database (Supabase)
 
 1. Buat project di [supabase.com](https://supabase.com)
-2. Dapatkan connection string (`DATABASE_URL`) dari Settings → Database
-3. Jalankan `npx prisma db push` untuk migrasi
-4. Jalankan `npx tsx prisma/seed.ts` untuk seed data
+2. Copy connection string ke `DATABASE_URL`
+3. `npx prisma db push && npx tsx prisma/seed.ts`
 
-### Vercel
+### App (Vercel)
 
-1. Push repo ke GitHub/GitLab
-2. Import di [vercel.com](https://vercel.com)
-3. Set environment variables:
-   - `DATABASE_URL` — Supabase connection string
-   - `NEXTAUTH_SECRET` — Generate dengan `openssl rand -base64 32`
-   - `NEXTAUTH_URL` — URL deployment Vercel
-4. Deploy
+1. Push ke GitHub, import di [vercel.com](https://vercel.com)
+2. Set env vars: `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
+3. Deploy ✨
 
-## Lisensi
+<br>
 
-Metuah Hub — The 12th UTU Awards 2026
+## 📄 Lisensi
+
+MIT — Acelora · The 12th UTU Awards 2026
