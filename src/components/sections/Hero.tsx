@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Zap } from 'lucide-react'
 import { useTranslations } from '@/lib/i18n'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import gsap from 'gsap'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -44,6 +44,12 @@ export default function Hero() {
   // InView for counter animation
   const statsRef = useRef<HTMLDivElement>(null)
   useInView(statsRef, { once: true, margin: '-80px' })
+  // ── Scroll parallax ─────────────────────────────────────────────────────
+  const prefersReducedMotion = !!useReducedMotion()
+  const { scrollY } = useScroll()
+  const gradY = useTransform(scrollY, [0, 800], prefersReducedMotion ? [0, 0] : [0, -40])
+  const blobsY = useTransform(scrollY, [0, 800], prefersReducedMotion ? [0, 0] : [0, -100])
+  // ponytail: fixed 800px range, use element-based offset if multi-section parallax needed
 
   // GSAP parallax on blobs — slow organic float with random offset
   useEffect(() => {
@@ -108,9 +114,10 @@ export default function Hero() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white dark:bg-gray-950">
 
       {/* ── Animated gradient background ──────────────────────────── */}
-      <div
+      <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
+          y: gradY,
           background:
             'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(34,197,94,0.18) 0%, transparent 70%), ' +
             'radial-gradient(ellipse 60% 50% at 85% 80%, rgba(14,165,233,0.14) 0%, transparent 70%), ' +
@@ -119,7 +126,7 @@ export default function Hero() {
       />
 
       {/* ── GSAP blobs ─────────────────────────────────────────────── */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: blobsY }}>
         <div
           ref={blobGreenRef}
           className="absolute"
@@ -162,7 +169,7 @@ export default function Hero() {
             filter: 'blur(35px)',
           }}
         />
-      </div>
+      </motion.div>
 
       {/* ── Floating particles ──────────────────────────────────────── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
