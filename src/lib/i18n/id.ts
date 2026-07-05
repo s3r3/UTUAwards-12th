@@ -108,6 +108,7 @@ const id: Translations = {
     newsletter: 'Berlangganan Newsletter',
     emailPlaceholder: 'Email Anda',
     subscribe: 'Langganan',
+    address: 'Banda Aceh, Indonesia',
   },
   mentoring: {
     title: 'Program',
@@ -144,6 +145,15 @@ const id: Translations = {
     ctaTitle: 'Siap Tingkatkan Produk Anda ke Pasar Global?',
     ctaDesc: 'Daftarkan produk Anda sekarang dan dapatkan konsultasi awal gratis dengan tim ahli Acelora',
     ctaBtn: 'Daftar Sekarang',
+    badge: 'Program Mentoring',
+    improve: 'Tingkatkan',
+    quality: 'Kualitas Produk',
+    your: 'Anda',
+    homedesc: 'Program pendampingan profesional step-by-step untuk menembus pasar global',
+    ctaTitle: 'Siap Tingkatkan Produk Anda ke Pasar Global?',
+    ctaDesc: 'Daftarkan produk anda sekarang dan dapatkan konsultasi awal gratis dengan tim ahli Acelora',
+    ctaBtn: 'Daftar Sekarang',
+    learnMore: 'Pelajari Lebih Lanjut',
     learnMore: 'Pelajari Lebih Lanjut',
   },
   partners: {
