@@ -4,32 +4,32 @@ import { Linkedin, Twitter, Mail } from 'lucide-react'
 import Image from 'next/image'
 import { useTranslations } from '@/lib/i18n'
 
-const teamMembers = [
+const getTeamMembers = (t: ReturnType<typeof useTranslations>) => [
   {
     name: 'Ahmad Fauzan',
     role: 'CEO & Founder',
-    bio: 'Pengusaha muda dengan 10 tahun pengalaman di bidang agro-maritim',
+    bio: t.team.bio1,
     image: 'https://randomuser.me/api/portraits/men/32.jpg',
     social: { linkedin: '#', twitter: '#' },
   },
   {
     name: 'Siti Nurhaliza',
     role: 'CTO',
-    bio: 'Expert dalam teknologi dan sistem informasi pertanian',
+    bio: t.team.bio2,
     image: 'https://randomuser.me/api/portraits/women/44.jpg',
     social: { linkedin: '#', twitter: '#' },
   },
   {
     name: 'Budi Santoso',
     role: 'Head of Operations',
-    bio: 'Spesialis supply chain dan logistik agro-maritim',
+    bio: t.team.bio3,
     image: 'https://randomuser.me/api/portraits/men/45.jpg',
     social: { linkedin: '#', twitter: '#' },
   },
   {
     name: 'Dewi Kartika',
     role: 'Head of Partnership',
-    bio: 'Berpengalaman dalam hubungan internasional dan ekspor-impor',
+    bio: t.team.bio4,
     image: 'https://randomuser.me/api/portraits/women/68.jpg',
     social: { linkedin: '#', twitter: '#' },
   },
@@ -37,6 +37,7 @@ const teamMembers = [
 
 export default function Team() {
   const t = useTranslations()
+  const teamMembers = getTeamMembers(t)
   return (
     <section className="py-20 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,7 +46,7 @@ export default function Team() {
             {t.team.title}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Didukung oleh tim profesional yang berpengalaman di bidang agro-maritim dan teknologi
+            {t.team.desc2}
           </p>
         </div>
 

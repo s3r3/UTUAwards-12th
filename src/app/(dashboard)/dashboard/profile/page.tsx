@@ -20,7 +20,7 @@ export default function ProfilePage() {
           <div className="flex items-center gap-3 text-sm"><User size={16} className="text-gray-400" /><span className="text-gray-600 dark:text-gray-400">{t.dashboard.name1} <strong className="text-gray-900 dark:text-white">{t.dashboard.profile}</strong></span></div>
           <div className="flex items-center gap-3 text-sm"><Mail size={16} className="text-gray-400" /><span className="text-gray-600 dark:text-gray-400">{t.dashboard.email1} <strong className="text-gray-900 dark:text-white">user@acelora.id</strong></span></div>
           <div className="flex items-center gap-3 text-sm"><Shield size={16} className="text-gray-400" /><span className="text-gray-600 dark:text-gray-400">{t.dashboard.role} <strong className="text-gray-900 dark:text-white">User</strong></span></div>
-          <div className="flex items-center gap-3 text-sm"><Calendar size={16} className="text-gray-400" /><span className="text-gray-600 dark:text-gray-400">{t.dashboard.joined} <strong className="text-gray-900 dark:text-white">Juni 2026</strong></span></div>
+          <div className="flex items-center gap-3 text-sm"><Calendar size={16} className="text-gray-400" /><span className="text-gray-600 dark:text-gray-400">{t.dashboard.joined} <strong className="text-gray-900 dark:text-white">{new Date().toLocaleDateString("id-ID", { month: "long", year: "numeric" })}</strong></span></div>
         </div>
       </div>
     </div>

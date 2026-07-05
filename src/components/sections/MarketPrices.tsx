@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { TrendingUp, TrendingDown, RefreshCw, Activity, BarChart3 } from 'lucide-react'
 import Image from 'next/image'
-import { useTranslations } from '@/lib/i18n'
+import { useTranslations, useI18NStore } from '@/lib/i18n'
 
 interface CommodityPrice {
   id: string
@@ -35,6 +35,7 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
 
 export default function MarketPrices() {
   const t = useTranslations()
+  const lang = useI18NStore((s) => s.lang)
   const [prices, setPrices] = useState<CommodityPrice[]>([])
   const [loading, setLoading] = useState(true)
   const [lastUpdate, setLastUpdate] = useState<string>('')
@@ -102,7 +103,7 @@ export default function MarketPrices() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2 text-xs text-gray-400">
             <Activity size={12} />
-            <span>{t.marketPrices.lastUpdate}: {lastUpdate ? new Date(lastUpdate).toLocaleTimeString('id-ID') : '-'}</span>
+            <span>{t.marketPrices.lastUpdate}: {lastUpdate ? new Date(lastUpdate).toLocaleTimeString(lang === 'id' ? 'id-ID' : 'en-US') : '-'}</span>
           </div>
           <button
             onClick={() => { setLoading(true); fetchPrices() }}
@@ -151,7 +152,7 @@ export default function MarketPrices() {
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-gray-900 dark:text-white">{item.name}</p>
-                        <p className="text-[10px] text-gray-400 dark:text-gray-500">{item.nameId}</p>
+                        {lang === 'id' && <p className="text-[10px] text-gray-400 dark:text-gray-500">{item.nameId}</p>}
                       </div>
                     </div>
                     <span className="text-[10px] text-gray-400 dark:text-gray-600 bg-gray-50 dark:bg-gray-700 px-2 py-0.5 rounded-full">
@@ -178,7 +179,7 @@ export default function MarketPrices() {
                   <div className="relative">
                     <Sparkline data={item.history} color={color} />
                     <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[9px] text-gray-400 dark:text-gray-600 mt-0.5">
-                      <span>30 hari</span>
+                      <span>{t.marketPrices.days30}</span>
                       <span>{t.marketPrices.today}</span>
                     </div>
                   </div>
@@ -195,7 +196,7 @@ export default function MarketPrices() {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 0.5 }}
         >
-          Data harga bersifat indikatif berdasarkan estimasi pasar. Sumber: ICE Futures, FAO, dan data pasar komoditas global.
+          {t.marketPrices.disclaimer}
         </motion.p>
       </div>
     </section>

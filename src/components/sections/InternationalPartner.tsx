@@ -6,24 +6,26 @@ import { motion, useInView } from 'framer-motion'
 import { Building2, MapPin, Globe } from 'lucide-react'
 import WorldGlobe from './WorldGlobe'
 
-const partners = [
-  { id: 1, company: 'PT. Global Trade Asia', country: 'Malaysia', location: 'Kuala Lumpur', category: 'ASIA' },
-  { id: 2, company: 'European Foods Ltd', country: 'Belanda', location: 'Amsterdam', category: 'EUROPE' },
-  { id: 3, company: 'Middle East Trading Co', country: 'UAE', location: 'Dubai', category: 'MIDDLE_EAST' },
-  { id: 4, company: 'American Natural Goods', country: 'USA', location: 'New York', category: 'AMERICA' },
-  { id: 5, company: 'Tokyo Fresh Imports', country: 'Jepang', location: 'Tokyo', category: 'ASIA' },
-  { id: 6, company: 'Sydney Seafood Pty', country: 'Australia', location: 'Sydney', category: 'ASIA' },
+const getPartners = (t: ReturnType<typeof useTranslations>) => [
+  { id: 1, company: 'PT. Global Trade Asia', country: t.partners.partnerCompany1Country, location: t.partners.partnerCompany1Loc, category: 'ASIA' },
+  { id: 2, company: 'European Foods Ltd', country: t.partners.partnerCompany2Country, location: t.partners.partnerCompany2Loc, category: 'EUROPE' },
+  { id: 3, company: 'Middle East Trading Co', country: t.partners.partnerCompany3Country, location: t.partners.partnerCompany3Loc, category: 'MIDDLE_EAST' },
+  { id: 4, company: 'American Natural Goods', country: t.partners.partnerCompany4Country, location: t.partners.partnerCompany4Loc, category: 'AMERICA' },
+  { id: 5, company: 'Tokyo Fresh Imports', country: t.partners.partnerCompany5Country, location: t.partners.partnerCompany5Loc, category: 'ASIA' },
+  { id: 6, company: 'Sydney Seafood Pty', country: t.partners.partnerCompany6Country, location: t.partners.partnerCompany6Loc, category: 'ASIA' },
 ]
 
-const regions = [
-  { name: 'Asia', count: 15, color: 'bg-green-500', desc: 'Jepang, Malaysia, Singapura, China' },
-  { name: 'Europe', count: 5, color: 'bg-blue-500', desc: 'Belanda, Prancis, Jerman' },
-  { name: 'Middle East', count: 3, color: 'bg-yellow-500', desc: 'UAE, Saudi Arabia, Qatar' },
-  { name: 'America', count: 2, color: 'bg-purple-500', desc: 'USA, Kanada' },
+const getRegions = (t: ReturnType<typeof useTranslations>) => [
+  { name: t.partners.regionAsia, count: 15, color: 'bg-green-500', desc: t.partners.regionAsiaCountries },
+  { name: t.partners.regionEurope, count: 5, color: 'bg-blue-500', desc: t.partners.regionEuropeCountries },
+  { name: t.partners.regionMiddleEast, count: 3, color: 'bg-yellow-500', desc: t.partners.regionMiddleEastCountries },
+  { name: t.partners.regionAmerica, count: 2, color: 'bg-purple-500', desc: t.partners.regionAmericaCountries },
 ]
 
 export default function InternationalPartner() {
   const t = useTranslations()
+  const partners = getPartners(t)
+  const regions = getRegions(t)
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-60px' })
 

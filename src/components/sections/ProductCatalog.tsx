@@ -21,13 +21,13 @@ import {
 
 // ─── Data ───────────────────────────────────────────────────────────────────
 
-const categories = [
-  { id: 'all', name: 'Semua', icon: Package, color: 'from-gray-500 to-gray-600' },
-  { id: 'COFFEE', name: 'Kopi Gayo', icon: Coffee, color: 'from-amber-600 to-orange-600' },
-  { id: 'PATCHOULI', name: 'Nilam Aceh', icon: Leaf, color: 'from-[#22c55e] to-emerald-600' },
-  { id: 'SEAFOOD', name: 'Seafood', icon: Waves, color: 'from-[#0ea5e9] to-blue-600' },
-  { id: 'SPICES', name: 'Rempah', icon: Star, color: 'from-red-500 to-rose-600' },
-  { id: 'PROCESSED', name: 'Produk Olahan', icon: Package, color: 'from-purple-500 to-violet-600' },
+const getCategories = (t: ReturnType<typeof useTranslations>) => [
+  { id: 'all', name: t.products.categories.all, icon: Package, color: 'from-gray-500 to-gray-600' },
+  { id: 'COFFEE', name: t.products.categories.coffee, icon: Coffee, color: 'from-amber-600 to-orange-600' },
+  { id: 'PATCHOULI', name: t.products.categories.patchouli, icon: Leaf, color: 'from-[#22c55e] to-emerald-600' },
+  { id: 'SEAFOOD', name: t.products.categories.seafood, icon: Waves, color: 'from-[#0ea5e9] to-blue-600' },
+  { id: 'SPICES', name: t.products.categories.spices, icon: Star, color: 'from-red-500 to-rose-600' },
+  { id: 'PROCESSED', name: t.products.categories.processed, icon: Package, color: 'from-purple-500 to-violet-600' },
 ]
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -56,7 +56,8 @@ function ProductModal({
   onClose: () => void
 }) {
   const t = useTranslations()
-  const category = categories.find((c) => c.id === product.category)
+  const categories = getCategories(t)
+  const category = getCategories(t).find((c) => c.id === product.category)
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
@@ -190,12 +191,12 @@ const cardVariants = {
 
 export default function ProductCatalog() {
   const fallbackProducts: Product[] = [
-  { id: 1, name: 'Kopi Arabica Gayo Premium', category: 'COFFEE', origin: 'Gayo Lues', price: 'Rp 150.000/kg', rating: 4.9, image: '/images/kopi_arabica.png', emojiColor: 'from-amber-500 to-orange-600', description: 'Kopi arabica single origin dari dataran tinggi Gayo Lues.', certifications: ['Organic', 'Fair Trade'], stock: 250 },
-  { id: 2, name: 'Minyak Nilam Aceh', category: 'PATCHOULI', origin: 'Aceh Selatan', price: 'Rp 250.000/liter', rating: 4.8, image: '/images/PatchouliOil.png', emojiColor: 'from-[#22c55e] to-emerald-600', description: 'Minyak nilam murni kualitas ekspor.', certifications: ['ISO 9001', 'Halal MUI'], stock: 80 },
-  { id: 3, name: 'Udang Vannamei Fresh', category: 'SEAFOOD', origin: 'Aceh Timur', price: 'Rp 85.000/kg', rating: 4.7, image: '/images/VannameiShrimp.png', emojiColor: 'from-[#0ea5e9] to-cyan-500', description: 'Udang vannamei segar dari tambak terintegrasi.', certifications: ['HACCP', 'ASC'], stock: 500 },
-  { id: 4, name: 'Rempah Kustom Aceh', category: 'SPICES', origin: 'Aceh Besar', price: 'Rp 75.000/box', rating: 4.9, image: '/images/rempahcustomAceh.png', emojiColor: 'from-red-500 to-rose-600', description: 'Campuran rempah autentik Aceh.', certifications: ['Halal MUI', 'BPOM'], stock: 300 },
-  { id: 5, name: 'Kopi Robusta Gayo', category: 'COFFEE', origin: 'Bener Meriah', price: 'Rp 120.000/kg', rating: 4.6, image: '/images/cofferobusta.png', emojiColor: 'from-stone-600 to-amber-700', description: 'Kopi robusta dengan karakter bold dan earthy.', certifications: ['Organic', 'Fair Trade'], stock: 180 },
-  { id: 6, name: 'Ikan Tongkol Asap', category: 'PROCESSED', origin: 'Pidie', price: 'Rp 95.000/kg', rating: 4.8, image: '/images/ikantongkolasap.png', emojiColor: 'from-purple-500 to-indigo-600', description: 'Ikan tongkol asap tradisional.', certifications: ['Halal MUI', 'P-IRT'], stock: 120 },
+  { id: 1, name: 'Premium Gayo Arabica Coffee', category: 'COFFEE', origin: 'Gayo Lues', price: 'Rp 150,000/kg', rating: 4.9, image: '/images/kopi_arabica.png', emojiColor: 'from-amber-500 to-orange-600', description: 'Single origin arabica coffee from the Gayo highlands.', certifications: ['Organic', 'Fair Trade'], stock: 250 },
+  { id: 2, name: 'Aceh Patchouli Oil', category: 'PATCHOULI', origin: 'South Aceh', price: 'Rp 250,000/liter', rating: 4.8, image: '/images/PatchouliOil.png', emojiColor: 'from-[#22c55e] to-emerald-600', description: 'Pure patchouli oil of export quality.', certifications: ['ISO 9001', 'Halal MUI'], stock: 80 },
+  { id: 3, name: 'Fresh Vannamei Shrimp', category: 'SEAFOOD', origin: 'East Aceh', price: 'Rp 85,000/kg', rating: 4.7, image: '/images/VannameiShrimp.png', emojiColor: 'from-[#0ea5e9] to-cyan-500', description: 'Fresh vannamei shrimp from integrated ponds.', certifications: ['HACCP', 'ASC'], stock: 500 },
+  { id: 4, name: 'Aceh Custom Spices', category: 'SPICES', origin: 'Aceh Besar', price: 'Rp 75,000/box', rating: 4.9, image: '/images/rempahcustomAceh.png', emojiColor: 'from-red-500 to-rose-600', description: 'Authentic Acehnese spice blend.', certifications: ['Halal MUI', 'BPOM'], stock: 300 },
+  { id: 5, name: 'Gayo Robusta Coffee', category: 'COFFEE', origin: 'Bener Meriah', price: 'Rp 120,000/kg', rating: 4.6, image: '/images/cofferobusta.png', emojiColor: 'from-stone-600 to-amber-700', description: 'Robusta coffee with bold and earthy character.', certifications: ['Organic', 'Fair Trade'], stock: 180 },
+  { id: 6, name: 'Smoked Mackerel Tuna', category: 'PROCESSED', origin: 'Pidie', price: 'Rp 95,000/kg', rating: 4.8, image: '/images/ikantongkolasap.png', emojiColor: 'from-purple-500 to-indigo-600', description: 'Traditional smoked mackerel tuna.', certifications: ['Halal MUI', 'P-IRT'], stock: 120 },
 ]
 
   const categoryColor = (cat: string) => {
@@ -208,6 +209,14 @@ export default function ProductCatalog() {
     }
     return map[cat] || 'from-gray-500 to-gray-600'
   }
+const categoryImg: Record<string, string> = {
+    COFFEE: '/images/kopi_arabica.png',
+    PATCHOULI: '/images/PatchouliOil.png',
+    SEAFOOD: '/images/VannameiShrimp.png',
+    SPICES: '/images/rempahcustomAceh.png',
+    PROCESSED: '/images/ikantongkolasap.png',
+  }
+
 const [products, setProducts] = useState<Product[]>(fallbackProducts)
   const [, setLoading] = useState(true)
 
@@ -223,9 +232,9 @@ const [products, setProducts] = useState<Product[]>(fallbackProducts)
             name: p.name,
             category: p.category,
             origin: p.origin || 'Aceh',
-            price: p.price || 'Hubungi',
+            price: p.price || t.products.contactSupplier,
             rating: 4.5,
-            image: p.image || '/images/kopi_arabica.png',
+            image: p.image || categoryImg[p.category as string] || '/images/kopi_arabica.png',
             emojiColor: categoryColor(p.category as string),
             description: p.description || '',
             certifications: ['Terdaftar'],
@@ -243,6 +252,7 @@ const [products, setProducts] = useState<Product[]>(fallbackProducts)
 
 
   const t = useTranslations()
+  const categories = getCategories(t)
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-60px' })
 

@@ -22,13 +22,7 @@ interface Product {
   createdAt: string
 }
 
-const categories = [
-  { value: 'COFFEE', label: 'Kopi Gayo', image: '/images/kopi_arabica.png' },
-  { value: 'PATCHOULI', label: 'Nilam Aceh', image: '/images/PatchouliOil.png' },
-  { value: 'SEAFOOD', label: 'Seafood', image: '/images/VannameiShrimp.png' },
-  { value: 'SPICES', label: 'Rempah', image: '/images/rempahcustomAceh.png' },
-  { value: 'PROCESSED', label: 'Produk Olahan', image: '/images/ikantongkolasap.png' },
-]
+
 
 const statusBadge: Record<string, string> = {
   APPROVED: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
@@ -43,6 +37,13 @@ const initialForm = { name: '', category: 'COFFEE', description: '', origin: '',
 export default function MyProductsPage() {
   const t = useTranslations()
   const { user } = useAuthStore()
+  const categories = [
+    { value: 'COFFEE', label: t.products.categories.coffee, image: '/images/kopi_arabica.png' },
+    { value: 'PATCHOULI', label: t.products.categories.patchouli, image: '/images/PatchouliOil.png' },
+    { value: 'SEAFOOD', label: t.products.categories.seafood, image: '/images/VannameiShrimp.png' },
+    { value: 'SPICES', label: t.products.categories.spices, image: '/images/rempahcustomAceh.png' },
+    { value: 'PROCESSED', label: t.products.categories.processed, image: '/images/ikantongkolasap.png' },
+  ]
   const [products, setProducts] = useState<Product[]>([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
@@ -335,25 +336,25 @@ export default function MyProductsPage() {
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t.dashboard.description}</label>
             <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
-              placeholder="Ceritakan tentang produk Anda..."
+              placeholder={t.dashboard.productFormDescription}
               className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:outline-none resize-none"
               rows={3} required />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <Input id="origin" label="Asal Daerah" value={form.origin} onChange={(e) => setForm({ ...form, origin: e.target.value })} placeholder="Contoh: Gayo Lues" required />
-            <Input id="legality" label="Legalitas (opsional)" value={form.legality} onChange={(e) => setForm({ ...form, legality: e.target.value })} placeholder="Contoh: BPOM, Halal MUI" />
+            <Input id="origin" label={t.dashboard.origin} value={form.origin} onChange={(e) => setForm({ ...form, origin: e.target.value })} placeholder={t.dashboard.productFormOriginPlaceholder} required />
+            <Input id="legality" label={t.dashboard.legality + " (opsional)"} value={form.legality} onChange={(e) => setForm({ ...form, legality: e.target.value })} placeholder={t.dashboard.productFormLegalityPlaceholder} />
           </div>
 
           <div className="flex justify-end gap-3 pt-2 border-t border-gray-100 dark:border-gray-700">
             <Button variant="outline" onClick={() => setModal(null)}>{t.dashboard.cancel}</Button>
-            <Button onClick={handleSave} isLoading={saving}>{editing ? 'Simpan Perubahan' : t.dashboard.addProduct}</Button>
+            <Button onClick={handleSave} isLoading={saving}>{editing ? t.dashboard.saveChanges : t.dashboard.addProduct}</Button>
           </div>
         </div>
       </Modal>
 
       {/* Delete Confirmation */}
-      <Modal open={deleteId !== null} onClose={() => setDeleteId(null)} title={t.dashboard.deleteProduct + " Produk"} size="sm">
+      <Modal open={deleteId !== null} onClose={() => setDeleteId(null)} title={t.dashboard.deleteProductTitle} size="sm">
         <div className="text-center">
           <div className="w-14 h-14 rounded-2xl bg-red-100 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-4">
             <Trash2 size={28} className="text-red-500" />

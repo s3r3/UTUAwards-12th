@@ -13,20 +13,10 @@ import { useAuth } from '@/hooks/useAuth'
 import { signOut } from 'next-auth/react'
 import { useAuthStore } from '@/store/auth.store'
 import DashboardChatBot from '@/components/DashboardChatBot'
+import { useTranslations } from '@/lib/i18n'
 
-const sidebarItems = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Produk Saya', href: '/dashboard/products', icon: Package },
-  { name: 'Mentoring', href: '/dashboard/mentoring', icon: BookOpen },
-  { name: 'Mitra', href: '/dashboard/partners', icon: Globe },
-  { name: 'Pengaturan', href: '/dashboard/settings', icon: Settings },
-]
-
-const adminItems = [
-  { name: 'Panel Admin', href: '/dashboard/admin', icon: LayoutDashboard },
-  { name: 'Kelola Produk', href: '/dashboard/admin/products', icon: Package },
-  { name: 'Kelola Pengguna', href: '/dashboard/admin/users', icon: Globe },
-]
+const sidebarItems: { name: string; href: string; icon: React.ComponentType<{ size?: number }> }[] = []
+const adminItems: typeof sidebarItems = []
 
 function FloatingOrbs() {
   return (
@@ -136,6 +126,19 @@ function SidebarNav({ items, pathname, onNavigate }: { items: typeof sidebarItem
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const t = useTranslations()
+  const sidebarItems = [
+    { name: t.nav.dashboard, href: '/dashboard', icon: LayoutDashboard },
+    { name: t.dashboard.myProducts, href: '/dashboard/products', icon: Package },
+    { name: t.nav.mentoring, href: '/dashboard/mentoring', icon: BookOpen },
+    { name: t.nav.partners, href: '/dashboard/partners', icon: Globe },
+    { name: t.dashboard.settings, href: '/dashboard/settings', icon: Settings },
+  ]
+  const adminItems = [
+    { name: t.dashboard.adminPanel, href: '/dashboard/admin', icon: LayoutDashboard },
+    { name: t.dashboard.adminProducts, href: '/dashboard/admin/products', icon: Package },
+    { name: t.dashboard.adminUsers, href: '/dashboard/admin/users', icon: Globe },
+  ]
   const mounted = useSyncExternalStore(() => () => {}, () => true, () => false)
   useAuth()
   const { user, logout } = useAuthStore()
@@ -193,7 +196,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 height={30}
                 className="hidden dark:block h-6 w-auto"
               />
-              <p className="text-[9px] text-gray-400 dark:text-gray-500 tracking-widest uppercase">Dashboard</p>
+              <p className="text-[9px] text-gray-400 dark:text-gray-500 tracking-widest uppercase">{t.nav.dashboard}</p>
             </div>
           </Link>
           <button onClick={() => setSidebarOpen(false)} className="md:hidden p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
@@ -232,7 +235,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             onClick={() => { logout(); signOut({ callbackUrl: "/login" }) }}
             className="flex items-center gap-2.5 w-full px-3 py-2 rounded-xl text-xs font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
           >
-            <LogOut size={15} /> Keluar
+            <LogOut size={15} /> {t.nav.logout}
           </motion.button>
         </div>
       </motion.aside>
@@ -271,7 +274,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               />
             <ChevronRight size={12} />
             <span className="text-gray-600 dark:text-gray-300 font-medium">
-              {sidebarItems.find(i => i.href === pathname)?.name || 'Dashboard'}
+              {sidebarItems.find(i => i.href === pathname)?.name || t.nav.dashboard}
             </span>
           </div>
 

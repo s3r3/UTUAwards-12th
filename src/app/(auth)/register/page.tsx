@@ -54,10 +54,10 @@ export default function RegisterPage() {
             />
           </Link>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Daftar Akun Baru
+            {t.auth.registerNewAccount}
           </h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Sudah punya akun?{' '}
+            {t.auth.haveAccount}{' '}
             <Link href="/login" className="font-medium text-primary-600 hover:text-primary-500">
               {t.auth.haveAccount}
             </Link>
@@ -71,7 +71,7 @@ export default function RegisterPage() {
               <Input
                 id="name"
                 type="text"
-                placeholder="Nama Lengkap"
+                placeholder={t.auth.namePlaceholder}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="pl-10"
@@ -84,7 +84,7 @@ export default function RegisterPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="Email"
+                placeholder={t.auth.email}
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="pl-10"
@@ -97,7 +97,7 @@ export default function RegisterPage() {
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
-                placeholder="Password"
+                placeholder={t.auth.password}
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="pl-10 pr-10"
@@ -117,7 +117,7 @@ export default function RegisterPage() {
               <Input
                 id="confirmPassword"
                 type="password"
-                placeholder="Konfirmasi Password"
+                placeholder={t.auth.passwordConfirmPlaceholder}
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 className="pl-10"
@@ -127,7 +127,7 @@ export default function RegisterPage() {
           </div>
 
           <Button type="submit" className="w-full" size="lg" isLoading={isLoading}>
-            Daftar
+            {t.auth.register}
           </Button>
         </form>
       </div>

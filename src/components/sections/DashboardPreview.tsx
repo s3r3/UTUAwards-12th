@@ -40,7 +40,7 @@ const getStats = (t: ReturnType<typeof useTranslations>) => [
     chartColor: '#0ea5e9',
   },
   {
-    label: 'Negara Mitra',
+    label: t.dashboardPreview.statCountries,
     value: 25,
     suffix: '',
     icon: Globe,
@@ -222,17 +222,17 @@ export default function DashboardPreview() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22c55e] opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#22c55e]" />
             </span>
-            Live Dashboard
+            {t.dashboardPreview.badge}
           </div>
 
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Dashboard{' '}
+            {t.dashboardPreview.title}{' '}
             <span className="bg-gradient-to-r from-[#22c55e] to-[#0ea5e9] bg-clip-text text-transparent">
-              Ringkasan
+              {t.dashboardPreview.titleHighlight}
             </span>
           </h2>
           <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">
-            Pantau perkembangan ekosistem agro-maritim Aceh secara real-time
+            {t.dashboardPreview.desc}
           </p>
         </motion.div>
 
@@ -308,11 +308,11 @@ export default function DashboardPreview() {
         >
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#22c55e]" />
-            Data diperbarui setiap hari
+            {t.dashboardPreview.updateLabel}
           </span>
           <span className="hidden md:flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#0ea5e9]" />
-            Sumber: platform Acelora
+            {t.dashboardPreview.sourceLabel}
           </span>
         </motion.div>
       </div>

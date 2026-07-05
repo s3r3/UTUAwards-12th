@@ -6,13 +6,13 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { Globe, MapPin, Building, Search } from 'lucide-react'
 
-const regions = [
-  { id: 'all', name: '{t.partners.all}' },
-  { id: 'ASIA', name: 'Asia' },
-  { id: 'EUROPE', name: 'Eropa' },
-  { id: 'MIDDLE_EAST', name: 'Timur Tengah' },
-  { id: 'AMERICA', name: 'Amerika' },
-  { id: 'AFRICA', name: 'Afrika' },
+const getRegions = (t: ReturnType<typeof useTranslations>) => [
+  { id: 'all', name: t.partners.all },
+  { id: 'ASIA', name: t.partners.regionAsia },
+  { id: 'EUROPE', name: t.partners.regionEurope },
+  { id: 'MIDDLE_EAST', name: t.partners.regionMiddleEast },
+  { id: 'AMERICA', name: t.partners.regionAmerica },
+  { id: 'AFRICA', name: t.partners.regionAfrica },
 ]
 
 const partners = [
@@ -32,6 +32,7 @@ const partners = [
 
 export default function PartnersPage() {
   const t = useTranslations()
+  const regions = getRegions(t)
   const [region, setRegion] = useState('all')
   const [search, setSearch] = useState('')
 

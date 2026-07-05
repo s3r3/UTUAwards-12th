@@ -35,10 +35,10 @@ export default function LoginPage() {
       if (result?.ok) {
         router.push('/dashboard')
       } else {
-        setError('Email atau password salah')
+        setError(t.auth.errorInvalid)
       }
     } catch {
-      setError('Terjadi kesalahan, coba lagi')
+      setError(t.auth.errorGeneric)
     } finally {
       setIsLoading(false)
     }
@@ -67,12 +67,12 @@ export default function LoginPage() {
             />
           </Link>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Selamat Datang Kembali
+            {t.auth.loginDesc}
           </h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Atau{' '}
             <Link href="/register" className="font-medium text-primary-600 hover:text-primary-500">
-              daftar akun baru
+              {t.auth.registerNew}
             </Link>
           </p>
         </div>
@@ -85,7 +85,7 @@ export default function LoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="{t.auth.email}"
+                placeholder={t.auth.email}
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="pl-10"
@@ -98,7 +98,7 @@ export default function LoginPage() {
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
-                placeholder="Password"
+                placeholder={t.auth.password}
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="pl-10 pr-10"
@@ -117,10 +117,10 @@ export default function LoginPage() {
           <div className="flex items-center justify-between">
             <label className="flex items-center">
               <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
-              <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Ingat saya</span>
+              <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">{t.auth.rememberMe}</span>
             </label>
             <Link href="#" className="text-sm font-medium text-primary-600 hover:text-primary-500">
-              Lupa password?
+              {t.auth.forgotPassword}
             </Link>
           </div>
 

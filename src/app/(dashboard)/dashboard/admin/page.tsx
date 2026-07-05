@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Package, Users, Search, CheckCircle, XCircle, Clock, TrendingUp, AlertTriangle, Sparkles } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 import { useAuthStore } from '@/store/auth.store'
 
 type Product = {
@@ -22,16 +23,20 @@ const statusBadge: Record<string, string> = {
   REJECTED: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
 }
 
-const categoryLabels: Record<string, string> = {
-  COFFEE: 'Kopi Gayo',
-  PATCHOULI: 'Nilam Aceh',
-  SEAFOOD: 'Seafood',
-  SPICES: 'Rempah',
-  PROCESSED: 'Produk Olahan',
+const getCategoryLabel = (cat: string, t: ReturnType<typeof useTranslations>) => {
+  const map: Record<string, string> = {
+    COFFEE: t.products.categories.coffee,
+    PATCHOULI: t.products.categories.patchouli,
+    SEAFOOD: t.products.categories.seafood,
+    SPICES: t.products.categories.spices,
+    PROCESSED: t.products.categories.processed,
+  }
+  return map[cat] || cat
 }
 
 export default function AdminDashboardPage() {
   const { user } = useAuthStore()
+  const t = useTranslations()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -182,7 +187,7 @@ export default function AdminDashboardPage() {
                     <td className="py-3 text-gray-600 dark:text-gray-400">{p.owner?.name || '-'}</td>
                     <td className="py-3">
                       <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                        {categoryLabels[p.category as keyof typeof categoryLabels] || p.category}
+                        {getCategoryLabel(p.category, t)}
                       </span>
                     </td>
                     <td className="py-3 text-gray-600 dark:text-gray-400 text-xs">

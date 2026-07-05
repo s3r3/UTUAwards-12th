@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { TrendingUp, TrendingDown, BarChart3, RefreshCw } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
 
 interface CommodityPrice {
   id: string
@@ -15,6 +16,7 @@ interface CommodityPrice {
 }
 
 export default function MarketWidget() {
+  const t = useTranslations()
   const [prices, setPrices] = useState<CommodityPrice[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -49,7 +51,7 @@ export default function MarketWidget() {
     <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-800">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2 text-sm">
-          <BarChart3 size={16} className="text-primary-500" /> Harga Pasar
+          <BarChart3 size={16} className="text-primary-500" /> {t.dashboard.marketPrice}
         </h3>
         <RefreshCw size={12} className="text-gray-400" />
       </div>

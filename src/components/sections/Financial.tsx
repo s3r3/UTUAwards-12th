@@ -5,33 +5,33 @@ import { useTranslations } from '@/lib/i18n'
 
 const getMetrics = (t: ReturnType<typeof useTranslations>) => [
   {
-    label: 'Total Cost',
-    value: 'Rp 140 Juta',
-    description: 'Investasi awal pengembangan platform',
+    label: t.financial.metric1label,
+    value: t.financial.metric1value,
+    description: t.financial.metric1desc,
     icon: DollarSign,
     color: 'text-red-500',
     bgColor: 'bg-red-100 dark:bg-red-900/20',
   },
   {
-    label: 'Revenue Projection',
-    value: 'Rp 500 Juta/tahun',
-    description: 'Proyeksi pendapatan tahun pertama',
+    label: t.financial.metric2label,
+    value: t.financial.metric2value,
+    description: t.financial.metric2desc,
     icon: TrendingUp,
     color: 'text-green-500',
     bgColor: 'bg-green-100 dark:bg-green-900/20',
   },
   {
-    label: 'Break Even',
-    value: 'Bulan ke-10',
-    description: 'Target titik impas investasi',
+    label: t.financial.metric3label,
+    value: t.financial.metric3value,
+    description: t.financial.metric3desc,
     icon: Target,
     color: 'text-blue-500',
     bgColor: 'bg-blue-100 dark:bg-blue-900/20',
   },
   {
-    label: 'ROI Target',
-    value: '257%',
-    description: 'Target return on investment',
+    label: t.financial.metric4label,
+    value: t.financial.metric4value,
+    description: t.financial.metric4desc,
     icon: Calendar,
     color: 'text-purple-500',
     bgColor: 'bg-purple-100 dark:bg-purple-900/20',
@@ -39,10 +39,10 @@ const getMetrics = (t: ReturnType<typeof useTranslations>) => [
 ]
 
 const getRevenueStreams = (t: ReturnType<typeof useTranslations>) => [
-  { name: 'Komisi 3%', description: 'Dari setiap transaksi yang terjadi di platform', percentage: 40 },
-  { name: 'Premium Listing', description: 'Fitur unggulan untuk produk di halaman utama', percentage: 25 },
-  { name: 'B2B Consultation', description: 'Layanan konsultasi bisnis untuk mitra', percentage: 20 },
-  { name: 'Government Partnership', description: t.financial.govDesc, percentage: 15 },
+  { name: t.financial.revenue1name, description: t.financial.revenue1desc, percentage: 40 },
+  { name: t.financial.revenue2name, description: t.financial.revenue2desc, percentage: 25 },
+  { name: t.financial.revenue3name, description: t.financial.revenue3desc, percentage: 20 },
+  { name: t.financial.revenue4name, description: t.financial.govDesc, percentage: 15 },
 ]
 
 export default function Financial() {
@@ -55,7 +55,7 @@ export default function Financial() {
             {t.financial.title}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Strategi monetisasi berkelanjutan untuk pertumbuhan ekosistem agro-maritim Aceh
+            {t.financial.desc}
           </p>
         </div>
 
@@ -76,7 +76,7 @@ export default function Financial() {
         {/* Revenue Streams */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-lg">
           <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-            Sumber Pendapatan
+            {t.financial.revenueTitle}
           </h3>
           <div className="space-y-4">
             {getRevenueStreams(t).map((stream, index) => (

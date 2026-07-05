@@ -41,8 +41,8 @@ const getPrograms = (t: ReturnType<typeof useTranslations>) => [
   },
   {
     step: '04',
-    title: 'Supply Chain Training',
-    description: 'Comprehensive integrated supply chain management training for operational efficiency.',
+    title: t.mentoring.program4,
+    description: t.mentoring.program4desc,
     icon: Truck,
     gradient: 'from-orange-500 to-amber-600',
     glow: 'shadow-[0_4px_32px_rgba(249,115,22,0.20)]',
@@ -217,10 +217,10 @@ export default function Mentoring() {
 
           <div className="relative z-10">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
-              Siap {t.mentoring.improve} Produk {t.mentoring.your} ke Pasar Global?
+              {t.mentoring.ctaTitle}
             </h3>
             <p className="text-white/80 mb-6 max-w-xl mx-auto">
-              Daftarkan produk {t.mentoring.your} sekarang dan dapatkan konsultasi awal gratis dengan tim ahli Acelora
+              {t.mentoring.ctaDesc}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <motion.button

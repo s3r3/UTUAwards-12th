@@ -19,8 +19,8 @@ export default function SettingsPage() {
         <div>
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{t.dashboard.profileSection}</h3>
           <div className="space-y-4">
-            <Input id="name" label="Nama" value={name} onChange={(e) => setName(e.target.value)} />
-            <Input id="email" label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input id="name" label={t.dashboard.name} value={name} onChange={(e) => setName(e.target.value)} />
+            <Input id="email" label={t.dashboard.email} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <Button>{t.dashboard.save}</Button>
           </div>
         </div>

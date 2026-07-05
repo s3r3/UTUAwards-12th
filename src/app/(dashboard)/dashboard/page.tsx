@@ -39,10 +39,10 @@ export default function DashboardPage() {
   }, [])
 
   const stats = [
-    { label: 'Total Produk', value: products.length, icon: Package, color: 'from-primary-500 to-emerald-500', change: `${products.length}` },
-    { label: 'Sedang Review', value: products.filter(p => p.status === 'REVIEW' || p.status === 'PENDING').length, icon: FileCheck, color: 'from-yellow-500 to-orange-500', change: '-' },
-    { label: 'Program Aktif', value: 0, icon: BookOpen, color: 'from-ocean-500 to-blue-500', change: '0' },
-    { label: 'Mitra Terhubung', value: 0, icon: Globe, color: 'from-purple-500 to-pink-500', change: '0' },
+    { label: t.dashboard.totalProducts, value: products.length, icon: Package, color: 'from-primary-500 to-emerald-500', change: `${products.length}` },
+    { label: t.dashboard.reviewProducts, value: products.filter(p => p.status === 'REVIEW' || p.status === 'PENDING').length, icon: FileCheck, color: 'from-yellow-500 to-orange-500', change: '-' },
+    { label: t.dashboard.activePrograms, value: 0, icon: BookOpen, color: 'from-ocean-500 to-blue-500', change: '0' },
+    { label: t.dashboard.connectedPartners, value: 0, icon: Globe, color: 'from-purple-500 to-pink-500', change: '0' },
   ]
 
   return (
@@ -65,7 +65,7 @@ export default function DashboardPage() {
             <span>{t.dashboard.overviewTitle}</span>
           </motion.div>
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-            Selamat Datang{', '}
+            {t.dashboard.welcome}{', '}
             <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">{t.dashboard.overviewSubtitle}</span>
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{t.dashboard.overviewDesc}</p>
@@ -227,7 +227,7 @@ export default function DashboardPage() {
                 <BookOpen size={18} className="text-ocean-500" /> {t.dashboard.mentoringProgram}
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[t.mentoring.program1, t.mentoring.program2, t.mentoring.program3, 'Supply Chain Training'].map((name, i) => (
+                {[t.mentoring.program1, t.mentoring.program2, t.mentoring.program3, t.mentoring.program4].map((name, i) => (
                   <motion.div
                     key={name}
                     initial={{ opacity: 0, y: 10 }}
@@ -247,7 +247,7 @@ export default function DashboardPage() {
                           className="h-full rounded-full bg-gradient-to-r from-primary-500 to-ocean-500"
                         />
                       </div>
-                      <span className="text-[10px] font-medium text-gray-400">{['65%', '30%', '10%', 'Mulai'][i]}</span>
+                      <span className="text-[10px] font-medium text-gray-400">{['65%', '30%', '10%', t.dashboard.start][i]}</span>
                     </div>
                   </motion.div>
                 ))}
@@ -298,7 +298,7 @@ export default function DashboardPage() {
                   whileTap={{ scale: 0.97 }}
                   className="text-sm font-semibold bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl transition-colors backdrop-blur-sm border border-white/20"
                 >
-                  Lihat Detail ↗
+                  {t.dashboard.viewDetail} ↗
                 </motion.button>
               </div>
             </motion.div>
@@ -311,13 +311,13 @@ export default function DashboardPage() {
               className="bg-white dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-5 border border-gray-100 dark:border-gray-800/60 shadow-sm"
             >
               <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-3 flex items-center gap-2">
-                <Sparkles size={15} className="text-yellow-500" /> Tips Cepat
+                <Sparkles size={15} className="text-yellow-500" /> {t.dashboard.quickTips}
               </h3>
               <div className="space-y-2.5">
                 {[
-                  { emoji: '📸', text: 'Tambah foto produk untuk meningkatkan daya tarik' },
-                  { emoji: '📋', text: 'Lengkapi legalitas produk untuk akses pasar ekspor' },
-                  { emoji: '🎓', text: 'Ikuti mentoring sertifikasi Halal & HACCP' },
+                  { emoji: '📸', text: t.dashboard.tip1 },
+                  { emoji: '📋', text: t.dashboard.tip2 },
+                  { emoji: '🎓', text: t.dashboard.tip3 },
                 ].map((tip, i) => (
                   <motion.div
                     key={i}

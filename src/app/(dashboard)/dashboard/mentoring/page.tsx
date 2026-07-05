@@ -3,14 +3,13 @@
 import { BookOpen, Award, Shield, Package, Truck, CheckCircle2 } from 'lucide-react'
 import { useTranslations } from '@/lib/i18n'
 
-const programs = [
-  { name: 'Sertifikasi Halal', product: 'Kopi Gayo Premium', progress: 65, icon: Award, color: 'bg-green-500' },
-  { name: 'HACCP', product: 'Udang Vannamei', progress: 30, icon: Shield, color: 'bg-blue-500' },
-  { name: 'Export Packaging', product: 'Minyak Nilam', progress: 10, icon: Package, color: 'bg-purple-500' },
-]
-
 export default function MentoringPage() {
   const t = useTranslations()
+  const programs = [
+    { name: t.mentoring.program1, product: 'Kopi Gayo Premium', progress: 65, icon: Award, color: 'bg-green-500' },
+    { name: t.mentoring.program2, product: 'Udang Vannamei', progress: 30, icon: Shield, color: 'bg-blue-500' },
+    { name: t.dashboard.exportPackaging, product: 'Minyak Nilam', progress: 10, icon: Package, color: 'bg-purple-500' },
+  ]
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{t.dashboard.mentoringProgram}</h1>

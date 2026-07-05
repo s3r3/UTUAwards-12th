@@ -4,29 +4,32 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useAuthStore } from '@/store/auth.store'
+import { useTranslations } from '@/lib/i18n'
 import {
   LayoutDashboard, Package, BookOpen, Globe, Users, Settings, LogOut, X,
 } from 'lucide-react'
 
-const userMenu = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Produk Saya', href: '/dashboard/products', icon: Package },
-  { name: 'Mentoring', href: '/dashboard/mentoring', icon: BookOpen },
-  { name: 'Mitra', href: '/dashboard/partners', icon: Globe },
-  { name: 'Pengaturan', href: '/dashboard/settings', icon: Settings },
+const getUserMenu = (t: ReturnType<typeof useTranslations>) => [
+  { name: t.nav.dashboard, href: '/dashboard', icon: LayoutDashboard },
+  { name: t.dashboard.myProducts, href: '/dashboard/products', icon: Package },
+  { name: t.nav.mentoring, href: '/dashboard/mentoring', icon: BookOpen },
+  { name: t.nav.partners, href: '/dashboard/partners', icon: Globe },
+  { name: t.dashboard.settings, href: '/dashboard/settings', icon: Settings },
 ]
 
-const adminMenu = [
-  { name: 'Admin Panel', href: '/dashboard/admin', icon: Users },
-  { name: 'Kelola Produk', href: '/dashboard/admin/products', icon: Package },
-  { name: 'Kelola Pengguna', href: '/dashboard/admin/users', icon: Users },
-  { name: 'Kelola Mitra', href: '/dashboard/admin/partners', icon: Globe },
+const getAdminMenu = (t: ReturnType<typeof useTranslations>) => [
+  { name: t.dashboard.adminPanel, href: '/dashboard/admin', icon: Users },
+  { name: t.dashboard.adminProducts, href: '/dashboard/admin/products', icon: Package },
+  { name: t.dashboard.adminUsers, href: '/dashboard/admin/users', icon: Users },
+  { name: t.dashboard.adminPartners, href: '/dashboard/admin/partners', icon: Globe },
 ]
 
 export default function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const t = useTranslations()
   const pathname = usePathname()
   const { user, logout } = useAuthStore()
-
+  const userMenu = getUserMenu(t)
+  const adminMenu = getAdminMenu(t)
   const menu = user?.role === 'ADMIN' ? [...userMenu, ...adminMenu] : userMenu
 
   return (
@@ -78,7 +81,7 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
           onClick={logout}
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 w-full transition-colors"
         >
-          <LogOut size={20} /> Keluar
+          <LogOut size={20} /> {t.nav.logout}
         </button>
       </div>
     </aside>

@@ -5,30 +5,33 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { TrendingUp, DollarSign, BarChart3, Users, Rocket, Target, Zap } from 'lucide-react'
 
-const revenueStreams = [
-  { name: 'Komisi Transaksi', pct: 35, desc: 'Fee per transaksi yang berhasil melalui platform' },
-  { name: 'Langganan Premium', pct: 25, desc: 'Biaya berlangganan fitur premium untuk UMKM' },
-  { name: 'Mentoring Fee', pct: 20, desc: 'Biaya program mentoring dan sertifikasi' },
-  { name: 'Partnership Fee', pct: 15, desc: 'Fee kemitraan dengan buyer internasional' },
-  { name: 'Data & Insight', pct: 5, desc: 'Layanan analisis data komoditas' },
+const getRevenueStreams = (t: ReturnType<typeof useTranslations>) => [
+  { name: t.business.commissionTitle, pct: 35, desc: t.business.commissionDesc },
+  { name: t.business.premiumTitle, pct: 25, desc: t.business.premiumDesc },
+  { name: t.business.mentoringFeeTitle, pct: 20, desc: t.business.mentoringFeeDesc },
+  { name: t.business.partnershipFeeTitle, pct: 15, desc: t.business.partnershipFeeDesc },
+  { name: t.business.dataInsightTitle, pct: 5, desc: t.business.dataInsightDesc },
 ]
 
-const projections = [
-  { year: 'Tahun 1', revenue: 'Rp 500 Jt', users: '500 UMKM', growth: '+100%' },
-  { year: 'Tahun 2', revenue: 'Rp 2 M', users: '2.000 UMKM', growth: '+300%' },
-  { year: 'Tahun 3', revenue: 'Rp 8 M', users: '5.000 UMKM', growth: '+300%' },
-  { year: 'Tahun 5', revenue: 'Rp 25 M', users: '15.000 UMKM', growth: '+212%' },
+const getProjections = (t: ReturnType<typeof useTranslations>) => [
+  { year: t.business.projectionYear1, revenue: 'Rp 500 Jt', users: t.business.growthProjection1, growth: '+100%' },
+  { year: t.business.projectionYear2, revenue: 'Rp 2 M', users: t.business.growthProjection2, growth: '+300%' },
+  { year: t.business.projectionYear3, revenue: 'Rp 8 M', users: t.business.growthProjection3, growth: '+300%' },
+  { year: t.business.projectionYear5, revenue: 'Rp 25 M', users: t.business.growthProjection5, growth: '+212%' },
 ]
 
-const advantages = [
-  { icon: Target, title: 'First Mover', desc: 'Platform agro-maritim digital pertama yang fokus di ekosistem Aceh.' },
-  { icon: Users, title: 'Network Effect', desc: 'Semakin banyak UMKM bergabung, semakin menarik bagi buyer internasional.' },
-  { icon: Zap, title: 'Tech-Enabled', desc: 'Teknologi traceability dan digitalisasi end-to-end.' },
-  { icon: Rocket, title: 'Scalable', desc: 'Model bisnis dapat direplikasi ke daerah agro-maritim lain di Indonesia.' },
+const getAdvantages = (t: ReturnType<typeof useTranslations>) => [
+  { icon: Target, title: t.business.advantage1Title, desc: t.business.advantage1Desc },
+  { icon: Users, title: t.business.advantage2Title, desc: t.business.advantage2Desc },
+  { icon: Zap, title: t.business.advantage3Title, desc: t.business.advantage3Desc },
+  { icon: Rocket, title: t.business.advantage4Title, desc: t.business.advantage4Desc },
 ]
 
 export default function BusinessPage() {
   const t = useTranslations()
+  const revenueStreams = getRevenueStreams(t)
+  const projections = getProjections(t)
+  const advantages = getAdvantages(t)
   return (
     <main className="min-h-screen">
       <Navbar />

@@ -7,24 +7,24 @@ import Link from 'next/link'
 import { Search, Coffee, Waves, Leaf, Package, Star, MapPin, ArrowRight } from 'lucide-react'
 import { useTranslations } from '@/lib/i18n'
 
-const categories = [
-  { id: 'all', name: 'Semua', icon: Package },
-  { id: 'COFFEE', name: 'Kopi Gayo', icon: Coffee },
-  { id: 'PATCHOULI', name: 'Nilam Aceh', icon: Leaf },
-  { id: 'SEAFOOD', name: 'Seafood', icon: Waves },
-  { id: 'SPICES', name: 'Rempah', icon: Star },
-  { id: 'PROCESSED', name: 'Produk Olahan', icon: Package },
+const getCategories = (t: ReturnType<typeof useTranslations>) => [
+  { id: 'all', name: t.products.categories.all, icon: Package },
+  { id: 'COFFEE', name: t.products.categories.coffee, icon: Coffee },
+  { id: 'PATCHOULI', name: t.products.categories.patchouli, icon: Leaf },
+  { id: 'SEAFOOD', name: t.products.categories.seafood, icon: Waves },
+  { id: 'SPICES', name: t.products.categories.spices, icon: Star },
+  { id: 'PROCESSED', name: t.products.categories.processed, icon: Package },
 ]
 
 const products = [
-  { id: 1, name: 'Kopi Arabica Gayo Premium', category: 'COFFEE', origin: 'Gayo Lues', price: 'Rp 150.000/kg', rating: 4.9, status: 'APPROVED', desc: 'Kopi arabica specialty grade 1 dari dataran tinggi Gayo.', image: '/images/kopi_arabica.png' },
-  { id: 2, name: 'Minyak Nilam Aceh', category: 'PATCHOULI', origin: 'Aceh Selatan', price: 'Rp 250.000/liter', rating: 4.8, status: 'APPROVED', desc: 'Minyak nilam kualitas ekspor dengan kadar patchouli alcohol tinggi.', image: '/images/PatchouliOil.png' },
-  { id: 3, name: 'Udang Vannamei Fresh', category: 'SEAFOOD', origin: 'Aceh Timur', price: 'Rp 85.000/kg', rating: 4.7, status: 'VERIFIED', desc: 'Udang vannamei segar dari tambak berkualitas.', image: '/images/VannameiShrimp.png' },
-  { id: 4, name: 'Rempah Kustom Aceh', category: 'SPICES', origin: 'Aceh Besar', price: 'Rp 75.000/box', rating: 4.9, status: 'APPROVED', desc: 'Campuran rempah khas Aceh untuk masakan tradisional.', image: '/images/rempahcustomAceh.png' },
-  { id: 5, name: 'Kopi Robusta Gayo', category: 'COFFEE', origin: 'Bener Meriah', price: 'Rp 120.000/kg', rating: 4.6, status: 'APPROVED', desc: 'Robusta pilihan dari perkebunan organik Bener Meriah.', image: '/images/cofferobusta.png' },
-  { id: 6, name: 'Ikan Tongkol Asap', category: 'PROCESSED', origin: 'Pidie', price: 'Rp 95.000/kg', rating: 4.8, status: 'VERIFIED', desc: 'Tongkol asap tradisional dengan cita rasa khas Aceh.', image: '/images/ikantongkolasap.png' },
-  { id: 7, name: 'Lada Hitam Aceh', category: 'SPICES', origin: 'Aceh Tenggara', price: 'Rp 180.000/kg', rating: 4.7, status: 'APPROVED', desc: 'Lada hitam premium dari perkebunan rakyat.', image: '/images/ladahitamAceh.png' },
-  { id: 8, name: 'Kepiting Rajungan', category: 'SEAFOOD', origin: 'Aceh Utara', price: 'Rp 120.000/kg', rating: 4.5, status: 'REVIEW', desc: 'Rajungan segar berkualitas ekspor.', image: '/images/kepitingranjungan.png' },
+  { id: 1, name: 'Premium Gayo Arabica Coffee', category: 'COFFEE', origin: 'Gayo Lues', price: 'Rp 150,000/kg', rating: 4.9, status: 'APPROVED', desc: 'Specialty grade 1 arabica coffee from the Gayo highlands.', image: '/images/kopi_arabica.png' },
+  { id: 2, name: 'Aceh Patchouli Oil', category: 'PATCHOULI', origin: 'South Aceh', price: 'Rp 250,000/liter', rating: 4.8, status: 'APPROVED', desc: 'Export quality patchouli oil with high patchouli alcohol content.', image: '/images/PatchouliOil.png' },
+  { id: 3, name: 'Fresh Vannamei Shrimp', category: 'SEAFOOD', origin: 'East Aceh', price: 'Rp 85,000/kg', rating: 4.7, status: 'VERIFIED', desc: 'Fresh vannamei shrimp from quality ponds.', image: '/images/VannameiShrimp.png' },
+  { id: 4, name: 'Aceh Custom Spices', category: 'SPICES', origin: 'Aceh Besar', price: 'Rp 75,000/box', rating: 4.9, status: 'APPROVED', desc: 'Traditional Acehnese spice blend for cooking.', image: '/images/rempahcustomAceh.png' },
+  { id: 5, name: 'Gayo Robusta Coffee', category: 'COFFEE', origin: 'Bener Meriah', price: 'Rp 120,000/kg', rating: 4.6, status: 'APPROVED', desc: 'Selected robusta from organic Bener Meriah plantations.', image: '/images/cofferobusta.png' },
+  { id: 6, name: 'Smoked Mackerel Tuna', category: 'PROCESSED', origin: 'Pidie', price: 'Rp 95,000/kg', rating: 4.8, status: 'VERIFIED', desc: 'Traditional smoked tuna with distinctive Acehnese flavor.', image: '/images/ikantongkolasap.png' },
+  { id: 7, name: 'Aceh Black Pepper', category: 'SPICES', origin: 'Southeast Aceh', price: 'Rp 180,000/kg', rating: 4.7, status: 'APPROVED', desc: 'Premium black pepper from local farms.', image: '/images/ladahitamAceh.png' },
+  { id: 8, name: 'Blue Swimming Crab', category: 'SEAFOOD', origin: 'North Aceh', price: 'Rp 120,000/kg', rating: 4.5, status: 'REVIEW', desc: 'Fresh export quality blue swimming crab.', image: '/images/kepitingranjungan.png' },
 ]
 
 const statusColor: Record<string, string> = {
@@ -36,6 +36,7 @@ const statusColor: Record<string, string> = {
 
 export default function ProductsPage() {
   const t = useTranslations()
+  const categories = getCategories(t)
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('all')
 

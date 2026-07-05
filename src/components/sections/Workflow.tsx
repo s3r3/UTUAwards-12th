@@ -5,26 +5,26 @@ import { useTranslations } from '@/lib/i18n'
 
 const getSteps = (t: ReturnType<typeof useTranslations>) => [
   {
-    title: 'Producer',
+    title: t.workflow.step1title,
     description: t.workflow.step1desc,
     icon: User,
     color: 'bg-green-500',
   },
   {
-    title: 'Acelora',
-    description: 'Verifikasi kualitas dan sertifikasi produk',
+    title: t.workflow.step2title,
+    description: t.workflow.step2desc,
     icon: Building,
     color: 'bg-blue-500',
   },
   {
-    title: 'Certification',
-    description: 'Proses sertifikasi halal, HACCP, dan standar ekspor',
+    title: t.workflow.step3title,
+    description: t.workflow.step3desc,
     icon: Award,
     color: 'bg-purple-500',
   },
   {
-    title: 'Global Market',
-    description: 'Distribusi ke pasar internasional',
+    title: t.workflow.step4title,
+    description: t.workflow.step4desc,
     icon: Globe,
     color: 'bg-orange-500',
   },
@@ -37,10 +37,10 @@ export default function Workflow() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Alur Kerja Ekosistem
+            {t.workflow.title} {t.workflow.titleHighlight}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Proses terintegrasi dari produsen lokal hingga pasar global
+            {t.workflow.desc}
           </p>
         </div>
 
