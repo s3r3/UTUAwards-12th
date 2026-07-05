@@ -92,17 +92,17 @@ export default function Mentoring() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full border border-[#22c55e]/30 bg-[#22c55e]/10 text-[#22c55e] text-sm font-medium">
             <Award size={14} />
-            Program Mentoring
+            {t.mentoring.badge}
           </div>
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Tingkatkan{' '}
+            {t.mentoring.improve}{' '}
             <span className="bg-gradient-to-r from-[#22c55e] to-[#0ea5e9] bg-clip-text text-transparent">
-              Kualitas Produk
+              {t.mentoring.quality}
             </span>{' '}
-            Anda
+            {t.mentoring.your}
           </h2>
           <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">
-            Program pendampingan profesional step-by-step untuk menembus pasar global
+            {t.mentoring.homedesc}
           </p>
         </motion.div>
 
@@ -217,10 +217,10 @@ export default function Mentoring() {
 
           <div className="relative z-10">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
-              Siap Tingkatkan Produk Anda ke Pasar Global?
+              Siap {t.mentoring.improve} Produk {t.mentoring.your} ke Pasar Global?
             </h3>
             <p className="text-white/80 mb-6 max-w-xl mx-auto">
-              Daftarkan produk Anda sekarang dan dapatkan konsultasi awal gratis dengan tim ahli Acelora
+              Daftarkan produk {t.mentoring.your} sekarang dan dapatkan konsultasi awal gratis dengan tim ahli Acelora
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <motion.button
@@ -228,7 +228,7 @@ export default function Mentoring() {
                 whileTap={{ scale: 0.97 }}
                 className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-white text-[#22c55e] font-bold hover:bg-gray-50 transition-colors shadow-xl"
               >
-                Daftar Sekarang
+                {t.mentoring.ctaBtn}
                 <ArrowRight size={18} />
               </motion.button>
               <motion.button
@@ -236,7 +236,7 @@ export default function Mentoring() {
                 whileTap={{ scale: 0.97 }}
                 className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-white/15 text-white font-semibold hover:bg-white/25 transition-colors border border-white/30 backdrop-blur-sm"
               >
-                Pelajari Lebih Lanjut
+                {t.mentoring.learnMore}
               </motion.button>
             </div>
           </div>

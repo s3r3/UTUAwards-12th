@@ -70,7 +70,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-2">
                 <MapPin size={16} />
-                <span>Banda Aceh, Indonesia</span>
+                <span>{t.footer.address}</span>
               </li>
             </ul>
           </div>

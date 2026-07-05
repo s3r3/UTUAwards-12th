@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion, useInView, useAnimation, stagger, animate } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { Package, FileCheck, BookOpen, Globe, TrendingUp, Activity } from 'lucide-react'
 import { useTranslations } from '@/lib/i18n'
 
-const stats = [
+const getStats = (t: ReturnType<typeof useTranslations>) => [
   {
-    label: 'Total Produk',
+    label: t.dashboard.statProducts,
     value: 500,
     suffix: '+',
     icon: Package,
@@ -18,7 +18,7 @@ const stats = [
     chartColor: '#22c55e',
   },
   {
-    label: 'Sedang Review',
+    label: t.dashboard.statReview,
     value: 45,
     suffix: '',
     icon: FileCheck,
@@ -29,7 +29,7 @@ const stats = [
     chartColor: '#eab308',
   },
   {
-    label: 'Program Aktif',
+    label: t.dashboard.statActive,
     value: 15,
     suffix: '',
     icon: BookOpen,
@@ -108,7 +108,6 @@ function AnimatedCounter({
 
     const duration = 1800
     const steps = 60
-    const stepValue = value / steps
     let current = 0
     let frame = 0
 
@@ -193,6 +192,7 @@ const cardVariants = {
 
 export default function DashboardPreview() {
   const t = useTranslations()
+  const stats = getStats(t)
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-80px' })
 

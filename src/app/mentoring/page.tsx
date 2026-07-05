@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Award, Shield, Package, Truck, CheckCircle2, Clock, FileText, Users, Star, ArrowRight, X, BookOpen } from 'lucide-react'
+import { Award, Shield, Package, Truck, CheckCircle2, Clock, FileText, Star, ArrowRight, X, BookOpen } from 'lucide-react'
 import { useTranslations } from "@/lib/i18n"
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
@@ -14,7 +14,7 @@ interface Course {
   title: string
   description: string
   longDesc: string
-  icon: any
+  icon: React.ComponentType<{ size?: number }>
   gradient: string
   duration: string
   price: string
@@ -99,13 +99,13 @@ export default function MentoringPage() {
           {/* Header */}
           <motion.div className="text-center mb-14" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full border border-primary-500/30 bg-primary-500/10 text-primary-500 text-sm font-medium">
-              <BookOpen size={14} /> Program {t.mentoring.mentor}ing
+              <BookOpen size={14} /> {t.mentoring.programTitle}
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Tingkatkan <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">{t.mentoring.title}</span> {t.products.title}
+              {t.mentoring.improveTitle} <span className="bg-gradient-to-r from-primary-500 to-ocean-500 bg-clip-text text-transparent">{t.mentoring.title}</span> {t.products.title}
             </h1>
             <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto text-lg">
-              Pilih program pendampingan yang sesuai dengan kebutuhan produk Anda. Setiap program dipandu oleh mentor ahli.
+              {t.mentoring.programDesc}
             </p>
           </motion.div>
 
@@ -143,7 +143,7 @@ export default function MentoringPage() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-bold text-primary-500">{course.price}</span>
                       <span className="flex items-center gap-1 text-xs text-primary-600 group-hover:gap-2 transition-all">
-                        Detail Program <ArrowRight size={12} />
+                        {t.mentoring.detailProgram} <ArrowRight size={12} />
                       </span>
                     </div>
                   </div>
@@ -206,7 +206,7 @@ export default function MentoringPage() {
                 {/* Modules */}
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                    <FileText size={16} className="text-primary-500" /> Modul Pembelajaran
+                    <FileText size={16} className="text-primary-500" /> {t.mentoring.modules}
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {selected.modules.map((m, i) => (
@@ -220,7 +220,7 @@ export default function MentoringPage() {
                 {/* Outcomes */}
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Star size={16} className="text-yellow-500" /> Yang Akan Anda Dapatkan
+                    <Star size={16} className="text-yellow-500" /> {t.mentoring.outcomes}
                   </h3>
                   <div className="space-y-2">
                     {selected.outcomes.map((o, i) => (
@@ -232,7 +232,7 @@ export default function MentoringPage() {
                 </div>
 
                 <Button className="w-full gap-2" size="lg">
-                  Daftar Program <ArrowRight size={16} />
+                  {t.mentoring.detailProgram} <ArrowRight size={16} />
                 </Button>
               </div>
             </motion.div>

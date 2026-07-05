@@ -155,11 +155,11 @@ function ProductModal({
               <div className="flex gap-2">
               <Link href={`/products/${product.id}`} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e]/10 transition-colors">
                 <Package size={16} />
-                Detail Lengkap
+                {t.products.detailFull}
               </Link>
               <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#22c55e] to-[#0ea5e9] hover:opacity-90 transition-opacity shadow-lg">
                 <ShoppingBag size={16} />
-                Hubungi Supplier
+                {t.products.contactSupplier}
               </button>
               </div>
             </div>
@@ -286,10 +286,10 @@ const [selectedCategory, setSelectedCategory] = useState('all')
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full border border-[#0ea5e9]/30 bg-[#0ea5e9]/10 text-[#0ea5e9] text-sm font-medium">
             <Package size={14} />
-            Katalog Produk
+            {t.products.catalogTitle}
           </div>
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Produk Unggulan{' '}
+            {t.products.featuredTitle}{' '}
             <span className="bg-gradient-to-r from-[#22c55e] to-[#0ea5e9] bg-clip-text text-transparent">
               Aceh
             </span>
@@ -420,7 +420,7 @@ const [selectedCategory, setSelectedCategory] = useState('all')
                         onClick={(e) => { e.stopPropagation(); setSelectedProduct(product); }}
                         className="flex items-center gap-1 text-xs font-semibold text-[#0ea5e9] hover:text-[#22c55e] transition-colors"
                       >
-                        Detail <ChevronRight size={14} />
+                        {t.products.detail} <ChevronRight size={14} />
                       </button>
                     </div>
                   </div>
