@@ -43,6 +43,8 @@ const id: Translations = {
   products: {
     title: 'Katalog',
     titleHighlight: 'Produk',
+    catalogTitle: 'Katalog Produk',
+    featuredTitle: 'Produk Unggulan',
     desc: 'Temukan produk unggulan agro-maritim Aceh yang siap bersaing di pasar global.',
     searchPlaceholder: 'Cari produk...',
     categories: {
@@ -108,6 +110,7 @@ const id: Translations = {
     newsletter: 'Berlangganan Newsletter',
     emailPlaceholder: 'Email Anda',
     subscribe: 'Langganan',
+    address: 'Banda Aceh, Indonesia',
   },
   mentoring: {
     title: 'Program',

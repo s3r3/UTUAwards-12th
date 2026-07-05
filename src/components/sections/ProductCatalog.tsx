@@ -55,6 +55,7 @@ function ProductModal({
   product: Product
   onClose: () => void
 }) {
+  const t = useTranslations()
   const category = categories.find((c) => c.id === product.category)
 
   useEffect(() => {
