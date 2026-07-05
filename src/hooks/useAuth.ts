@@ -19,7 +19,7 @@ export function useAuth() {
           id: (u.id as string) || '',
           name: (u.name as string) || '',
           email: (u.email as string) || '',
-          role: (u.role as string) || 'USER',
+          role: (u.role as 'USER' | 'ADMIN' | 'PARTNER') || 'USER',
         })
       } else {
         setUser(null)
