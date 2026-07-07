@@ -35,10 +35,10 @@ export default function LoginPage() {
       if (result?.ok) {
         router.push('/dashboard')
       } else {
-        setError(t.auth.loginDesc)
+        setError('Email atau password salah')
       }
     } catch {
-      setError(t.auth.loginDesc)
+      setError('Terjadi kesalahan')
     } finally {
       setIsLoading(false)
     }
@@ -49,22 +49,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <Link href="/" className="inline-flex items-center justify-center mb-6">
-            <Image
-              src="/logo/logoaceloraputih.png"
-              alt="Acelora"
-              width={180}
-              height={50}
-              className="block dark:hidden h-10 w-auto"
-              priority
-            />
-            <Image
-              src="/logo/logoacelorahitam.png"
-              alt="Acelora"
-              width={180}
-              height={50}
-              className="hidden dark:block h-10 w-auto"
-              priority
-            />
+            <h1 className="text-3xl font-bold text-primary-600">Acelora</h1>
           </Link>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
             {t.auth.loginDesc}
@@ -117,11 +102,8 @@ export default function LoginPage() {
           <div className="flex items-center justify-between">
             <label className="flex items-center">
               <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
-              <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">{t.auth.loginDesc}</span>
+              <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Ingat saya</span>
             </label>
-            <Link href="#" className="text-sm font-medium text-primary-600 hover:text-primary-500">
-              {t.auth.loginDesc}
-            </Link>
           </div>
 
           <Button type="submit" className="w-full" size="lg" isLoading={isLoading}>

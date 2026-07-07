@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { ShoppingBag, Sparkles } from 'lucide-react'
+import { ShoppingBag, Sparkles, LogIn } from 'lucide-react'
 
 export default function ParallaxHero() {
   const bgRef = useRef<HTMLDivElement>(null)
@@ -103,10 +103,10 @@ export default function ParallaxHero() {
             Belanja Sekarang
           </Link>
           <Link
-            href="/products?category=COFFEE"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border border-white/15 text-white/80 font-medium text-base hover:bg-white/10 hover:border-white/30 transition-all duration-300"
+            href="/login"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-white/15 text-white/80 font-medium text-base hover:bg-white/10 hover:border-white/30 transition-all duration-300"
           >
-            Kopi Gayo →
+            <LogIn size={18} /> Masuk
           </Link>
         </div>
       </div>
