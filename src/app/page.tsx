@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import { ShoppingBag, ArrowRight, Coffee, Leaf, Fish, Flame, Factory, Package as Pkg } from 'lucide-react'
 import Image from 'next/image'
 import ParallaxHero from '@/components/ParallaxHero'
+import { getServerTranslations } from '@/lib/i18n'
+import { cookies } from 'next/headers'
 
 const categoryIcons: Record<string, any> = { COFFEE: Coffee, PATCHOULI: Leaf, SEAFOOD: Fish, SPICES: Flame, PROCESSED: Factory }
 
@@ -16,6 +18,7 @@ async function getData() {
 
 export default async function HomePage() {
   const { products, categories } = await getData()
+  const t = getServerTranslations(cookies().toString())
 
   return (
     <main>
@@ -24,9 +27,9 @@ export default async function HomePage() {
       {/* Categories */}
       <section className="py-20 px-4 max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-12">
-          <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 mb-3">Kategori</span>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Jelajahi Koleksi</h2>
-          <p className="text-gray-500 mt-2 max-w-md mx-auto">Produk agro-maritim premium langsung dari Aceh</p>
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 mb-3">{t.hero.category}</span>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">{t.hero.exploreTitle}</h2>
+          <p className="text-gray-500 mt-2 max-w-md mx-auto">{t.hero.exploreDesc}</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {categories.map(({ category, count }, i) => {
@@ -41,7 +44,7 @@ export default async function HomePage() {
                   <Icon size={28} />
                 </div>
                 <span className="text-sm font-semibold text-gray-900 dark:text-white capitalize">{category.toLowerCase()}</span>
-                <span className="text-xs text-gray-400 mt-1">{count} produk</span>
+                <span className="text-xs text-gray-400 mt-1">{t.hero.productCount.replace('{count}', String(count))}</span>
               </Link>
             )
           })}
@@ -53,11 +56,11 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-ocean-50 dark:bg-ocean-900/20 text-ocean-600 dark:text-ocean-400 mb-3">Produk Unggulan</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Featured Products</h2>
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-ocean-50 dark:bg-ocean-900/20 text-ocean-600 dark:text-ocean-400 mb-3">{t.hero.featuredBadge}</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">{t.hero.featured}</h2>
             </div>
             <Link href="/products" className="hidden sm:flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors">
-              Lihat Semua <ArrowRight size={16} />
+              {t.hero.viewAll} <ArrowRight size={16} />
             </Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
@@ -78,7 +81,7 @@ export default async function HomePage() {
                   <h3 className="font-semibold text-sm text-gray-900 dark:text-white truncate">{product.name}</h3>
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-lg font-bold text-primary-600">Rp {product.price.toLocaleString('id-ID')}</span>
-                    {product.stock <= 0 && <span className="text-[10px] text-red-500 font-medium">Habis</span>}
+                    {product.stock <= 0 && <span className="text-[10px] text-red-500 font-medium">{t.hero.outOfStock}</span>}
                   </div>
                 </div>
               </Link>
@@ -86,7 +89,7 @@ export default async function HomePage() {
           </div>
           <div className="mt-8 text-center sm:hidden">
             <Link href="/products" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-500 text-white font-semibold">
-              Lihat Semua <ArrowRight size={16} />
+              {t.hero.viewAll} <ArrowRight size={16} />
             </Link>
           </div>
         </div>
@@ -97,10 +100,10 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-r from-primary-600 via-primary-500 to-ocean-600" />
         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M30 0L60 30L30 60L0 30Z\' fill=\'%23ffffff\' fill-opacity=\'0.1\'/%3E%3C/svg%3E")', backgroundSize: '30px 30px' }} />
         <div className="relative z-10 text-center max-w-2xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Siap Menjelajah Produk Premium Aceh?</h2>
-          <p className="text-primary-100/90 mb-8 max-w-lg mx-auto">Terhubung langsung dengan produsen lokal dan nikmati cita rasa autentik dari jantung Aceh.</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{t.hero.ctaTitle}</h2>
+          <p className="text-primary-100/90 mb-8 max-w-lg mx-auto">{t.hero.ctaDesc}</p>
           <Link href="/products" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-white text-primary-700 font-semibold hover:bg-primary-50 hover:scale-105 transition-all duration-300 shadow-xl shadow-black/10">
-            <ShoppingBag size={20} /> Belanja Sekarang <ArrowRight size={18} />
+            <ShoppingBag size={20} /> {t.hero.cta} <ArrowRight size={18} />
           </Link>
         </div>
       </section>

@@ -4,10 +4,11 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
-import { ShoppingCart, Menu, X, Sun, Moon, User, Package, LogOut, ListOrdered } from 'lucide-react'
+import { ShoppingCart, Menu, X, Sun, Moon, User, Package, LogOut, ListOrdered, Globe } from 'lucide-react'
 import { useUIStore } from '@/store/ui.store'
 import { useCartStore } from '@/store/cart.store'
-import { useTranslations } from '@/lib/i18n'
+import { useTranslations, useI18NStore } from '@/lib/i18n'
+import type { Lang } from '@/lib/i18n'
 import { useSession, signOut } from 'next-auth/react'
 
 const publicMenu = [
@@ -26,6 +27,8 @@ export default function Navbar() {
   const { data: session } = useSession()
   const count = items.reduce((s, i) => s + i.quantity, 0)
   const isDark = theme === 'dark'
+  const lang = useI18NStore((s) => s.lang)
+  const setLang = useI18NStore((s) => s.setLang)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -92,6 +95,16 @@ export default function Navbar() {
 
           {/* Right actions */}
           <div className="hidden md:flex items-center gap-2">
+            {/* Language toggle */}
+            <button
+              onClick={() => setLang(lang === 'id' ? 'en' : 'id')}
+              className="flex items-center gap-1.5 p-2.5 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-xs font-semibold uppercase tracking-wider"
+              aria-label="Toggle language"
+            >
+              <Globe size={16} />
+              {lang === 'id' ? 'EN' : 'ID'}
+            </button>
+
             {/* Theme toggle */}
             <button
               onClick={() => setTheme(isDark ? 'light' : 'dark')}
@@ -210,6 +223,12 @@ export default function Navbar() {
               )
             })}
             <div className="border-t border-gray-100 dark:border-gray-800 my-2 pt-2">
+              <button
+                onClick={() => { setLang(lang === 'id' ? 'en' : 'id'); setIsOpen(false) }}
+                className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <Globe size={16} /> {lang === 'id' ? 'English' : 'Indonesia'}
+              </button>
               {session?.user ? (
                 <>
                   <Link href="/orders" onClick={() => setIsOpen(false)}

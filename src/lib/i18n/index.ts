@@ -30,3 +30,15 @@ export function useTranslations() {
 export function t(lang: Lang): Translations {
   return translations[lang]
 }
+
+export function getServerTranslations(cookies?: string): Translations {
+  const lang = parseCookie(cookies) as Lang || 'id'
+  return translations[lang in translations ? lang : 'id']
+}
+
+function parseCookie(cookie?: string): Lang | null {
+  if (!cookie) return null
+  const m = cookie.match(/(?:^|;\s*)i18n-lang=([^;]+)/)
+  if (!m) return null
+  return m[1] as Lang
+}

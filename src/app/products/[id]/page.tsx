@@ -33,7 +33,7 @@ export default function ProductDetailPage() {
     <div className="min-h-screen pt-24 pb-12">
       <div className="max-w-6xl mx-auto px-4">
         <button onClick={() => router.back()} className="flex items-center gap-2 text-gray-600 mb-6 hover:text-primary-600">
-          <ArrowLeft size={20} /> Back
+          <ArrowLeft size={20} /> {t.common.back}
         </button>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="aspect-square relative rounded-2xl overflow-hidden bg-gray-50">

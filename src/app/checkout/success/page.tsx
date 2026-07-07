@@ -43,15 +43,15 @@ function SuccessInner() {
     return (
       <>
         <CheckCircle size={64} className="text-green-500 mx-auto mb-4" />
-        <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">Pembayaran Berhasil!</h1>
-        <p className="text-gray-500 mb-2">Terima kasih! Pesanan Anda akan segera diproses.</p>
-        <p className="text-sm text-gray-400 mb-6">ID Pesanan: <span className="font-mono">{orderId.slice(0, 12)}</span></p>
+        <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">{t.success.title}!</h1>
+        <p className="text-gray-500 mb-2">{t.success.desc}</p>
+        <p className="text-sm text-gray-400 mb-6">{t.success.orderPrefix} <span className="font-mono">{orderId.slice(0, 12)}</span></p>
         <div className="flex gap-3 justify-center">
           <Link href={`/orders/${orderId}`} className="px-6 py-2.5 rounded-xl bg-primary-500 text-white font-medium flex items-center gap-2">
-            <Package size={18} /> Lihat Pesanan
+            <Package size={18} /> {t.success.viewOrder}
           </Link>
           <Link href="/products" className="px-6 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium flex items-center gap-2">
-            <ShoppingBag size={18} /> Belanja Lagi
+            <ShoppingBag size={18} /> {t.success.shopAgain}
           </Link>
         </div>
       </>
@@ -60,9 +60,9 @@ function SuccessInner() {
 
   return (
     <>
-      <h1 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Pesanan tidak ditemukan</h1>
-      <p className="text-gray-500 mb-6">Cek pesanan Anda di dashboard.</p>
-      <Link href="/dashboard/orders" className="px-6 py-2.5 rounded-xl bg-primary-500 text-white font-medium">Lihat Pesanan</Link>
+      <h1 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">{t.success.notFound}</h1>
+      <p className="text-gray-500 mb-6">{t.success.checkDashboard}</p>
+      <Link href="/dashboard/orders" className="px-6 py-2.5 rounded-xl bg-primary-500 text-white font-medium">{t.success.viewOrder}</Link>
     </>
   )
 }

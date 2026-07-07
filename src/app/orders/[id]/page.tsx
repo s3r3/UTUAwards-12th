@@ -19,7 +19,7 @@ export default function OrderDetailPage() {
   }, [id])
 
   if (loading) return <div className="min-h-screen pt-24 flex items-center justify-center">{t.common.loading}</div>
-  if (!order) return <div className="min-h-screen pt-24 flex items-center justify-center">Order not found</div>
+  if (!order) return <div className="min-h-screen pt-24 flex items-center justify-center">{t.orders.notFound}</div>
 
   const statusColors: Record<string, string> = {
     PAID: 'bg-green-100 text-green-800', PROCESSING: 'bg-blue-100 text-blue-800',
