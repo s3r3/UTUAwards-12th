@@ -105,10 +105,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Footer spacer */}
-      <section className="py-12 text-center text-gray-400 text-sm">
-        <p>© {new Date().getFullYear()} Acelora. Hak cipta dilindungi.</p>
-      </section>
     </main>
   )
 }

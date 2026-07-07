@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/Providers'
+import PublicShell from '@/components/layout/PublicShell'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -53,7 +54,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="id" className={`${inter.variable} ${plusJakartaSans.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-        <Providers>{children}</Providers>
+        <Providers>
+          <PublicShell>{children}</PublicShell>
+        </Providers>
       </body>
     </html>
   )
