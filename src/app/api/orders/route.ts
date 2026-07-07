@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { stripe } from '@/lib/stripe'
+import { snap } from '@/lib/midtrans'
 
 export async function GET(request: NextRequest) {
   const session = await auth()
@@ -35,52 +35,47 @@ export async function POST(request: NextRequest) {
 
   for (const item of items) {
     const product = productMap.get(item.productId)
-    if (!product) return NextResponse.json({ success: false, error: `Product not found` }, { status: 400 })
+    if (!product) return NextResponse.json({ success: false, error: 'Product not found' }, { status: 400 })
     if (product.stock < item.quantity) return NextResponse.json({ success: false, error: `${product.name} insufficient stock` }, { status: 400 })
   }
 
   const address = await prisma.address.findFirst({ where: { id: addressId, userId: session.user.id } })
   if (!address) return NextResponse.json({ success: false, error: 'Address not found' }, { status: 404 })
 
-  const total = items.reduce((sum: number, i: any) => {
-    return sum + (productMap.get(i.productId)!.price * i.quantity)
-  }, 0)
+  const total = items.reduce((sum: number, i: any) => sum + productMap.get(i.productId)!.price * i.quantity, 0)
 
   const order = await prisma.order.create({
     data: {
       userId: session.user.id,
       total,
       addressId,
-      items: {
-        create: items.map((i: any) => ({
-          productId: i.productId,
-          quantity: i.quantity,
-          price: productMap.get(i.productId)!.price,
-        })),
-      },
+      items: { create: items.map((i: any) => ({ productId: i.productId, quantity: i.quantity, price: productMap.get(i.productId)!.price })) },
     },
     include: { items: { include: { product: true } } },
   })
 
-  const stripeSession = await stripe.checkout.sessions.create({
-    mode: 'payment',
-    payment_method_types: ['card'],
-    line_items: items.map((i: any) => {
+  // Create Midtrans Snap transaction
+  const transaction = await snap.createTransaction({
+    transaction_details: {
+      order_id: order.id,
+      gross_amount: total,
+    },
+    customer_details: {
+      first_name: address.name,
+      phone: address.phone,
+    },
+    item_details: items.map((i: any) => {
       const product = productMap.get(i.productId)!
-      return {
-        price_data: { currency: 'idr', product_data: { name: product.name }, unit_amount: product.price },
-        quantity: i.quantity,
-      }
+      return { id: product.id, name: product.name, price: product.price, quantity: i.quantity }
     }),
-    metadata: { orderId: order.id },
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cart`,
   })
 
-  await prisma.order.update({
-    where: { id: order.id },
-    data: { stripeSessionId: stripeSession.id },
+  return NextResponse.json({
+    success: true,
+    data: {
+      orderId: order.id,
+      token: transaction.token,
+      redirectUrl: transaction.redirect_url,
+    },
   })
-
-  return NextResponse.json({ success: true, data: { orderId: order.id, url: stripeSession.url } })
 }
