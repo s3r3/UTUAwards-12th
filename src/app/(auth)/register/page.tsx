@@ -54,12 +54,12 @@ export default function RegisterPage() {
             />
           </Link>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-            {t.auth.registerNewAccount}
+            {t.auth.registerDesc}
           </h2>
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            {t.auth.haveAccount}{' '}
+            {t.auth.registerDesc}{' '}
             <Link href="/login" className="font-medium text-primary-600 hover:text-primary-500">
-              {t.auth.haveAccount}
+              {t.auth.registerDesc}
             </Link>
           </p>
         </div>
@@ -71,7 +71,7 @@ export default function RegisterPage() {
               <Input
                 id="name"
                 type="text"
-                placeholder={t.auth.namePlaceholder}
+                placeholder={t.auth.name}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="pl-10"
@@ -117,7 +117,7 @@ export default function RegisterPage() {
               <Input
                 id="confirmPassword"
                 type="password"
-                placeholder={t.auth.passwordConfirmPlaceholder}
+                placeholder={t.auth.password}
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 className="pl-10"

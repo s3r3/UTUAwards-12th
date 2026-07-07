@@ -22,34 +22,34 @@ async function main() {
   })
 
   const products = [
-    { name: "Kopi Arabica Gayo Premium", category: "COFFEE" as const, description: "Kopi arabica single origin dari dataran tinggi Gayo Lues, ditanam pada ketinggian 1.200-1.500 mdpl.", origin: "Gayo Lues", ownerId: user.id },
-    { name: "Minyak Nilam Aceh", category: "PATCHOULI" as const, description: "Minyak nilam murni (Patchouli Oil) diekstrak secara tradisional dari tanaman nilam pilihan Aceh Selatan.", origin: "Aceh Selatan", ownerId: user.id },
-    { name: "Udang Vannamei Fresh", category: "SEAFOOD" as const, description: "Udang vannamei segar dari tambak terintegrasi di pesisir Aceh Timur.", origin: "Aceh Timur", ownerId: user.id },
-    { name: "Rempah Kustom Aceh", category: "SPICES" as const, description: "Campuran rempah autentik Aceh yang telah diracik oleh maestro kuliner lokal.", origin: "Aceh Besar", ownerId: user.id },
-    { name: "Kopi Robusta Gayo", category: "COFFEE" as const, description: "Kopi robusta dari Bener Meriah dengan karakter bold dan earthy.", origin: "Bener Meriah", ownerId: user.id },
+    { name: "Kopi Arabika Gayo Specialty", category: "COFFEE" as const, description: "Kopi Arabika single-origin dari ketinggian 1.200-1.600 mdpl di Gayo, Aceh Tengah. Proses natural & washed dengan profil rasa cokelat, karamel, floral.", origin: "Aceh Tengah", price: 85000, stock: 50, weight: 250, image: "/images/kopi_arabica.png" },
+    { name: "Minyak Nilam Aceh Grade A", category: "PATCHOULI" as const, description: "Minyak nilam murni distilasi uap dari Aceh Selatan. Kadar PA >= 32%.", origin: "Aceh Selatan", price: 250000, stock: 20, weight: 100, image: "/images/PatchouliOil.png" },
+    { name: "Udang Vannamei Segar Aceh", category: "SEAFOOD" as const, description: "Udang Vannamei segar dari tambak pesisir Aceh Timur. Tanpa antibiotik, size 80/100.", origin: "Aceh Timur", price: 45000, stock: 100, weight: 500, image: "/images/VannameiShrimp.png" },
+    { name: "Lada Hitam Aceh Premium", category: "SPICES" as const, description: "Lada hitam premium dari Aceh Jaya dengan aroma tajam dan kadar oleoresin tinggi.", origin: "Aceh Jaya", price: 35000, stock: 75, weight: 200, image: "/images/ladahitamAceh.png" },
+    { name: "Kopi Gayo Robusta Green Bean", category: "COFFEE" as const, description: "Kopi Robusta full-body dari Gayo Lues. Cocok untuk espresso blend.", origin: "Gayo Lues", price: 55000, stock: 60, weight: 500, image: "/images/cofferobusta.png" },
+    { name: "Dodol Aceh Premium", category: "PROCESSED" as const, description: "Dodol tradisional Aceh dari gula aren, santan dan ketan. Varian original.", origin: "Banda Aceh", price: 25000, stock: 40, weight: 350, image: "/images/ikantongkolasap.png" },
+    { name: "Kayu Manis Aceh", category: "SPICES" as const, description: "Kayu manis asli Aceh dengan aroma manis khas. Grade ekspor.", origin: "Aceh Barat", price: 28000, stock: 80, weight: 200, image: "/images/Cinnamon.png" },
+    { name: "Kepiting Ranjungan Segar", category: "SEAFOOD" as const, description: "Kepiting ranjungan segar dari perairan Aceh. Ukuran jumbo.", origin: "Aceh Barat Daya", price: 65000, stock: 30, weight: 1000, image: "/images/kepitingranjungan.png" },
   ]
 
   for (const p of products) {
-    await prisma.product.upsert({
-      where: { id: `seed-${p.name.toLowerCase().replace(/\s+/g, "-")}` },
-      update: {},
-      create: { id: `seed-${p.name.toLowerCase().replace(/\s+/g, "-")}`, ...p, status: "APPROVED" },
-    })
+    const id = `seed-${p.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+$/, "")}`
+    const existing = await prisma.product.findUnique({ where: { id } })
+    if (!existing) {
+      await prisma.product.create({
+        data: { id, ...p, images: [p.image], ownerId: user.id, status: "APPROVED" },
+      })
+    }
   }
 
-  const partners = [
-    { company: "PT. Global Trade Asia", country: "Malaysia", location: "Kuala Lumpur", category: "ASIA" as const },
-    { company: "European Foods Ltd", country: "Belanda", location: "Amsterdam", category: "EUROPE" as const },
-    { company: "Middle East Trading Co", country: "UAE", location: "Dubai", category: "MIDDLE_EAST" as const },
-    { company: "American Natural Goods", country: "USA", location: "New York", category: "AMERICA" as const },
+  // Sample addresses
+  const addresses = [
+    { userId: user.id, label: "Rumah", name: "User Acelora", phone: "081234567890", street: "Jl. Teuku Nyak Arief No. 1", city: "Banda Aceh", province: "Aceh", postalCode: "23111", isDefault: true },
+    { userId: admin.id, label: "Kantor", name: "Admin Acelora", phone: "081234567891", street: "Jl. Sultan Iskandar Muda No. 45", city: "Banda Aceh", province: "Aceh", postalCode: "23241", isDefault: true },
   ]
 
-  for (const p of partners) {
-    await prisma.partner.upsert({
-      where: { id: `seed-partner-${p.company.toLowerCase().replace(/\s+/g, "-")}` },
-      update: {},
-      create: { id: `seed-partner-${p.company.toLowerCase().replace(/\s+/g, "-")}`, ...p },
-    })
+  for (const a of addresses) {
+    await prisma.address.create({ data: a })
   }
 
   console.log("Seed completed")

@@ -3,430 +3,98 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { Menu, X, Sun, Moon, Globe } from 'lucide-react'
+import { ShoppingCart, Menu, X, Sun, Moon } from 'lucide-react'
 import { useUIStore } from '@/store/ui.store'
-import { useI18NStore, useTranslations } from '@/lib/i18n'
-import type { Lang } from '@/lib/i18n'
+import { useCartStore } from '@/store/cart.store'
+import { useTranslations } from '@/lib/i18n'
 
 const publicMenu = [
   { key: 'home', href: '/' },
-  { key: 'about', href: '/about' },
   { key: 'products', href: '/products' },
-  { key: 'mentoring', href: '/mentoring' },
-  { key: 'partners', href: '/partners' },
-  { key: 'business', href: '/business' },
-  { key: 'team', href: '/team' },
-  { key: 'contact', href: '/contact' },
 ]
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [langOpen, setLangOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
   const { theme, setTheme } = useUIStore()
-  const { lang, setLang } = useI18NStore()
+  const items = useCartStore((s) => s.items)
   const t = useTranslations()
+  const count = items.reduce((s, i) => s + i.quantity, 0)
 
-  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light')
-
-  // Scroll detection
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    // Using a timeout to avoid cascading re-renders
-    const timer = setTimeout(() => setIsOpen(false), 0)
-    return () => clearTimeout(timer)
-  }, [pathname])
+  useEffect(() => { setIsOpen(false) }, [pathname])
+
+  const isDark = theme === 'dark'
 
   return (
-    <>
-      {/* Navbar slide down from top */}
-      <motion.nav
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-0 left-0 right-0 z-50"
-        style={{
-          backdropFilter: scrolled ? 'blur(20px)' : 'blur(8px)',
-          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'blur(8px)',
-          backgroundColor: scrolled
-            ? theme === 'dark'
-              ? 'rgba(3, 7, 18, 0.92)'
-              : 'rgba(255, 255, 255, 0.92)'
-            : theme === 'dark'
-            ? 'rgba(3, 7, 18, 0.4)'
-            : 'rgba(255, 255, 255, 0.4)',
-          borderBottom: scrolled
-            ? theme === 'dark'
-              ? '1px solid rgba(255,255,255,0.08)'
-              : '1px solid rgba(0,0,0,0.08)'
-            : '1px solid transparent',
-          transition: 'background-color 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease',
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 group">
-              <Image
-                src="/logo/logoaceloraputih.png"
-                alt="Acelora"
-                width={140}
-                height={40}
-                className="block dark:hidden h-8 w-auto"
-                priority
-              />
-              <Image
-                src="/logo/logoacelorahitam.png"
-                alt="Acelora"
-                width={140}
-                height={40}
-                className="hidden dark:block h-8 w-auto"
-                priority
-              />
-            </Link>
+    <nav className="fixed top-0 left-0 right-0 z-50" style={{
+      backdropFilter: 'blur(20px)',
+      backgroundColor: scrolled
+        ? (isDark ? 'rgba(3,7,18,0.92)' : 'rgba(255,255,255,0.92)')
+        : (isDark ? 'rgba(3,7,18,0.4)' : 'rgba(255,255,255,0.4)'),
+      borderBottom: scrolled ? '1px solid rgba(0,0,0,0.08)' : '1px solid transparent',
+    }}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="flex items-center">
+            <Image src="/logo/logoaceloraputih.png" alt="Acelora" width={120} height={35} className="block dark:hidden h-8 w-auto" priority />
+            <Image src="/logo/logoacelorahitam.png" alt="Acelora" width={120} height={35} className="hidden dark:block h-8 w-auto" priority />
+          </Link>
 
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-0.5">
-              {publicMenu.map((item, i) => {
-                const isActive = pathname === item.href
-                return (
-                  <motion.div
-                    key={item.key}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.05 * i + 0.3, duration: 0.4 }}
-                  >
-                    <Link
-                      href={item.href}
-                      className="relative px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
-                      style={{
-                        color: isActive
-                          ? 'var(--primary-600)'
-                          : theme === 'dark'
-                          ? '#d1d5db'
-                          : '#374151',
-                      }}
-                    >
-                      {isActive && (
-                        <motion.span
-                          layoutId="nav-pill"
-                          className="absolute inset-0 rounded-lg"
-                          style={{ backgroundColor: 'rgba(34,197,94,0.12)' }}
-                          transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                        />
-                      )}
-                      <span className="relative z-10">{t.nav[item.key as keyof typeof t.nav]}</span>
-                    </Link>
-                  </motion.div>
-                )
-              })}
-            </div>
-
-            {/* Right actions */}
-            <div className="hidden md:flex items-center gap-2">
-              {/* Language Switcher */}
-              <div className="relative">
-                <motion.button
-                  onClick={() => setLangOpen(!langOpen)}
-                  whileTap={{ scale: 0.9 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="relative p-2 rounded-lg overflow-hidden flex items-center gap-1"
-                  style={{
-                    color: theme === 'dark' ? '#d1d5db' : '#374151',
-                    backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
-                  }}
-                  aria-label="Switch language"
-                >
-                  <Globe size={18} />
-                  <span className="text-xs font-semibold uppercase">{lang}</span>
-                </motion.button>
-                <AnimatePresence>
-                  {langOpen && (
-                    <>
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-40"
-                        onClick={() => setLangOpen(false)}
-                      />
-                      <motion.div
-                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute right-0 mt-2 w-28 z-50 rounded-xl overflow-hidden shadow-xl border"
-                        style={{
-                          backgroundColor: theme === 'dark' ? 'rgba(15,23,42,0.98)' : 'rgba(255,255,255,0.98)',
-                          borderColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
-                        }}
-                      >
-                        {(['en', 'id'] as Lang[]).map((l) => (
-                          <button
-                            key={l}
-                            onClick={() => { setLang(l); setLangOpen(false); }}
-                            className="w-full px-4 py-2.5 text-sm font-medium flex items-center gap-2 transition-colors"
-                            style={{
-                              color: lang === l ? 'var(--primary-600)' : theme === 'dark' ? '#d1d5db' : '#374151',
-                              backgroundColor: lang === l ? 'rgba(34,197,94,0.10)' : 'transparent',
-                            }}
-                          >
-                            <span className="text-base">{l === 'en' ? '🇬🇧' : '🇮🇩'}</span>
-                            <span>{l === 'en' ? 'English' : 'Indonesia'}</span>
-                            {lang === l && (
-                              <span className="ml-auto w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--primary-500)' }} />
-                            )}
-                          </button>
-                        ))}
-                      </motion.div>
-                    </>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Theme toggle */}
-              <motion.button
-                onClick={toggleTheme}
-                whileTap={{ scale: 0.9 }}
-                whileHover={{ scale: 1.05 }}
-                className="relative p-2 rounded-lg overflow-hidden"
-                style={{
-                  color: theme === 'dark' ? '#d1d5db' : '#374151',
-                  backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
-                }}
-                aria-label="Toggle theme"
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  {theme === 'light' ? (
-                    <motion.span
-                      key="moon"
-                      initial={{ rotate: -90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="block"
-                    >
-                      <Moon size={18} />
-                    </motion.span>
-                  ) : (
-                    <motion.span
-                      key="sun"
-                      initial={{ rotate: 90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="block"
-                    >
-                      <Sun size={18} />
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </motion.button>
-
-              {/* Login CTA */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.7, duration: 0.3 }}
-              >
-                <Link
-                  href="/login"
-                  className="px-4 py-2 rounded-lg text-sm font-semibold text-white shadow-md transition-all duration-200 hover:opacity-90 hover:shadow-lg hover:-translate-y-0.5"
-                  style={{
-                    background: 'linear-gradient(135deg, var(--primary-500) 0%, var(--ocean-500) 100%)',
-                    boxShadow: '0 4px 12px rgba(34,197,94,0.3)',
-                  }}
-                >
-                  Login
+          <div className="hidden md:flex items-center gap-1">
+            {publicMenu.map((item) => {
+              const isActive = pathname === item.href
+              return (
+                <Link key={item.key} href={item.href}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium ${isActive ? 'text-primary-600 bg-primary-50' : 'text-gray-700 dark:text-gray-300 hover:text-primary-600'}`}>
+                  {t.nav[item.key as keyof typeof t.nav]}
                 </Link>
-              </motion.div>
-            </div>
+              )
+            })}
+          </div>
 
-            {/* Mobile controls */}
-            <div className="md:hidden flex items-center gap-1">
-              <motion.button
-                onClick={toggleTheme}
-                whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-lg"
-                style={{ color: theme === 'dark' ? '#d1d5db' : '#374151' }}
-                aria-label="Toggle theme"
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  {theme === 'light' ? (
-                    <motion.span key="moon-m" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="block">
-                      <Moon size={18} />
-                    </motion.span>
-                  ) : (
-                    <motion.span key="sun-m" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="block">
-                      <Sun size={18} />
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </motion.button>
+          <div className="hidden md:flex items-center gap-3">
+            <button onClick={() => setTheme(isDark ? 'light' : 'dark')} className="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100" aria-label="Toggle theme">
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <Link href="/cart" className="relative p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100">
+              <ShoppingCart size={20} />
+              {count > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary-500 text-white text-[10px] font-bold flex items-center justify-center">
+                  {count > 99 ? '99+' : count}
+                </span>
+              )}
+            </Link>
+            <Link href="/login" className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-primary-500 hover:bg-primary-600">
+              Login
+            </Link>
+          </div>
 
-              {/* Language Switcher */}
-              <div className="relative">
-                <motion.button
-                  onClick={() => setLangOpen(!langOpen)}
-                  whileTap={{ scale: 0.9 }}
-                  className="p-2 rounded-lg flex items-center gap-1"
-                  style={{ color: theme === 'dark' ? '#d1d5db' : '#374151' }}
-                  aria-label="Switch language"
-                >
-                  <Globe size={18} />
-                  <span className="text-xs font-semibold uppercase">{lang}</span>
-                </motion.button>
-                <AnimatePresence>
-                  {langOpen && (
-                    <>
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-40"
-                        onClick={() => setLangOpen(false)}
-                      />
-                      <motion.div
-                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute right-0 mt-2 w-28 z-50 rounded-xl overflow-hidden shadow-xl border"
-                        style={{
-                          backgroundColor: theme === 'dark' ? 'rgba(15,23,42,0.98)' : 'rgba(255,255,255,0.98)',
-                          borderColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
-                        }}
-                      >
-                        {(['en', 'id'] as Lang[]).map((l) => (
-                          <button
-                            key={l}
-                            onClick={() => { setLang(l); setLangOpen(false); }}
-                            className="w-full px-4 py-2.5 text-sm font-medium flex items-center gap-2 transition-colors"
-                            style={{
-                              color: lang === l ? 'var(--primary-600)' : theme === 'dark' ? '#d1d5db' : '#374151',
-                              backgroundColor: lang === l ? 'rgba(34,197,94,0.10)' : 'transparent',
-                            }}
-                          >
-                            <span className="text-base">{l === 'en' ? '🇬🇧' : '🇮🇩'}</span>
-                            <span>{l === 'en' ? 'English' : 'Indonesia'}</span>
-                            {lang === l && (
-                              <span className="ml-auto w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--primary-500)' }} />
-                            )}
-                          </button>
-                        ))}
-                      </motion.div>
-                    </>
-                  )}
-                </AnimatePresence>
-              </div>
-
-                            <motion.button
-                onClick={() => setIsOpen(!isOpen)}
-                whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-lg"
-                style={{ color: theme === 'dark' ? '#d1d5db' : '#374151' }}
-                aria-label="Toggle menu"
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  {isOpen ? (
-                    <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }} className="block">
-                      <X size={22} />
-                    </motion.span>
-                  ) : (
-                    <motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }} className="block">
-                      <Menu size={22} />
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </motion.button>
-            </div>
+          <div className="md:hidden flex items-center gap-2">
+            <Link href="/cart" className="relative p-2">
+              <ShoppingCart size={20} />
+              {count > 0 && <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary-500 text-white text-[9px] font-bold flex items-center justify-center">{count}</span>}
+            </Link>
+            <button onClick={() => setIsOpen(!isOpen)} className="p-2">{isOpen ? <X size={22} /> : <Menu size={22} />}</button>
           </div>
         </div>
 
-        {/* Mobile slide-down menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="md:hidden overflow-hidden"
-              style={{
-                borderTop: theme === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.08)',
-              }}
-            >
-              <div className="px-4 py-4 flex flex-col gap-1">
-                {publicMenu.map((item, i) => {
-                  const isActive = pathname === item.href
-                  return (
-                    <motion.div
-                      key={item.key}
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: i * 0.04, duration: 0.3, ease: 'easeOut' }}
-                    >
-                      <Link
-                        href={item.href}
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-150"
-                        style={{
-                          color: isActive ? 'var(--primary-600)' : theme === 'dark' ? '#d1d5db' : '#374151',
-                          backgroundColor: isActive
-                            ? 'rgba(34,197,94,0.10)'
-                            : 'transparent',
-                        }}
-                      >
-                        {t.nav[item.key as keyof typeof t.nav]}
-                        {isActive && (
-                          <span
-                            className="ml-auto w-1.5 h-1.5 rounded-full"
-                            style={{ backgroundColor: 'var(--primary-500)' }}
-                          />
-                        )}
-                      </Link>
-                    </motion.div>
-                  )
-                })}
-                <motion.div
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: publicMenu.length * 0.04, duration: 0.3 }}
-                  className="pt-2"
-                >
-                  <Link
-                    href="/login"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-white"
-                    style={{
-                      background: 'linear-gradient(135deg, var(--primary-500) 0%, var(--ocean-500) 100%)',
-                    }}
-                  >
-                    Login
-                  </Link>
-                </motion.div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
-
-      {/* Gradient shift keyframes */}
-      <style>{`
-        @keyframes gradientShift {
-          0% { background-position: 0% center; }
-          100% { background-position: 200% center; }
-        }
-      `}</style>
-    </>
+        {isOpen && (
+          <div className="md:hidden pb-4 border-t border-gray-200 dark:border-gray-700">
+            {publicMenu.map(item => (
+              <Link key={item.key} href={item.href} className="block px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300">{t.nav[item.key as keyof typeof t.nav]}</Link>
+            ))}
+            <Link href="/login" className="block mx-4 mt-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-primary-500 text-center">Login</Link>
+          </div>
+        )}
+      </div>
+    </nav>
   )
 }

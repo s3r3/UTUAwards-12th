@@ -1,0 +1,85 @@
+'use client'
+
+import { Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
+import { CheckCircle, Package, ShoppingBag } from 'lucide-react'
+import { useTranslations } from '@/lib/i18n'
+import { useEffect, useState } from 'react'
+
+function SuccessInner() {
+  const searchParams = useSearchParams()
+  const t = useTranslations()
+  const [orderId, setOrderId] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const sessionId = searchParams.get('session_id')
+    if (!sessionId) { setLoading(false); return }
+    const check = async () => {
+      const res = await fetch('/api/orders')
+      const d = await res.json()
+      if (d.success && d.data.length > 0) {
+        setOrderId(d.data[0].id)
+        setLoading(false)
+      } else {
+        setTimeout(check, 1000)
+      }
+    }
+    check()
+  }, [searchParams])
+
+  if (loading) {
+    return (
+      <div className="animate-pulse">
+        <div className="w-16 h-16 rounded-full bg-gray-200 mx-auto mb-4" />
+        <div className="h-6 bg-gray-200 rounded w-48 mx-auto mb-2" />
+        <div className="h-4 bg-gray-200 rounded w-64 mx-auto" />
+      </div>
+    )
+  }
+
+  if (orderId) {
+    return (
+      <>
+        <CheckCircle size={64} className="text-green-500 mx-auto mb-4" />
+        <h1 className="text-2xl font-bold mb-2">{t.success.title}</h1>
+        <p className="text-gray-500 mb-2">{t.success.desc}</p>
+        <p className="text-sm text-gray-400 mb-6">{t.success.orderId}: <span className="font-mono">{orderId.slice(0, 8)}</span></p>
+        <div className="flex gap-3 justify-center">
+          <Link href={`/orders/${orderId}`} className="px-6 py-2.5 rounded-xl bg-primary-500 text-white font-medium flex items-center gap-2">
+            <Package size={18} /> {t.success.viewOrder}
+          </Link>
+          <Link href="/products" className="px-6 py-2.5 rounded-xl border font-medium flex items-center gap-2">
+            <ShoppingBag size={18} /> {t.success.continueShopping}
+          </Link>
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <h1 className="text-xl font-bold mb-2">Order not found</h1>
+      <p className="text-gray-500 mb-6">Check your orders in the dashboard.</p>
+      <Link href="/dashboard/orders" className="px-6 py-2.5 rounded-xl bg-primary-500 text-white font-medium">View Orders</Link>
+    </>
+  )
+}
+
+export default function SuccessPage() {
+  return (
+    <div className="min-h-screen pt-24 flex items-center justify-center px-4">
+      <div className="text-center max-w-md">
+        <Suspense fallback={
+          <div className="animate-pulse">
+            <div className="w-16 h-16 rounded-full bg-gray-200 mx-auto mb-4" />
+            <div className="h-6 bg-gray-200 rounded w-48 mx-auto mb-2" />
+          </div>
+        }>
+          <SuccessInner />
+        </Suspense>
+      </div>
+    </div>
+  )
+}

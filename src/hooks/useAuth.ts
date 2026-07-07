@@ -14,7 +14,7 @@ export function useAuth() {
     } else {
       setLoading(false)
       if (session?.user) {
-        const u = session.user as Record<string, unknown>
+        const u = session.user as any
         setUser({
           id: (u.id as string) || '',
           name: (u.name as string) || '',

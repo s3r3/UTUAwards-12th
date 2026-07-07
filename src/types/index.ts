@@ -1,5 +1,3 @@
-// Type definitions for Acelora
-
 export interface User {
   id: string;
   name: string;
@@ -15,7 +13,12 @@ export interface Product {
   category: ProductCategory;
   description: string;
   image?: string;
+  images: string[];
   origin: string;
+  price: number;
+  compareAt?: number;
+  stock: number;
+  weight?: number;
   status: ProductStatus;
   legality?: string;
   ownerId: string;
@@ -23,37 +26,54 @@ export interface Product {
 }
 
 export type ProductCategory = 'COFFEE' | 'PATCHOULI' | 'SEAFOOD' | 'SPICES' | 'PROCESSED';
-
 export type ProductStatus = 'PENDING' | 'REVIEW' | 'VERIFIED' | 'APPROVED' | 'REJECTED';
 
-export interface Mentoring {
+export interface Address {
   id: string;
-  type: MentoringType;
-  status: MentoringStatus;
+  userId: string;
+  label?: string;
+  name: string;
+  phone: string;
+  street: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  isDefault: boolean;
+}
+
+export type OrderStatus = 'PENDING' | 'PAID' | 'PROCESSING' | 'SHIPPING' | 'DELIVERED' | 'CANCELLED';
+
+export interface OrderItem {
+  id: string;
+  orderId: string;
   productId: string;
-  createdAt: Date;
+  quantity: number;
+  price: number;
+  product: Product;
 }
 
-export type MentoringType = 'HALAL_CERTIFICATION' | 'HACCP' | 'EXPORT_PACKAGING' | 'SUPPLY_CHAIN_TRAINING';
-
-export type MentoringStatus = 'ACTIVE' | 'COMPLETED' | 'CANCELLED';
-
-export interface Partner {
+export interface Order {
   id: string;
-  company: string;
-  country: string;
-  location: string;
-  category: PartnerCategory;
-  createdAt: Date;
+  userId: string;
+  status: OrderStatus;
+  total: number;
+  shippingCost: number;
+  addressId: string;
+  stripeSessionId?: string;
+  stripePaymentId?: string;
+  paidAt?: string;
+  createdAt: string;
+  items: OrderItem[];
+  address: Address;
 }
 
-export type PartnerCategory = 'ASIA' | 'EUROPE' | 'MIDDLE_EAST' | 'AMERICA' | 'AFRICA';
-
-export interface DashboardStats {
-  totalProducts: number;
-  reviewProducts: number;
-  activePrograms: number;
-  partnerCountries: number;
+export interface CartItem {
+  productId: string;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+  stock: number;
 }
 
 export interface ApiResponse<T> {

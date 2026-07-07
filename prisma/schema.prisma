@@ -1,6 +1,4 @@
-// Prisma Schema for Acelora
-// Agro-Maritime Ecosystem Platform
-
+// Prisma Schema for Acelora — E-Commerce
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,7 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-// User Model
 model User {
   id        String   @id @default(cuid())
   name      String
@@ -21,6 +18,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   products  Product[]
+  orders    Order[]
+  addresses Address[]
   accounts  Account[]
   sessions  Session[]
 
@@ -33,22 +32,26 @@ enum Role {
   PARTNER
 }
 
-// Product Model
 model Product {
-  id          String        @id @default(cuid())
+  id          String          @id @default(cuid())
   name        String
   category    ProductCategory
   description String
   image       String?
+  images      String[]
   origin      String
-  status      ProductStatus @default(PENDING)
+  price       Int             @default(0)
+  compareAt   Int?
+  stock       Int             @default(0)
+  weight      Float?
+  status      ProductStatus   @default(PENDING)
   legality    String?
   ownerId     String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 
-  owner     User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  mentoring Mentoring[]
+  owner      User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
 
   @@map("products")
 }
@@ -69,52 +72,64 @@ enum ProductStatus {
   REJECTED
 }
 
-// Mentoring Model
-model Mentoring {
-  id        String          @id @default(cuid())
-  type      MentoringType
-  status    MentoringStatus @default(ACTIVE)
-  productId String
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  status          OrderStatus @default(PENDING)
+  total           Int
+  shippingCost    Int         @default(0)
+  addressId       String
+  stripeSessionId String?     @unique
+  stripePaymentId String?
+  paidAt          DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User       @relation(fields: [userId], references: [id])
+  items   OrderItem[]
+  address Address    @relation(fields: [addressId], references: [id])
 
-  @@map("mentorings")
+  @@map("orders")
 }
 
-enum MentoringType {
-  HALAL_CERTIFICATION
-  HACCP
-  EXPORT_PACKAGING
-  SUPPLY_CHAIN_TRAINING
-}
-
-enum MentoringStatus {
-  ACTIVE
-  COMPLETED
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPING
+  DELIVERED
   CANCELLED
 }
 
-// Partner Model
-model Partner {
-  id        String          @id @default(cuid())
-  company   String
-  country   String
-  location  String
-  category  PartnerCategory
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
+model OrderItem {
+  id        String @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Int
 
-  @@map("partners")
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
 }
 
-enum PartnerCategory {
-  ASIA
-  EUROPE
-  MIDDLE_EAST
-  AMERICA
-  AFRICA
+model Address {
+  id         String  @id @default(cuid())
+  userId     String
+  label      String?
+  name       String
+  phone      String
+  street     String
+  city       String
+  province   String
+  postalCode String
+  isDefault  Boolean @default(false)
+
+  user   User    @relation(fields: [userId], references: [id])
+  orders Order[]
+
+  @@map("addresses")
 }
 
 // NextAuth Models

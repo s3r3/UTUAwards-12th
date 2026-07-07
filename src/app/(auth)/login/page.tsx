@@ -35,10 +35,10 @@ export default function LoginPage() {
       if (result?.ok) {
         router.push('/dashboard')
       } else {
-        setError(t.auth.errorInvalid)
+        setError(t.auth.loginDesc)
       }
     } catch {
-      setError(t.auth.errorGeneric)
+      setError(t.auth.loginDesc)
     } finally {
       setIsLoading(false)
     }
@@ -72,7 +72,7 @@ export default function LoginPage() {
           <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Atau{' '}
             <Link href="/register" className="font-medium text-primary-600 hover:text-primary-500">
-              {t.auth.registerNew}
+              {t.auth.registerDesc}
             </Link>
           </p>
         </div>
@@ -117,10 +117,10 @@ export default function LoginPage() {
           <div className="flex items-center justify-between">
             <label className="flex items-center">
               <input type="checkbox" className="rounded border-gray-300 text-primary-600 focus:ring-primary-500" />
-              <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">{t.auth.rememberMe}</span>
+              <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">{t.auth.loginDesc}</span>
             </label>
             <Link href="#" className="text-sm font-medium text-primary-600 hover:text-primary-500">
-              {t.auth.forgotPassword}
+              {t.auth.loginDesc}
             </Link>
           </div>
 

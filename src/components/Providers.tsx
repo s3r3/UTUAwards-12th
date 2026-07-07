@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Lenis from 'lenis'
 import { useUIStore } from '@/store/ui.store'
 import AuthContext from '@/contexts/AuthContext'
-import ChatBotWrapper from './ChatBotWrapper'
+// ChatBot removed
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -50,7 +50,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <AuthContext>
         <ThemeApplier />
         <LenisProvider>
-          <ChatBotWrapper>{children}</ChatBotWrapper>
+          {children}
         </LenisProvider>
       </AuthContext>
     </QueryClientProvider>
