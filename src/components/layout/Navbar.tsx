@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
@@ -18,7 +18,6 @@ const publicMenu = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const pathname = usePathname()
   const { theme, setTheme } = useUIStore()
@@ -30,12 +29,6 @@ export default function Navbar() {
   const lang = useI18NStore((s) => s.lang)
   const setLang = useI18NStore((s) => s.setLang)
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
   useEffect(() => { setIsOpen(false); setProfileOpen(false) }, [pathname])
 
   const isActive = (href: string) =>
@@ -45,17 +38,11 @@ export default function Navbar() {
     <nav
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
       style={{
-        backdropFilter: scrolled ? 'blur(24px) saturate(1.8)' : 'blur(8px)',
-        WebkitBackdropFilter: scrolled ? 'blur(24px) saturate(1.8)' : 'blur(8px)',
-        backgroundColor: scrolled
-          ? isDark ? 'rgba(3,7,18,0.85)' : 'rgba(255,255,255,0.85)'
-          : 'transparent',
-        borderBottom: scrolled
-          ? isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)'
-          : '1px solid transparent',
-        boxShadow: scrolled
-          ? isDark ? '0 1px 40px rgba(0,0,0,0.3)' : '0 1px 40px rgba(0,0,0,0.06)'
-          : 'none',
+        backdropFilter: 'blur(24px) saturate(1.8)',
+        WebkitBackdropFilter: 'blur(24px) saturate(1.8)',
+        backgroundColor: isDark ? 'rgba(3,7,18,0.85)' : 'rgba(255,255,255,0.85)',
+        borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)',
+        boxShadow: isDark ? '0 1px 40px rgba(0,0,0,0.3)' : '0 1px 40px rgba(0,0,0,0.06)',
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -34,6 +34,7 @@ export default function CheckoutPage() {
   const [form, setForm] = useState({ label: '', name: '', phone: '', street: '', city: '', province: '', postalCode: '' })
 
   useEffect(() => {
+    if (items.length === 0) { router.push('/cart'); return }
     fetch('/api/addresses').then(r => r.json()).then(d => {
       if (d.success) {
         setAddresses(d.data)
@@ -46,7 +47,7 @@ export default function CheckoutPage() {
     script.src = 'https://app.sandbox.midtrans.com/snap/snap.js'
     script.setAttribute('data-client-key', process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || '')
     document.body.appendChild(script)
-  }, [])
+  }, [items, router])
 
   const handleSaveAddress = async () => {
     const res = await fetch('/api/addresses', {
@@ -90,7 +91,6 @@ export default function CheckoutPage() {
   }
 
   if (items.length === 0) {
-    router.push('/cart')
     return null
   }
 

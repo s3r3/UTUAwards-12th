@@ -13,12 +13,18 @@ async function getData() {
     prisma.product.findMany({ where: { status: 'APPROVED', stock: { gt: 0 } }, orderBy: { createdAt: 'desc' }, take: 4 }),
     prisma.product.groupBy({ by: ['category'], _count: true, where: { status: 'APPROVED' } }),
   ])
-  return { products: JSON.parse(JSON.stringify(products)), categories: cats.map(c => ({ category: c.category, count: c._count })) }
+  return { products: products.map(p => ({
+    id: p.id, name: p.name, category: p.category, description: p.description,
+    image: p.image, images: p.images, origin: p.origin, price: p.price,
+    compareAt: p.compareAt, stock: p.stock, weight: p.weight, status: p.status,
+    legality: p.legality, ownerId: p.ownerId,
+    createdAt: p.createdAt.toISOString(), updatedAt: p.updatedAt.toISOString(),
+  })), categories: cats.map(c => ({ category: c.category, count: c._count })) }
 }
 
 export default async function HomePage() {
   const { products, categories } = await getData()
-  const t = getServerTranslations(cookies().toString())
+  const t = getServerTranslations((await cookies()).get('i18n-lang')?.value as any)
 
   return (
     <main>
