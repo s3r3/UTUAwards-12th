@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCartStore } from '@/store/cart.store'
 import { useTranslations } from '@/lib/i18n'
-import { ShoppingBag, QrCode, Building2, Store } from 'lucide-react'
+import { ShoppingBag, Building2, Store } from 'lucide-react'
 
 interface Address {
   id: string; label?: string; name: string; phone: string; street: string
@@ -12,14 +12,9 @@ interface Address {
 }
 
 const paymentMethods = (t: any) => [
-  { id: 'qris', label: 'QRIS', icon: QrCode },
   { id: 'bank_transfer', label: t.checkout.bankTransfer, icon: Building2 },
   { id: 'cstore', label: t.checkout.convenienceStore, icon: Store },
 ]
-
-declare global {
-  interface Window { snap?: any }
-}
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -42,11 +37,6 @@ export default function CheckoutPage() {
         if (def) setSelectedAddress(def.id)
       }
     })
-    // Load Midtrans Snap
-    const script = document.createElement('script')
-    script.src = 'https://app.sandbox.midtrans.com/snap/snap.js'
-    script.setAttribute('data-client-key', process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || '')
-    document.body.appendChild(script)
   }, [items, router])
 
   const handleSaveAddress = async () => {
@@ -73,18 +63,7 @@ export default function CheckoutPage() {
     const d = await res.json()
     if (d.success) {
       clearCart()
-      // Open Midtrans Snap popup
-      if (window.snap && d.data.token) {
-        window.snap.pay(d.data.token, {
-          onSuccess: () => { router.push('/orders/' + d.data.orderId) },
-          onPending: () => { router.push('/orders/' + d.data.orderId) },
-          onError: () => { setError(t.checkout.payError); setLoading(false) },
-          onClose: () => { setLoading(false) },
-        })
-      } else {
-        // Fallback: redirect
-        window.location.href = d.data.redirectUrl
-      }
+      router.push('/orders/' + d.data.orderId)
     } else {
       setError(d.error || t.common.error); setLoading(false)
     }
@@ -147,7 +126,7 @@ export default function CheckoutPage() {
                   </label>
                 ))}
               </div>
-              <p className="text-xs text-gray-400 mt-3">{t.checkout.midtransNote}</p>
+              <p className="text-xs text-gray-400 mt-3">{t.checkout.midtransNote || 'Setelah checkout, lakukan transfer ke rekening yang tertera.'}</p>
             </div>
           </div>
 

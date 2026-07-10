@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { snap } from '@/lib/midtrans'
 
 export async function GET(request: NextRequest) {
   const session = await auth()
@@ -54,28 +53,8 @@ export async function POST(request: NextRequest) {
     include: { items: { include: { product: true } } },
   })
 
-  // Create Midtrans Snap transaction
-  const transaction = await snap.createTransaction({
-    transaction_details: {
-      order_id: order.id,
-      gross_amount: total,
-    },
-    customer_details: {
-      first_name: address.name,
-      phone: address.phone,
-    },
-    item_details: items.map((i: any) => {
-      const product = productMap.get(i.productId)!
-      return { id: product.id, name: product.name, price: product.price, quantity: i.quantity }
-    }),
-  })
-
   return NextResponse.json({
     success: true,
-    data: {
-      orderId: order.id,
-      token: transaction.token,
-      redirectUrl: transaction.redirect_url,
-    },
+    data: { orderId: order.id },
   })
 }
