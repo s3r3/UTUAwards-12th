@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
-import { ShoppingCart, Menu, X, Sun, Moon, User, Package, LogOut, ListOrdered, Globe } from 'lucide-react'
+import { ShoppingCart as CartIcon, Menu, X, Sun, Moon, User, Package, LogOut, ListOrdered, Globe } from 'lucide-react'
+import MiniCart from './MiniCart'
 import { useUIStore } from '@/store/ui.store'
 import { useCartStore } from '@/store/cart.store'
 import { useTranslations, useI18NStore } from '@/lib/i18n'
@@ -101,14 +102,17 @@ export default function Navbar() {
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
-            {/* Cart */}
+            {/* Cart - Desktop (MiniCart) */}
+            <MiniCart />
+
+            {/* Mobile Cart (simple button) - keeps showing on mobile */}
             <Link
               href="/cart"
-              className="relative p-2.5 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="relative p-2.5 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors md:hidden"
             >
-              <ShoppingCart size={18} />
+              <CartIcon size={18} />
               {count > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary-500 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white dark:ring-gray-950 animate-in zoom-in duration-200">
+                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary-500 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white dark:ring-gray-950">
                   {count > 99 ? '99+' : count}
                 </span>
               )}
@@ -168,23 +172,7 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile hamburger */}
-          <div className="md:hidden flex items-center gap-1">
-            <Link href="/cart" className="relative p-2 text-gray-600 dark:text-gray-400">
-              <ShoppingCart size={20} />
-              {count > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 rounded-full bg-primary-500 text-white text-[9px] font-bold flex items-center justify-center">
-                  {count > 99 ? '99+' : count}
-                </span>
-              )}
-            </Link>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-gray-600 dark:text-gray-400"
-            >
-              {isOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
-          </div>
+          {/* Mobile hamburger - cart and menu already shown below */}
         </div>
       </div>
 
