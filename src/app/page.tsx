@@ -7,7 +7,6 @@ import { cookies } from 'next/headers'
 
 const categoryIcons: Record<string, any> = { COFFEE: Coffee, PATCHOULI: Leaf, SEAFOOD: Fish, SPICES: Flame, PROCESSED: Factory }
 
-// Fallback data when DB is not available
 const FALLBACK_CATEGORIES = [
   { category: 'COFFEE', count: 12 },
   { category: 'PATCHOULI', count: 8 },
@@ -55,7 +54,27 @@ const FALLBACK_PRODUCTS = [
   },
 ]
 
+// Fast TCP connectivity check (5s timeout) — no Prisma hang if DB down
+function dbReachable(): Promise<boolean> {
+  const url = process.env.DATABASE_URL || ''
+  const match = url.match(/postgres(?:ql)?:\/\/[^:]+:[^@]*@([^:]+):(\d+)/)
+  if (!match) return Promise.resolve(false)
+  const host = match[1]
+  const port = parseInt(match[2], 10)
+  return new Promise((resolve) => {
+    const net = require('node:net')
+    const socket = new net.Socket()
+    const timeout = setTimeout(() => { socket.destroy(); resolve(false) }, 5000)
+    socket.once('connect', () => { clearTimeout(timeout); socket.destroy(); resolve(true) })
+    socket.once('error', () => { clearTimeout(timeout); resolve(false) })
+    socket.connect(port, host)
+  })
+}
+
 async function getData() {
+  const reachable = await dbReachable()
+  if (!reachable) return { products: FALLBACK_PRODUCTS, categories: FALLBACK_CATEGORIES }
+
   try {
     const { prisma } = await import('@/lib/prisma')
     const [products, cats] = await Promise.all([
@@ -67,7 +86,6 @@ async function getData() {
       categories: cats.map(c => ({ category: c.category, count: c._count })),
     }
   } catch {
-    // Fallback to static data
     return { products: FALLBACK_PRODUCTS, categories: FALLBACK_CATEGORIES }
   }
 }
