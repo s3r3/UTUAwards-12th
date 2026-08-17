@@ -20,6 +20,7 @@ const publicMenu = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
   const { theme, setTheme } = useUIStore()
   const items = useCartStore((s) => s.items)
@@ -29,6 +30,10 @@ export default function Navbar() {
   const isDark = theme === 'dark'
   const lang = useI18NStore((s) => s.lang)
   const setLang = useI18NStore((s) => s.setLang)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => { setIsOpen(false); setProfileOpen(false) }, [pathname])
 
@@ -111,7 +116,7 @@ export default function Navbar() {
               className="relative p-2.5 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors md:hidden"
             >
               <CartIcon size={18} />
-              {count > 0 && (
+              {mounted && count > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary-500 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white dark:ring-gray-950">
                   {count > 99 ? '99+' : count}
                 </span>

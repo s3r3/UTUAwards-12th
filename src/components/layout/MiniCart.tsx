@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { X, ShoppingCart, Trash2, Minus, Plus, ArrowRight } from 'lucide-react'
 import { useCartStore } from '@/store/cart.store'
@@ -8,7 +8,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 export default function MiniCart() {
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const { items, removeItem, updateQuantity, subtotal, totalItems } = useCartStore()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   if (!open) {
     return (
@@ -18,7 +23,7 @@ export default function MiniCart() {
         aria-label="Shopping cart"
       >
         <ShoppingCart size={18} />
-        {totalItems() > 0 && (
+        {mounted && totalItems() > 0 && (
           <span className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 rounded-full bg-primary-500 text-white text-[9px] font-bold flex items-center justify-center ring-2 ring-white dark:ring-gray-950">
             {totalItems() > 99 ? '99+' : totalItems()}
           </span>
@@ -64,9 +69,7 @@ export default function MiniCart() {
                   className="w-12 h-12 rounded-lg object-cover bg-gray-100"
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm text-gray-900 dark:text-white truncate">
-                    {item.name}
-                  </p>
+                  <p className="font-medium text-sm text-gray-900 dark:text-white truncate">{item.name}</p>
                   <p className="text-xs text-gray-500">Rp {item.price.toLocaleString('id-ID')}</p>
                 </div>
                 <div className="flex items-center gap-1">
@@ -102,9 +105,7 @@ export default function MiniCart() {
         <div className="p-4 border-t border-gray-100 dark:border-gray-800">
           <div className="flex justify-between items-center mb-4">
             <span className="text-sm text-gray-600 dark:text-gray-400">Subtotal:</span>
-            <span className="text-lg font-bold text-gray-900 dark:text-white">
-              Rp {subtotal().toLocaleString('id-ID')}
-            </span>
+            <span className="text-lg font-bold text-gray-900 dark:text-white">Rp {subtotal().toLocaleString('id-ID')}</span>
           </div>
           <Link
             href="/checkout"

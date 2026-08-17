@@ -53,6 +53,26 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id" className={`${inter.variable} ${plusJakartaSans.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org/',
+              '@type': 'Organization',
+              name: 'Acelora',
+              url: 'https://acelora.id',
+              logo: 'https://acelora.id/favicon.ico',
+              contactPoint: {
+                '@type': 'ContactPoint',
+                telephone: '+62-651-123456',
+                contactType: 'Customer Service',
+                areaServed: 'ID',
+              },
+            }),
+          }}
+        />
+      </head>
       <body className="font-sans antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
         <Providers>
           <PublicShell>{children}</PublicShell>

@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, ShoppingCart, Minus, Plus, Heart } from 'lucide-react'
+import { ShoppingCart, Minus, Plus, Heart, Share2 } from 'lucide-react'
 import { useCartStore } from '@/store/cart.store'
 import type { Product } from '@/types'
 
@@ -41,8 +41,8 @@ export default function ProductDetailClient({ product, category, isAvailable }: 
   }
 
   const handleWishlist = () => {
+    if (typeof window === 'undefined') return
     setIsWishlisted(!isWishlisted)
-    // Save to localStorage for persistence
     const saved = localStorage.getItem('acelora-wishlist') || '[]'
     const wishlist = JSON.parse(saved)
     if (!isWishlisted) {
@@ -52,12 +52,26 @@ export default function ProductDetailClient({ product, category, isAvailable }: 
     }
   }
 
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
+  const handleShare = async () => {
+    if (!currentUrl) return
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: product.name, url: currentUrl })
+      } catch {
+        await navigator.clipboard.writeText(currentUrl)
+      }
+    } else {
+      await navigator.clipboard.writeText(currentUrl)
+    }
+  }
+
   // Load wishlist from localStorage on mount
-  useState(() => {
+  useEffect(() => {
     const saved = localStorage.getItem('acelora-wishlist') || '[]'
     const wishlist = JSON.parse(saved)
     setIsWishlisted(wishlist.includes(product.id))
-  })
+  }, [product.id])
 
   return (
     <div className="grid md:grid-cols-2 gap-8">
@@ -91,18 +105,28 @@ export default function ProductDetailClient({ product, category, isAvailable }: 
           </div>
         )}
 
-        {/* Wishlist Button */}
-        <button
-          onClick={handleWishlist}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-            isWishlisted
-              ? 'bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400'
-              : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-          }`}
-        >
-          <Heart size={18} fill={isWishlisted ? 'currentColor' : 'none'} />
-          {isWishlisted ? 'Simpan ke Wishlist' : 'Tambah ke Wishlist'}
-        </button>
+        {/* Wishlist & Share Buttons */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleWishlist}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+              isWishlisted
+                ? 'bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+            }`}
+          >
+            <Heart size={18} fill={isWishlisted ? 'currentColor' : 'none'} />
+            {isWishlisted ? 'Disukai' : 'Tambah ke Wishlist'}
+          </button>
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            aria-label="Bagikan"
+          >
+            <Share2 size={18} />
+            Bagikan
+          </button>
+        </div>
       </div>
 
       {/* Product Info */}
