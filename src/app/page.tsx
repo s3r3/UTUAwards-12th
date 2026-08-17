@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { prisma } from '@/lib/prisma'
 import { ShoppingBag, ArrowRight, Coffee, Leaf, Fish, Flame, Factory, Package as Pkg } from 'lucide-react'
 import Image from 'next/image'
 import ParallaxHero from '@/components/ParallaxHero'
@@ -8,18 +7,69 @@ import { cookies } from 'next/headers'
 
 const categoryIcons: Record<string, any> = { COFFEE: Coffee, PATCHOULI: Leaf, SEAFOOD: Fish, SPICES: Flame, PROCESSED: Factory }
 
+// Fallback data when DB is not available
+const FALLBACK_CATEGORIES = [
+  { category: 'COFFEE', count: 12 },
+  { category: 'PATCHOULI', count: 8 },
+  { category: 'SEAFOOD', count: 15 },
+  { category: 'SPICES', count: 5 },
+  { category: 'PROCESSED', count: 3 },
+]
+
+const FALLBACK_PRODUCTS = [
+  {
+    id: 'fallback-1',
+    name: 'Kopi Arabika Gayo Specialty',
+    category: 'COFFEE',
+    origin: 'Aceh Tengah',
+    image: '/images/kopi_arabica.png',
+    price: 120000,
+    stock: 5,
+  },
+  {
+    id: 'fallback-2',
+    name: 'Minyak Nilam Aceh Grade A',
+    category: 'PATCHOULI',
+    origin: 'Aceh Selatan',
+    image: '/images/PatchouliOil.png',
+    price: 450000,
+    stock: 3,
+  },
+  {
+    id: 'fallback-3',
+    name: 'Udang Vannamei Segar Aceh',
+    category: 'SEAFOOD',
+    origin: 'Aceh Timur',
+    image: '/images/VannameiShrimp.png',
+    price: 55000,
+    stock: 10,
+  },
+  {
+    id: 'fallback-4',
+    name: 'Lada Hitam Aceh Premium',
+    category: 'SPICES',
+    origin: 'Aceh Jaya',
+    image: '/images/ladahitamAceh.png',
+    price: 35000,
+    stock: 7,
+  },
+]
+
 async function getData() {
-  const [products, cats] = await Promise.all([
-    prisma.product.findMany({ where: { status: 'APPROVED', stock: { gt: 0 } }, orderBy: { createdAt: 'desc' }, take: 4 }),
-    prisma.product.groupBy({ by: ['category'], _count: true, where: { status: 'APPROVED' } }),
-  ])
-  return { products: products.map(p => ({
-    id: p.id, name: p.name, category: p.category, description: p.description,
-    image: p.image, images: p.images, origin: p.origin, price: p.price,
-    compareAt: p.compareAt, stock: p.stock, weight: p.weight, status: p.status,
-    legality: p.legality, ownerId: p.ownerId,
-    createdAt: p.createdAt.toISOString(), updatedAt: p.updatedAt.toISOString(),
-  })), categories: cats.map(c => ({ category: c.category, count: c._count })) }
+  try {
+    const { prisma } = await import('@/lib/prisma')
+    const [products, cats] = await Promise.all([
+      prisma.product.findMany({ where: { status: 'APPROVED', stock: { gt: 0 } }, orderBy: { createdAt: 'desc' }, take: 4 }),
+      prisma.product.groupBy({ by: ['category'], _count: true, where: { status: 'APPROVED' } }),
+    ])
+    return {
+      products: products.map(p => ({ id: p.id, name: p.name, category: p.category, description: p.description, image: p.image, origin: p.origin, price: p.price, stock: p.stock })),
+      categories: cats.map(c => ({ category: c.category, count: c._count })),
+    }
+  } catch {
+    // Fallback to static data
+    return { products: FALLBACK_PRODUCTS, categories: FALLBACK_CATEGORIES }
+  }
 }
 
 export default async function HomePage() {
