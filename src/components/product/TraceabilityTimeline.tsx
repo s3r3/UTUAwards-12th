@@ -3,7 +3,7 @@ export default function TraceabilityTimeline() {
     { title: 'Panen Raya', desc: 'Dipetik langsung oleh petani/nelayan lokal bersertifikat di Aceh', date: 'Hari ke-1', icon: '🌱' },
     { title: 'Kurasi & Kendali Mutu', desc: 'Pemeriksaan kualitas di Acelora Metuah Hub, Banda Aceh', date: 'Hari ke-2', icon: '🔍' },
     { title: 'Sertifikasi & Legalitas', desc: 'Validasi halal, BPOM, dan standar ekspor internasional', date: 'Hari ke-3', icon: '📜' },
-    { title: 'Pengiriman Global', desc: 'Dikirim via kargo udara/laut ke destinasi domestik & internasional', date: 'Hari ke-4', icon: '✈️' },
+    { title: 'Pengiriman Global', desc: 'Dikirim via kargo udara/laut ke destinasi domestik & internasional', date: 'Hari ke-5', icon: '✈️' },
   ]
 
   return (
