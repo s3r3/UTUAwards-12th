@@ -11,12 +11,18 @@ interface ProductDetailClientProps {
   product: Product & { owner?: { name: string; email: string } | null }
   category?: { label: string }
   isAvailable: boolean
+  reviews?: any[]
+  rating?: number
+  reviewCount?: number
 }
 
-export default function ProductDetailClient({ product, category, isAvailable }: ProductDetailClientProps) {
+export default function ProductDetailClient({ product, category, isAvailable, reviews = [], rating = 0, reviewCount = 0 }: ProductDetailClientProps) {
   const addItem = useCartStore((s) => s.addItem)
   const [quantity, setQuantity] = useState(1)
   const [isWishlisted, setIsWishlisted] = useState(false)
+  const [newRating, setNewRating] = useState(5)
+  const [newComment, setNewComment] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleQuantity = (delta: number) => {
     setQuantity(prev => {
@@ -49,6 +55,37 @@ export default function ProductDetailClient({ product, category, isAvailable }: 
       localStorage.setItem('acelora-wishlist', JSON.stringify([...wishlist, product.id]))
     } else {
       localStorage.setItem('acelora-wishlist', JSON.stringify(wishlist.filter((id: string) => id !== product.id)))
+    }
+  }
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (typeof window === 'undefined') return
+    setIsSubmitting(true)
+    try {
+      const userId = localStorage.getItem('acelora-user-id')
+      if (!userId) {
+        alert('Silakan login terlebih dahulu untuk memberikan ulasan')
+        return
+      }
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, productId: product.id, rating: newRating, comment: newComment }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setNewComment('')
+        setNewRating(5)
+        alert('Ulasan berhasil dikirim!')
+        window.location.reload()
+      } else {
+        alert(data.error || 'Gagal mengirim ulasan')
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan saat mengirim ulasan')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -145,7 +182,81 @@ export default function ProductDetailClient({ product, category, isAvailable }: 
 
         <p className="text-gray-600 dark:text-gray-300 mb-6">{product.description}</p>
 
-        {/* Stock & Legality */}
+      {/* Reviews Section */}
+      <div className="mt-8">
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Ulasan & Penilaian</h3>
+        <div className="space-y-4">
+          <div className="flex items-center gap-4">
+            <span className="text-3xl font-bold">{rating.toFixed(1)}</span>
+            <div className="flex">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <span key={i} className={`text-lg ${i < Math.round(rating) ? 'text-yellow-400' : 'text-gray-300'}`}>★</span>
+              ))}
+            </div>
+            <span className="text-sm text-gray-500">({reviewCount} ulasan)</span>
+          </div>
+          {reviews && reviews.length > 0 && (
+            <div className="space-y-3 mt-4">
+              {reviews.slice(0, 3).map((review) => (
+                <div key={review.id} className="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium text-sm">{review.user?.name || 'Pengguna'}</span>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <span key={i} className={`text-sm ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}`}>★</span>
+                      ))}
+                    </div>
+                  </div>
+                  {review.comment && <p className="text-sm text-gray-600 dark:text-gray-300">{review.comment}</p>}
+                </div>
+              ))}
+            </div>
+          )}
+          {reviews.length === 0 && (
+            <p className="text-sm text-gray-500">Belum ada ulasan untuk produk ini.</p>
+          )}
+        </div>
+      </div>
+
+      {/* Add Review Form */}
+      <div className="mt-6">
+        <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Tulis Ulasan</h4>
+        <form onSubmit={handleSubmitReview} className="space-y-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rating</label>
+            <select 
+              value={newRating}
+              onChange={(e) => setNewRating(Number(e.target.value))}
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+            >
+              <option value="5">5 ★</option>
+              <option value="4">4 ★</option>
+              <option value="3">3 ★</option>
+              <option value="2">2 ★</option>
+              <option value="1">1 ★</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Komentar</label>
+            <textarea 
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white h-20 resize-none" 
+              placeholder="Bagikan pengalaman Anda..." 
+              required
+            ></textarea>
+          </div>
+          <button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="w-full px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? 'Mengirim...' : 'Kirim Ulasan'}
+          </button>
+        </form>
+      </div>
+
+      {/* Stock & Legality */}
         <div className="flex items-center gap-4 mb-6 flex-wrap">
           <span className="text-sm text-gray-500 dark:text-gray-400">
             {isAvailable ? `✅ Tersedia (${product.stock} tersisa)` : 'Habis!'}
@@ -197,6 +308,45 @@ export default function ProductDetailClient({ product, category, isAvailable }: 
             Habis
           </button>
         )}
+      </div>
+    </div>
+  )
+}
+
+export function RelatedProducts({ product, products }: { product: Product; products: Product[] }) {
+  return (
+    <div className="mt-12">
+      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+        Produk Terkait
+      </h3>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {products.map((p) => (
+          <Link
+            key={p.id}
+            href={`/products/${p.id}`}
+            className="group rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden bg-white dark:bg-gray-900 hover:shadow-lg transition-all"
+          >
+            <div className="aspect-square relative bg-gray-50 dark:bg-gray-800">
+              {p.image && (
+                <Image
+                  src={p.image}
+                  alt={p.name}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
+              )}
+            </div>
+            <div className="p-4">
+              <h4 className="font-semibold text-sm text-gray-900 dark:text-white truncate">
+                {p.name}
+              </h4>
+              <p className="text-primary-600 font-bold mt-1">
+                Rp {p.price.toLocaleString('id-ID')}
+              </p>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   )

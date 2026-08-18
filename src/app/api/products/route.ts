@@ -10,6 +10,8 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status')
     const search = searchParams.get('search')
     const sortBy = searchParams.get('sort') || 'newest'
+    const minPrice = searchParams.get('minPrice')
+    const maxPrice = searchParams.get('maxPrice')
     const page = parseInt(searchParams.get('_page') || '1', 10)
     const limit = parseInt(searchParams.get('_limit') || '12', 10)
     const skip = (page - 1) * limit
@@ -23,6 +25,12 @@ export async function GET(request: NextRequest) {
         { description: { contains: search, mode: 'insensitive' } },
         { origin: { contains: search, mode: 'insensitive' } },
       ]
+    }
+    if (minPrice || maxPrice) {
+      where.price = {
+        ...(minPrice ? { gte: parseFloat(minPrice) } : {}),
+        ...(maxPrice ? { lte: parseFloat(maxPrice) } : {}),
+      }
     }
 
     const orderBy: Prisma.ProductOrderByWithRelationInput = {}

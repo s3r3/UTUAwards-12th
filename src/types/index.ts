@@ -23,6 +23,10 @@ export interface Product {
   legality?: string;
   ownerId: string;
   createdAt: Date;
+  updatedAt?: Date;
+  rating?: number;
+  reviewCount?: number;
+  reviews?: Review[];
 }
 
 export type ProductCategory = 'COFFEE' | 'PATCHOULI' | 'SEAFOOD' | 'SPICES' | 'PROCESSED';
@@ -43,13 +47,25 @@ export interface Address {
 
 export type OrderStatus = 'PENDING' | 'PAID' | 'PROCESSING' | 'SHIPPING' | 'DELIVERED' | 'CANCELLED';
 
+export interface Review {
+  id: string;
+  userId: string;
+  productId: string;
+  rating: number;
+  comment?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  user?: User;
+  product?: Product;
+}
+
 export interface OrderItem {
   id: string;
   orderId: string;
   productId: string;
   quantity: number;
   price: number;
-  product: Product;
+  product?: Product;
 }
 
 export interface Order {

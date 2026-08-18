@@ -46,10 +46,10 @@ export default function OrderDetailPage() {
             {order.items.map(item => (
               <div key={item.id} className="flex gap-3">
                 <div className="w-16 h-16 relative rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-800 shrink-0">
-                  {item.product.image && <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />}
+                  {item.product?.image && <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />}
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium">{item.product.name}</p>
+                  <p className="font-medium">{item.product?.name}</p>
                   <p className="text-sm text-gray-500">{item.quantity}x @ Rp {item.price.toLocaleString('id-ID')}</p>
                 </div>
                 <p className="font-semibold">Rp {(item.price * item.quantity).toLocaleString('id-ID')}</p>

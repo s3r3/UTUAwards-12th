@@ -31,6 +31,8 @@ export default function ProductsClient() {
   const [error, setError] = useState<string | null>(null)
   const [hasNextPage, setHasNextPage] = useState(true)
   const [page, setPage] = useState(1)
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
 
   const addItem = useCartStore((s) => s.addItem)
   const t = useTranslations()
@@ -81,11 +83,37 @@ export default function ProductsClient() {
     }
   }, [searchParams])
 
+  const updatePriceRange = useCallback((key: 'minPrice' | 'maxPrice', value: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (!value) {
+      params.delete(key)
+    } else {
+      params.set(key, value)
+    }
+    params.delete('_page')
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+  }, [searchParams, pathname, router])
+
+  const clearPriceRange = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('minPrice')
+    params.delete('maxPrice')
+    params.delete('_page')
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+  }, [searchParams, pathname, router])
+
+  const hasActivePriceFilter = minPrice !== '' || maxPrice !== ''
+
   useEffect(() => {
     setPage(1)
     setProducts([])
     fetchData(1)
   }, [fetchData])
+
+  useEffect(() => {
+    setMinPrice(searchParams.get('minPrice') || '')
+    setMaxPrice(searchParams.get('maxPrice') || '')
+  }, [searchParams])
 
   useEffect(() => {
     if (page > 1) {
@@ -175,6 +203,37 @@ export default function ProductsClient() {
                 </option>
               ))}
             </select>
+
+            <div className="flex flex-wrap gap-2 items-center">
+              <div className="flex gap-2 items-center">
+                <input
+                  type="number"
+                  placeholder="Min Harga"
+                  value={minPrice}
+                  onChange={(e) => updatePriceRange('minPrice', e.target.value)}
+                  className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm w-24"
+                  min="0"
+                />
+                <span className="text-gray-400">-</span>
+                <input
+                  type="number"
+                  placeholder="Max Harga"
+                  value={maxPrice}
+                  onChange={(e) => updatePriceRange('maxPrice', e.target.value)}
+                  className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm w-24"
+                  min="0"
+                />
+                {(minPrice !== '' || maxPrice !== '') && (
+                  <button
+                    onClick={clearPriceRange}
+                    className="px-2 py-2.5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+                    aria-label="Hapus filter harga"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+            </div>
 
             {hasActiveFilters && (
               <button

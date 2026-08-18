@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { PRODUCT_CATEGORIES } from '@/constants/products'
-import ProductDetailClient from '@/components/product/ProductDetailClient'
+import ProductDetailClient, { RelatedProducts } from '@/components/product/ProductDetailClient'
 import TraceabilityTimeline from '@/components/product/TraceabilityTimeline'
 
 export async function generateStaticParams() {
@@ -48,10 +48,20 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
 
-  const product = await prisma.product.findUnique({
-    where: { id },
-    include: { owner: { select: { name: true, email: true } } },
-  })
+  const [product, rawReviews] = await Promise.all([
+    prisma.product.findUnique({
+      where: { id },
+      include: { owner: { select: { name: true, email: true } } },
+    }),
+    prisma.review.findMany({
+      where: { productId: id },
+      include: { user: { select: { id: true, name: true, email: true, image: true } } },
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+    }),
+  ])
+
+  const reviews = rawReviews.map(r => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString() }))
 
   if (!product) {
     return (
@@ -61,9 +71,26 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     )
   }
 
+  // Related products: same category, excluding current — fallback static if DB down
+  let related: typeof product[] = []
+  try {
+    related = await prisma.product.findMany({
+      where: { category: product.category, status: 'APPROVED', id: { not: product.id } },
+      select: {
+        id: true, name: true, category: true, description: true, image: true, images: true, origin: true, price: true, compareAt: true, stock: true, weight: true, status: true, legality: true, ownerId: true, createdAt: true, updatedAt: true,
+        owner: { select: { name: true, email: true } }, // Include owner here
+      },
+      take: 4,
+    })
+  } catch {} // DB down → empty section hide-able
+
   const category = PRODUCT_CATEGORIES.find((c) => c.value === product.category)
   const isAvailable = product.stock > 0
   const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://acelora.id'
+
+  // Calculate rating stats
+  const avgRating = reviews.length > 0 ? Math.round((reviews.reduce((sum: any, r: any) => sum + r.rating, 0) / reviews.length) * 20) / 20 : 0
+  const reviewCount = reviews.length
 
   const breadcrumb = {
     '@context': 'https://schema.org/',
@@ -128,9 +155,35 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           }}
           category={category}
           isAvailable={isAvailable}
+          reviews={reviews}
+          rating={avgRating}
+          reviewCount={reviewCount}
         />
 
         <TraceabilityTimeline />
+
+        {related.length > 0 && (
+          <RelatedProducts
+            product={product as any}
+            products={related.map((r) => ({
+              id: r.id,
+              name: r.name,
+              category: r.category,
+              description: r.description,
+              image: r.image || undefined,
+              images: r.images,
+              origin: r.origin,
+              price: r.price,
+              compareAt: r.compareAt || undefined,
+              stock: r.stock,
+              weight: r.weight || undefined,
+              status: r.status,
+              legality: r.legality || undefined,
+              ownerId: r.ownerId,
+              createdAt: r.createdAt,
+            }))}
+          />
+        )}
       </div>
     </div>
   )

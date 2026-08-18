@@ -4,6 +4,7 @@ import Image from 'next/image'
 import ParallaxHero from '@/components/ParallaxHero'
 import { getServerTranslations } from '@/lib/i18n'
 import { cookies } from 'next/headers'
+import ExportGlobe from '@/components/sections/ExportGlobe'
 
 const categoryIcons: Record<string, any> = { COFFEE: Coffee, PATCHOULI: Leaf, SEAFOOD: Fish, SPICES: Flame, PROCESSED: Factory }
 
@@ -125,48 +126,16 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Featured Products */}
-      <section className="py-20 px-4 bg-gray-50/80 dark:bg-gray-900/40 relative">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-ocean-50 dark:bg-ocean-900/20 text-ocean-600 dark:text-ocean-400 mb-3">{t.hero.featuredBadge}</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">{t.hero.featured}</h2>
-            </div>
-            <Link href="/products" className="hidden sm:flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors">
-              {t.hero.viewAll} <ArrowRight size={16} />
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {products.map((product: any) => (
-              <Link
-                key={product.id}
-                href={`/products/${product.id}`}
-                className="group rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden bg-white dark:bg-gray-900 hover:shadow-xl hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="aspect-[4/3] relative bg-gray-100 dark:bg-gray-800 overflow-hidden">
-                  {product.image && (
-                    <Image src={product.image} alt={product.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-                <div className="p-4">
-                  <div className="text-[10px] font-medium text-primary-600 uppercase tracking-wider mb-1">{product.origin}</div>
-                  <h3 className="font-semibold text-sm text-gray-900 dark:text-white truncate">{product.name}</h3>
-                  <div className="flex items-center justify-between mt-2">
-                    <span className="text-lg font-bold text-primary-600">Rp {product.price.toLocaleString('id-ID')}</span>
-                    {product.stock <= 0 && <span className="text-[10px] text-red-500 font-medium">{t.hero.outOfStock}</span>}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-          <div className="mt-8 text-center sm:hidden">
-            <Link href="/products" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary-500 text-white font-semibold">
-              {t.hero.viewAll} <ArrowRight size={16} />
-            </Link>
-          </div>
+      {/* Export Globe - New Section */}
+      <section className="py-20 px-4 max-w-6xl mx-auto">
+        <div className="text-center mb-8">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-ocean-50 dark:bg-ocean-900/20 text-ocean-600 dark:text-ocean-400 mb-3">Ekspor Global</span>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Dari Aceh ke Dunia</h2>
+          <p className="text-gray-500 mt-2 max-w-lg mx-auto">
+            Jelajahi bagaimana produk khas Aceh didistribusikan ke pasar internasional, membawa kualitas dan warisan budaya Aceh ke seluruh dunia.
+          </p>
         </div>
+        <ExportGlobe />
       </section>
 
       {/* CTA */}
