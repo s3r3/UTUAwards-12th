@@ -51,30 +51,18 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const [product, rawReviews] = await Promise.all([
     prisma.product.findUnique({
       where: { id },
-      include: { owner: { select: { name: true, email: true } } },
+      include: { owner: { select: { name: true } } },
     }),
     prisma.review.findMany({
       where: { productId: id },
-      include: { user: { select: { id: true, name: true, email: true, image: true } } },
+      include: { user: { select: { id: true, name: true } } },
       orderBy: { createdAt: 'desc' },
       take: 10,
     }),
   ])
 
   const reviews = rawReviews.map(r => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString() }))
-  
-  // Dummy for testing (will be replaced by real DB data)
-  const dummyReviews = [
-    { id: '1', rating: 5, comment: 'Produk sangat segar, pengiriman cepat!', user: { name: 'Rina' } },
-    { id: '2', rating: 4, comment: 'Kualitas premium, packing aman.', user: { name: 'Budi' } },
-    { id: '3', rating: 5, comment: 'Sangat puas dengan pelayanannya.', user: { name: 'Andi' } },
-    { id: '4', rating: 5, comment: 'Packing sangat rapi, produk sampai dalam kondisi baik.', user: { name: 'Siti' } },
-    { id: '5', rating: 4, comment: 'Bagus sekali, recommended!', user: { name: 'Dewi' } },
-    { id: '6', rating: 5, comment: 'Harga sebanding dengan kualitas.', user: { name: 'Eko' } },
-    { id: '7', rating: 5, comment: 'Pengiriman ke Jakarta sangat cepat.', user: { name: 'Fajar' } },
-    { id: '8', rating: 4, comment: 'Sangat suka produknya, akan beli lagi.', user: { name: 'Gita' } },
-  ]
-  const displayReviews = reviews.length > 0 ? reviews : dummyReviews
+  const displayReviews = reviews.length > 0 ? reviews : []
 
   if (!product) {
     return (
@@ -90,7 +78,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     related = await prisma.product.findMany({
       where: { category: product.category, status: 'APPROVED', id: { not: product.id } },
       select: {
-        id: true, name: true, category: true, description: true, image: true, images: true, origin: true, price: true, compareAt: true, stock: true, weight: true, status: true, legality: true, ownerId: true, createdAt: true, updatedAt: true,
+        id: true, name: true, category: true, description: true, image: true, images: true, origin: true, price: true, compareAt: true, stock: true, weight: true, status: true, legality: true, packageDesign: true, ownerId: true, createdAt: true, updatedAt: true,
         owner: { select: { name: true, email: true } }, // Include owner here
       },
       take: 3,
@@ -133,10 +121,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     },
   }
 
+  const escapeScriptTags = (html: string) => html.replace(/<\//g, '\\u003c/')
+
   return (
     <div className="min-h-screen pt-24 pb-12">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeScriptTags(JSON.stringify(breadcrumb)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeScriptTags(JSON.stringify(productSchema)) }} />
 
       <div className="max-w-6xl mx-auto px-4">
         <Link
@@ -162,6 +152,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             weight: product.weight || undefined,
             status: product.status,
             legality: product.legality || undefined,
+            packageDesign: product.packageDesign || undefined,
             ownerId: product.ownerId,
             createdAt: product.createdAt,
             owner: product.owner,
@@ -177,7 +168,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
         {related.length > 0 && (
           <RelatedProducts
-            product={{ ...product, image: product.image || undefined, compareAt: product.compareAt || undefined, weight: product.weight || undefined, legality: product.legality || undefined }}
+            product={{ ...product, image: product.image || undefined, compareAt: product.compareAt || undefined, weight: product.weight || undefined, legality: product.legality || undefined, packageDesign: product.packageDesign || undefined }}
             products={related.map((r) => ({
               id: r.id,
               name: r.name,
@@ -192,6 +183,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               weight: r.weight || undefined,
               status: r.status,
               legality: r.legality || undefined,
+              packageDesign: r.packageDesign || undefined,
               ownerId: r.ownerId,
               createdAt: r.createdAt,
             }))}

@@ -1,4 +1,3 @@
-// Prisma Schema for Acelora — E-Commerce
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,54 +7,144 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String?
   image     String?
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  products  Product[]
-  orders    Order[]
-  addresses Address[]
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   accounts  Account[]
-  sessions  Session[]
+  addresses Address[]
+  orders    Order[]
+  products  Product[]
   reviews   Review[]
+  sessions  Session[]
 
   @@map("users")
+}
+
+model Product {
+  id            String          @id @default(cuid())
+  name          String
+  category      ProductCategory
+  description   String
+  image         String?
+  images        String[]
+  origin        String
+  price         Int             @default(0)
+  compareAt     Int?
+  stock         Int             @default(0)
+  weight        Float?
+  packageDesign String?
+  status        ProductStatus   @default(PENDING)
+  legality      String?
+  ownerId       String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  orderItems    OrderItem[]
+  owner         User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  reviews       Review[]
+
+  @@map("products")
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  status          OrderStatus @default(PENDING)
+  total           Int
+  shippingCost    Int         @default(0)
+  addressId       String
+  stripeSessionId String?     @unique
+  stripePaymentId String?
+  paidAt          DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  items           OrderItem[]
+  address         Address     @relation(fields: [addressId], references: [id])
+  user            User        @relation(fields: [userId], references: [id])
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model Address {
+  id         String  @id @default(cuid())
+  userId     String
+  label      String?
+  name       String
+  phone      String
+  street     String
+  city       String
+  province   String
+  postalCode String
+  isDefault  Boolean @default(false)
+  user       User    @relation(fields: [userId], references: [id])
+  orders     Order[]
+
+  @@map("addresses")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("reviews")
 }
 
 enum Role {
   USER
   ADMIN
   PARTNER
-}
-
-model Product {
-  id          String          @id @default(cuid())
-  name        String
-  category    ProductCategory
-  description String
-  image       String?
-  images      String[]
-  origin      String
-  price       Int             @default(0)
-  compareAt   Int?
-  stock       Int             @default(0)
-  weight      Float?
-  status      ProductStatus   @default(PENDING)
-  legality    String?
-  ownerId     String
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-
-  owner      User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  orderItems OrderItem[]
-  reviews    Review[]
-
-  @@map("products")
 }
 
 enum ProductCategory {
@@ -74,26 +163,6 @@ enum ProductStatus {
   REJECTED
 }
 
-model Order {
-  id              String      @id @default(cuid())
-  userId          String
-  status          OrderStatus @default(PENDING)
-  total           Int
-  shippingCost    Int         @default(0)
-  addressId       String
-  stripeSessionId String?     @unique
-  stripePaymentId String?
-  paidAt          DateTime?
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-
-  user    User       @relation(fields: [userId], references: [id])
-  items   OrderItem[]
-  address Address    @relation(fields: [addressId], references: [id])
-
-  @@map("orders")
-}
-
 enum OrderStatus {
   PENDING
   PAID
@@ -101,81 +170,4 @@ enum OrderStatus {
   SHIPPING
   DELIVERED
   CANCELLED
-}
-
-model OrderItem {
-  id        String @id @default(cuid())
-  orderId   String
-  productId String
-  quantity  Int
-  price     Int
-
-  order   Order   @relation(fields: [orderId], references: [id])
-  product Product @relation(fields: [productId], references: [id])
-
-  @@map("order_items")
-}
-
-model Address {
-  id         String  @id @default(cuid())
-  userId     String
-  label      String?
-  name       String
-  phone      String
-  street     String
-  city       String
-  province   String
-  postalCode String
-  isDefault  Boolean @default(false)
-
-  user   User    @relation(fields: [userId], references: [id])
-  orders Order[]
-
-  @@map("addresses")
-}
-
-// NextAuth Models
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@map("accounts")
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("sessions")
-}
-
-model Review {
-  id          String   @id @default(cuid())
-  userId      String
-  productId   String
-  rating      Int
-  comment     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  user    User    @relation(fields: [userId], references: [id])
-  product Product  @relation(fields: [productId], references: [id])
-
-  @@map("reviews")
 }

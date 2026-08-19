@@ -81,7 +81,7 @@ export default function CheckoutPage() {
     const d = await res.json()
     if (d.success) {
       clearCart()
-      router.push('/orders/' + d.data.orderId)
+      router.push('/checkout/success?order_id=' + d.data.orderId)
     } else {
       setError(d.error || t.common.error); setLoading(false)
     }

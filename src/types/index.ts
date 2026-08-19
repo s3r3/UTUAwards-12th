@@ -21,6 +21,7 @@ export interface Product {
   weight?: number;
   status: ProductStatus;
   legality?: string;
+  packageDesign?: string;
   ownerId: string;
   createdAt: Date;
   updatedAt?: Date;

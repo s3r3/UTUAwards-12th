@@ -3,13 +3,32 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ShoppingCart, Minus, Plus, Heart, Share2, ChevronUp, ChevronDown, UserCircle2, Star } from 'lucide-react'
+import { ShoppingCart, Minus, Plus, Heart, Share2, UserCircle2, Star, Package, Eye } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCartStore } from '@/store/cart.store'
 import type { Product } from '@/types'
+import PackageDesignLightbox from './PackageDesignLightbox'
+
+const PACKAGE_DESIGN_IMAGES: Record<string, string[]> = {
+  'KopiArabikaGayo': ['/packageDesign/KopiArabikaGayo/kopi.jpeg', '/packageDesign/KopiArabikaGayo/kopi2.jpeg'],
+  'MinyakNilam': ['/packageDesign/MinyakNilam/minyaknilam.jpeg', '/packageDesign/MinyakNilam/minyaknilam1.jpeg'],
+  'udangVaname': ['/packageDesign/udangVaname/udang.jpeg', '/packageDesign/udangVaname/udang2.jpeg'],
+  'LadaHitam': ['/packageDesign/LadaHitam/lada.jpeg', '/packageDesign/LadaHitam/lada2.jpeg'],
+  'coklat': ['/packageDesign/coklat/coklat.jpeg'],
+  'dodol': ['/packageDesign/dodol/dodol.jpeg'],
+  'kayumanis': ['/packageDesign/kayumanis/kayumanis.jpeg'],
+  'kepiting': ['/packageDesign/kepiting/kepiting.jpeg'],
+}
+
+const getPackageDesignImages = (folderPath: string): string[] => {
+  if (!folderPath) return []
+  const segments = folderPath.split('/')
+  const folderName = segments[segments.length - 2] || ''
+  return PACKAGE_DESIGN_IMAGES[folderName] || []
+}
 
 interface ProductDetailClientProps {
-  product: Product & { owner?: { name: string; email: string } | null }
+  product: Product & { owner?: { name: string; email?: string } | null }
   category?: { label: string }
   isAvailable: boolean
   reviews?: { id: string; rating: number; comment: string | null; user: { name: string | null } | null }[]
@@ -30,8 +49,7 @@ const ACCORDION_DATA = [
   },
   {
     title: 'SHIPPING & STORAGE',
-    content:
-      'Stored in amber glass bottles to prevent UV degradation. Ships within 24 hours via cold-chain or secure packaging depending on the product type.',
+    content: '',
   },
   {
     title: 'FAQ',
@@ -48,6 +66,10 @@ export default function ProductDetailClient({ product, category, isAvailable, re
   const [newComment, setNewComment] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [openSection, setOpenSection] = useState<string | null>(null)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState(0)
+
+  const packageDesignImages = getPackageDesignImages(product.packageDesign || '')
 
   const handleQuantity = (delta: number) => {
     setQuantity(prev => {
@@ -68,14 +90,19 @@ export default function ProductDetailClient({ product, category, isAvailable, re
       image: product.image || '',
       quantity,
       stock: product.stock,
+      packageDesign: product.packageDesign || undefined,
     })
   }
 
   const handleWishlist = () => {
     if (typeof window === 'undefined') return
     setIsWishlisted(!isWishlisted)
-    const saved = localStorage.getItem('acelora-wishlist') || '[]'
-    const wishlist = JSON.parse(saved)
+    let wishlist: string[] = []
+    try {
+      wishlist = JSON.parse(localStorage.getItem('acelora-wishlist') || '[]')
+    } catch {
+      wishlist = []
+    }
     if (!isWishlisted) {
       localStorage.setItem('acelora-wishlist', JSON.stringify([...wishlist, product.id]))
     } else {
@@ -130,11 +157,16 @@ export default function ProductDetailClient({ product, category, isAvailable, re
 
   useEffect(() => {
     let cancelled = false
-    setTimeout(() => {
+    try {
       const saved = localStorage.getItem('acelora-wishlist') || '[]'
-      const wishlist = JSON.parse(saved)
-      if (!cancelled) setIsWishlisted(wishlist.includes(product.id))
-    })
+      const wishlist: string[] = JSON.parse(saved)
+      const value = wishlist.includes(product.id)
+      requestAnimationFrame(() => {
+        if (!cancelled) setIsWishlisted(value)
+      })
+    } catch {
+      // corrupted localStorage — ignore
+    }
     return () => { cancelled = true }
   }, [product.id])
 
@@ -218,7 +250,8 @@ export default function ProductDetailClient({ product, category, isAvailable, re
         <div className="mb-6">
           <button
             onClick={handleAddToCart}
-            className="w-full bg-emerald-950 px-6 py-4 text-white text-sm font-semibold uppercase tracking-widest hover:bg-emerald-800 transition-colors flex items-center justify-center gap-3"
+            disabled={!isAvailable}
+            className="w-full bg-emerald-950 px-6 py-4 text-white text-sm font-semibold uppercase tracking-widest hover:bg-emerald-800 transition-colors flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <ShoppingCart size={18} />
             {isAvailable ? `ADD TO CART | Rp ${product.price.toLocaleString('id-ID')}` : 'OUT OF STOCK'}
@@ -287,9 +320,43 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <p className="pb-5 text-sm leading-relaxed whitespace-pre-line text-stone-600">
-                        {item.content}
-                      </p>
+                      {item.title === 'SHIPPING & STORAGE' ? (
+                        <div className="pb-5">
+                          <p className="text-sm leading-relaxed text-stone-600 mb-4">
+                            Stored in amber glass bottles to prevent UV degradation. Ships within 24 hours via cold-chain or secure packaging.
+                          </p>
+                          {packageDesignImages.length > 0 && (
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                              {packageDesignImages.map((img, i) => (
+                                <button
+                                  key={img}
+                                  onClick={() => {
+                                    setLightboxIndex(i)
+                                    setLightboxOpen(true)
+                                  }}
+                                  className="relative aspect-square group overflow-hidden border border-black/10 hover:border-black transition-colors"
+                                >
+                                  <Image
+                                    src={img}
+                                    alt={`Package design ${i + 1}`}
+                                    fill
+                                    unoptimized
+                                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                  />
+                                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <Eye size={20} className="text-white" />
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="pb-5 text-sm leading-relaxed whitespace-pre-line text-stone-600">
+                          {item.content}
+                        </p>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -311,7 +378,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                 onChange={(e) => setNewRating(Number(e.target.value))}
                 className="w-full px-3 py-2 border border-black/15 bg-white text-stone-900 text-sm"
               >
-                {[5, 4, 3, 2, 1].map(r => <option key={r} value={r}>{r} ★</option>)}
+                {[5, 4, 3, 2, 1].map((r) => <option key={r} value={r}>{r} ★</option>)}
               </select>
               <textarea
                 value={newComment}
@@ -350,6 +417,19 @@ export default function ProductDetailClient({ product, category, isAvailable, re
             )) : <p className="text-sm text-stone-500">Belum ada ulasan.</p>}
           </div>
         </div>
+
+        {/* Package Design Lightbox */}
+        <AnimatePresence>
+          {lightboxOpen && packageDesignImages.length > 0 && (
+            <PackageDesignLightbox
+              images={packageDesignImages}
+              folder={product.packageDesign || ''}
+              index={lightboxIndex}
+              onClose={() => setLightboxOpen(false)}
+              onNavigate={setLightboxIndex}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )

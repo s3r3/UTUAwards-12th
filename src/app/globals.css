@@ -45,9 +45,6 @@ body {
   color-scheme: dark;
 }
 
-.font-serif-display {
-  font-family: var(--font-playfair), 'Playfair Display', serif;
-}
 
 .bg-cream {
   background-color: #faf7f2;
