@@ -16,22 +16,27 @@ export default function WishlistPage() {
 
   // Load wishlist IDs from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('acelora-wishlist') || '[]'
-    const ids = JSON.parse(saved)
-    setWishlist(ids)
+    let cancelled = false
+    setTimeout(() => {
+      const saved = localStorage.getItem('acelora-wishlist') || '[]'
+      const ids = JSON.parse(saved)
+      if (!cancelled) setWishlist(ids)
+    })
+    return () => { cancelled = true }
   }, [])
 
   // Fetch product details for each wishlist item
   useEffect(() => {
     if (wishlist.length === 0) {
-      setProducts([])
-      setLoading(false)
+      setTimeout(() => {
+        setProducts([])
+        setLoading(false)
+      })
       return
     }
 
     const fetchProducts = async () => {
-      setLoading(true)
-      setError(null)
+      setTimeout(() => { setLoading(true); setError(null) })
       try {
         const res = await fetch('/api/products')
         const json = await res.json()

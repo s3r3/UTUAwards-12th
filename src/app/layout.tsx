@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
+import { Playfair_Display, Inter, Pacifico } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/Providers'
 import PublicShell from '@/components/layout/PublicShell'
@@ -10,9 +10,16 @@ const inter = Inter({
   display: 'swap',
 })
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  variable: '--font-plus-jakarta',
+  variable: '--font-playfair',
+  display: 'swap',
+})
+
+const pacifico = Pacifico({
+  subsets: ['latin'],
+  variable: '--font-script',
+  weight: '400',
   display: 'swap',
 })
 
@@ -52,7 +59,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" className={`${inter.variable} ${plusJakartaSans.variable}`} suppressHydrationWarning>
+    <html lang="id" className={`${inter.variable} ${playfair.variable} ${pacifico.variable}`} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

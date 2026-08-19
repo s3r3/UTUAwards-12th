@@ -1,14 +1,16 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { ShoppingCart, Search, X } from 'lucide-react'
+import { ShoppingCart, Search, Heart, ArrowRight, ChevronDown } from 'lucide-react'
 import { useCartStore } from '@/store/cart.store'
+import { useUIStore } from '@/store/ui.store'
 import { useTranslations } from '@/lib/i18n'
-import type { Product } from '@/types'
+import type { Product, CartItem } from '@/types'
 import { PRODUCT_CATEGORIES } from '@/constants/products'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface ProductResponse {
   success: boolean
@@ -31,347 +33,142 @@ export default function ProductsClient() {
   const [error, setError] = useState<string | null>(null)
   const [hasNextPage, setHasNextPage] = useState(true)
   const [page, setPage] = useState(1)
-  const [minPrice, setMinPrice] = useState('')
-  const [maxPrice, setMaxPrice] = useState('')
 
   const addItem = useCartStore((s) => s.addItem)
   const t = useTranslations()
+  const theme = useUIStore((s) => s.theme)
+  const isDark = theme === 'dark'
 
   const categoryParam = searchParams.get('category') || 'all'
   const searchParam = searchParams.get('search') || ''
   const sortParam = searchParams.get('sort') || 'newest'
 
   const categories = [
-    { value: 'all', label: 'Semua Kategori' },
+    { value: 'all', label: 'All' },
     ...PRODUCT_CATEGORIES.map((cat) => ({ value: cat.value, label: cat.label })),
   ]
 
   const sortOptions = [
-    { value: 'newest', label: 'Terbaru' },
-    { value: 'price_asc', label: 'Termurah' },
-    { value: 'price_desc', label: 'Termahal' },
-    { value: 'stock', label: 'Stok Tinggi' },
+    { value: 'newest', label: 'Featured' },
+    { value: 'price_asc', label: 'Price: Low to High' },
+    { value: 'price_desc', label: 'Price: High to Low' },
   ]
 
   const fetchData = useCallback(async (pageNum: number = 1) => {
     setLoading(true)
     setError(null)
-
     try {
       const params = new URLSearchParams(searchParams.toString())
       params.set('_page', String(pageNum))
       params.set('_limit', '12')
-
-      const res = await fetch(`/api/products?${params.toString()}`, { next: { revalidate: 0 } })
+      const res = await fetch(`/api/products?${params.toString()}`)
       const json: ProductResponse = await res.json()
-
-      if (!json.success) {
-        throw new Error(json.error || 'Gagal memuat produk')
-      }
-
-      if (pageNum === 1) {
-        setProducts(json.data)
-      } else {
-        setProducts((prev) => [...prev, ...json.data])
-      }
-
+      if (!json.success) throw new Error(json.error || 'Gagal memuat produk')
+      setProducts(pageNum === 1 ? json.data : (prev) => [...prev, ...json.data])
       setHasNextPage(json.pagination?.hasNextPage ?? false)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Error tidak diketahui')
+      setError(e instanceof Error ? e.message : 'Error')
     } finally {
       setLoading(false)
     }
   }, [searchParams])
 
-  const updatePriceRange = useCallback((key: 'minPrice' | 'maxPrice', value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-    if (!value) {
-      params.delete(key)
-    } else {
-      params.set(key, value)
-    }
-    params.delete('_page')
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
-  }, [searchParams, pathname, router])
-
-  const clearPriceRange = useCallback(() => {
-    const params = new URLSearchParams(searchParams.toString())
-    params.delete('minPrice')
-    params.delete('maxPrice')
-    params.delete('_page')
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
-  }, [searchParams, pathname, router])
-
-  const hasActivePriceFilter = minPrice !== '' || maxPrice !== ''
-
   useEffect(() => {
-    setPage(1)
-    setProducts([])
-    fetchData(1)
+    let cancelled = false
+    setTimeout(() => {
+      if (!cancelled) {
+        setPage(1)
+        fetchData(1)
+      }
+    })
+    return () => { cancelled = true }
   }, [fetchData])
-
-  useEffect(() => {
-    setMinPrice(searchParams.get('minPrice') || '')
-    setMaxPrice(searchParams.get('maxPrice') || '')
-  }, [searchParams])
-
-  useEffect(() => {
-    if (page > 1) {
-      fetchData(page)
-    }
-  }, [page, fetchData])
-
-  useEffect(() => {
-    if (!hasNextPage || loading) return
-
-    const observer = new IntersectionObserver(
-      (items) => {
-        if (items[0].isIntersecting && hasNextPage) {
-          setPage((prev) => prev + 1)
-        }
-      },
-      { threshold: 0.1 }
-    )
-
-    const target = document.getElementById('sentinel')
-    if (target) observer.observe(target)
-
-    return () => observer.disconnect()
-  }, [hasNextPage, loading])
 
   const updateParam = useCallback((key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString())
-    if (value === 'all' || value === 'newest' || value === '') {
-      params.delete(key)
-    } else {
-      params.set(key, value)
-    }
+    if (value === 'all' || value === 'newest') params.delete(key)
+    else params.set(key, value)
     params.delete('_page')
     router.replace(`${pathname}?${params.toString()}`, { scroll: false })
   }, [searchParams, pathname, router])
 
-  const clearFilter = useCallback(() => {
-    router.replace(pathname, { scroll: false })
-  }, [pathname, router])
-
-  const hasActiveFilters = categoryParam !== 'all' || searchParam !== '' || sortParam !== 'newest'
-
   return (
-    <div className="min-h-screen pt-24 pb-12 px-4 max-w-7xl mx-auto">
-      <section className="mb-8">
-        <div className="flex flex-col gap-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              placeholder={t.products.searchPlaceholder}
-              defaultValue={searchParam}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  const target = e.currentTarget as HTMLInputElement
-                  const params = new URLSearchParams(searchParams.toString())
-                  if (target.value) params.set('search', target.value)
-                  else params.delete('search')
-                  params.delete('_page')
-                  router.replace(`${pathname}?${params.toString()}`, { scroll: false })
-                }
-              }}
-            />
-          </div>
-
-          <div className="flex flex-wrap gap-2 items-center">
-            <select
-              value={categoryParam}
-              onChange={(e) => updateParam('category', e.target.value)}
-              className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm"
-            >
-              {categories.map(({ value, label }) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={sortParam}
-              onChange={(e) => updateParam('sort', e.target.value)}
-              className="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm"
-            >
-              {sortOptions.map(({ value, label }) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-
-            <div className="flex flex-wrap gap-2 items-center">
-              <div className="flex gap-2 items-center">
-                <input
-                  type="number"
-                  placeholder="Min Harga"
-                  value={minPrice}
-                  onChange={(e) => updatePriceRange('minPrice', e.target.value)}
-                  className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm w-24"
-                  min="0"
-                />
-                <span className="text-gray-400">-</span>
-                <input
-                  type="number"
-                  placeholder="Max Harga"
-                  value={maxPrice}
-                  onChange={(e) => updatePriceRange('maxPrice', e.target.value)}
-                  className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm w-24"
-                  min="0"
-                />
-                {(minPrice !== '' || maxPrice !== '') && (
-                  <button
-                    onClick={clearPriceRange}
-                    className="px-2 py-2.5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
-                    aria-label="Hapus filter harga"
-                  >
-                    <X size={16} />
-                  </button>
-                )}
-              </div>
+    <div className={`min-h-screen ${isDark ? 'bg-gray-950 text-stone-200' : 'bg-white text-stone-900'}`}>
+      {/* Top Filter Bar — added top margin to prevent navbar overlap */}
+      <div className={`mt-20 border-b py-4 px-6 md:px-12 flex items-center justify-between ${isDark ? 'bg-gray-950 border-white/10' : 'bg-white border-black/10'}`}>
+        <span className={`font-serif text-sm ${isDark ? 'text-stone-200' : 'text-stone-900'}`}>Showing {products.length} products</span>
+        <div className="flex items-center gap-8">
+            <div className="relative group">
+                <button className={`flex items-center gap-1 text-sm tracking-widest uppercase ${isDark ? 'text-white' : 'text-stone-900'}`}>
+                    Category <ChevronDown size={14} />
+                </button>
+                <div className={`absolute top-full right-0 z-[100] hidden w-56 border p-2 shadow-lg group-hover:block ${isDark ? 'bg-gray-900 border-white/10' : 'bg-white border-black/10'}`}>
+                    {categories.map(c => <button key={c.value} onClick={() => updateParam('category', c.value)} className={`block w-full px-3 py-2 text-left text-sm transition-colors ${isDark ? 'text-stone-100 hover:bg-white/5' : 'text-stone-800 hover:bg-stone-100'}`}>{c.label}</button>)}
+                </div>
             </div>
-
-            {hasActiveFilters && (
-              <button
-                onClick={clearFilter}
-                className="px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
-                aria-label="Hapus semua filter"
-              >
-                <X size={18} />
-              </button>
-            )}
-          </div>
+            <div className="relative group">
+                <button className={`flex items-center gap-1 text-sm tracking-widest uppercase ${isDark ? 'text-white' : 'text-stone-900'}`}>
+                    Sort <ChevronDown size={14} />
+                </button>
+                 <div className={`absolute top-full right-0 z-[100] hidden w-56 border p-2 shadow-lg group-hover:block ${isDark ? 'bg-gray-900 border-white/10' : 'bg-white border-black/10'}`}>
+                    {sortOptions.map(o => <button key={o.value} onClick={() => updateParam('sort', o.value)} className={`block w-full px-3 py-2 text-left text-sm transition-colors ${isDark ? 'text-stone-100 hover:bg-white/5' : 'text-stone-800 hover:bg-stone-100'}`}>{o.label}</button>)}
+                </div>
+            </div>
+            <input
+                className={`w-40 border-b bg-transparent pb-1 text-sm outline-none transition-colors placeholder:tracking-wider focus:w-48 ${isDark ? 'border-white/30 text-white placeholder:text-stone-500 focus:border-white' : 'border-black text-stone-900 placeholder:text-stone-400 focus:border-black'}`}
+                placeholder="Search..."
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') updateParam('search', e.currentTarget.value)
+                }}
+            />
         </div>
-      </section>
+      </div>
 
-      {error && (
-        <div className="text-center py-20">
-          <p className="text-red-500 mb-4">{error}</p>
-          <button
-            onClick={() => fetchData(1)}
-            className="px-4 py-2 rounded-xl bg-primary-500 text-white hover:bg-primary-600"
-          >
-            Coba Lagi
-          </button>
-        </div>
-      )}
-
-      {!loading && products.length === 0 && !error && (
-        <div className="text-center py-20">
-          <div className="mb-4">
-            <Search size={48} className="mx-auto text-gray-400" />
-          </div>
-          <h3 className="text-xl font-semibold mb-2">
-            {searchParam ? 'Produk tidak ditemukan' : 'Belum ada produk'}
-          </h3>
-          <p className="text-gray-500 mb-6">
-            {searchParam
-              ? 'Coba ubah kata kunci pencarian'
-              : 'Produk akan ditambahkan segera'}
-          </p>
-          <Link href="/" className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary-500 text-white hover:bg-primary-600">
-            Kembali ke Beranda
-          </Link>
-        </div>
-      )}
-
-      {!loading && products.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product: Product) => (
+      {/* Grid */}
+      <motion.div
+        layout
+        className="px-6 md:px-12 py-12 grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-12"
+      >
+        <AnimatePresence>
+          {products.map((product) => (
             <ProductCard key={product.id} product={product} addItem={addItem} />
           ))}
-        </div>
-      )}
-
-      {loading && page === 1 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="animate-pulse rounded-2xl bg-gray-100 dark:bg-gray-800 h-72" />
-          ))}
-        </div>
-      )}
-
-      {hasNextPage && !loading && (
-        <div id="sentinel" className="h-10 flex justify-center mt-4">
-          <div className="w-8 h-8 rounded-full bg-primary-500 animate-pulse" />
-        </div>
-      )}
-
-      {!hasNextPage && products.length > 0 && (
-        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-          Sudah ditampilkan semua produk
-        </div>
-      )}
+        </AnimatePresence>
+      </motion.div>
     </div>
   )
 }
 
-function ProductCard({ product, addItem }: { product: Product; addItem: (item: any) => void }) {
-  const isAvailable = product.stock > 0
-
+function ProductCard({ product, addItem }: { product: Product; addItem: (item: CartItem) => void }) {
   return (
-    <Link
-      href={`/products/${product.id}`}
-      className="group rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden bg-white dark:bg-gray-900 hover:shadow-lg hover:shadow-primary-500/5 hover:-translate-y-1 transition-all duration-300"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="group"
     >
-      <div className="aspect-square relative bg-gray-50 dark:bg-gray-800 overflow-hidden">
-        {product.image ? (
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform"
-            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full text-gray-300">
-            <ShoppingCart size={32} />
-          </div>
-        )}
-        {!isAvailable && (
-          <span className="absolute top-2 right-2 text-xs bg-red-500/10 text-red-600 dark:text-red-400 px-2 py-1 rounded-full">
-            Habis
-          </span>
-        )}
+      <Link href={`/products/${product.id}`} className="block relative aspect-[4/5] overflow-hidden bg-stone-100 mb-4">
+        <Image
+          src={product.image || ''}
+          alt={product.name}
+          fill
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
+        <Heart className="absolute top-4 right-4 text-stone-900 hover:fill-stone-900 transition-colors" size={20} />
+      </Link>
+
+      <div className="mb-4">
+        <h3 className="font-serif text-lg ">{product.name}</h3>
+        <p className="text-xs tracking-wider">Rp {product.price.toLocaleString('id-ID')}</p>
       </div>
 
-      <div className="p-4">
-        <div className="text-xs font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-1">
-          {product.origin}
-        </div>
-        <h3 className="font-semibold text-sm text-gray-900 dark:text-white truncate mb-2">
-          {product.name}
-        </h3>
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-lg font-bold text-primary-600">
-            Rp {product.price.toLocaleString('id-ID')}
-          </span>
-          {isAvailable && (
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                addItem({
-                  productId: product.id,
-                  name: product.name,
-                  price: product.price,
-                  image: product.image || '',
-                  quantity: 1,
-                  stock: product.stock,
-                })
-              }}
-              className="p-2 rounded-lg bg-primary-500 text-white hover:bg-primary-600"
-              title="Tambah ke keranjang"
-            >
-              <ShoppingCart size={16} />
-            </button>
-          )}
-        </div>
-      </div>
-    </Link>
+      <button
+        onClick={() => addItem({ ...product, image: product.image || '', productId: product.id, quantity: 1 })}
+        className="w-full bg-emerald-950 text-white py-3 text-[10px] tracking-widest uppercase hover:bg-emerald-800 transition-colors"
+      >
+        ADD TO CART
+      </button>
+    </motion.div>
   )
 }

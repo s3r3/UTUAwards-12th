@@ -12,7 +12,10 @@ export default function MiniCart() {
   const { items, removeItem, updateQuantity, subtotal, totalItems } = useCartStore()
 
   useEffect(() => {
-    setMounted(true)
+    const timer = setTimeout(() => {
+      setMounted(true)
+    }, 0)
+    return () => clearTimeout(timer)
   }, [])
 
   if (!open) {

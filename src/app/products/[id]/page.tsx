@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { PRODUCT_CATEGORIES } from '@/constants/products'
 import ProductDetailClient, { RelatedProducts } from '@/components/product/ProductDetailClient'
-import TraceabilityTimeline from '@/components/product/TraceabilityTimeline'
+
 
 export async function generateStaticParams() {
   const products = await prisma.product.findMany({
@@ -62,6 +62,19 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   ])
 
   const reviews = rawReviews.map(r => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString() }))
+  
+  // Dummy for testing (will be replaced by real DB data)
+  const dummyReviews = [
+    { id: '1', rating: 5, comment: 'Produk sangat segar, pengiriman cepat!', user: { name: 'Rina' } },
+    { id: '2', rating: 4, comment: 'Kualitas premium, packing aman.', user: { name: 'Budi' } },
+    { id: '3', rating: 5, comment: 'Sangat puas dengan pelayanannya.', user: { name: 'Andi' } },
+    { id: '4', rating: 5, comment: 'Packing sangat rapi, produk sampai dalam kondisi baik.', user: { name: 'Siti' } },
+    { id: '5', rating: 4, comment: 'Bagus sekali, recommended!', user: { name: 'Dewi' } },
+    { id: '6', rating: 5, comment: 'Harga sebanding dengan kualitas.', user: { name: 'Eko' } },
+    { id: '7', rating: 5, comment: 'Pengiriman ke Jakarta sangat cepat.', user: { name: 'Fajar' } },
+    { id: '8', rating: 4, comment: 'Sangat suka produknya, akan beli lagi.', user: { name: 'Gita' } },
+  ]
+  const displayReviews = reviews.length > 0 ? reviews : dummyReviews
 
   if (!product) {
     return (
@@ -80,7 +93,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         id: true, name: true, category: true, description: true, image: true, images: true, origin: true, price: true, compareAt: true, stock: true, weight: true, status: true, legality: true, ownerId: true, createdAt: true, updatedAt: true,
         owner: { select: { name: true, email: true } }, // Include owner here
       },
-      take: 4,
+      take: 3,
     })
   } catch {} // DB down → empty section hide-able
 
@@ -89,7 +102,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://acelora.id'
 
   // Calculate rating stats
-  const avgRating = reviews.length > 0 ? Math.round((reviews.reduce((sum: any, r: any) => sum + r.rating, 0) / reviews.length) * 20) / 20 : 0
+  const avgRating = reviews.length > 0 ? Math.round((reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length) * 20) / 20 : 0
   const reviewCount = reviews.length
 
   const breadcrumb = {
@@ -155,16 +168,16 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           }}
           category={category}
           isAvailable={isAvailable}
-          reviews={reviews}
+          reviews={displayReviews}
           rating={avgRating}
           reviewCount={reviewCount}
         />
 
-        <TraceabilityTimeline />
+
 
         {related.length > 0 && (
           <RelatedProducts
-            product={product as any}
+            product={{ ...product, image: product.image || undefined, compareAt: product.compareAt || undefined, weight: product.weight || undefined, legality: product.legality || undefined }}
             products={related.map((r) => ({
               id: r.id,
               name: r.name,

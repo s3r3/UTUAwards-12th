@@ -14,19 +14,25 @@ function SuccessInner() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    let cancelled = false
     const orderId = searchParams.get('order_id')
-    if (orderId) { setOrderId(orderId); setLoading(false); return }
+    if (orderId) {
+      setTimeout(() => {
+        if (!cancelled) { setOrderId(orderId); setLoading(false) }
+      }, 0)
+      return
+    }
     const check = async () => {
       const res = await fetch('/api/orders')
       const d = await res.json()
       if (d.success && d.data.length > 0) {
-        setOrderId(d.data[0].id)
-        setLoading(false)
-      } else {
+        if (!cancelled) { setOrderId(d.data[0].id); setLoading(false) }
+      } else if (!cancelled) {
         setTimeout(check, 1000)
       }
     }
-    check()
+    setTimeout(check, 0)
+    return () => { cancelled = true }
   }, [searchParams])
 
   if (loading) {

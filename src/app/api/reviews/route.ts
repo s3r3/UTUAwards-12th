@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 
 // GET /api/reviews - Get all reviews with pagination
 export async function GET(request: NextRequest) {
@@ -10,7 +11,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('_limit') || '10', 10)
     const skip = (page - 1) * limit
 
-    const where: any = {}
+    const where: Prisma.ReviewWhereInput = {}
     if (productId) where.productId = productId
 
     const [reviews, total] = await Promise.all([
