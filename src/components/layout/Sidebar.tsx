@@ -30,7 +30,7 @@ export default function Sidebar({ role }: { role?: string }) {
           return (
             <Link key={item.href} href={item.href} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'}`}>
               <item.icon size={18} />
-              {(t.dashboard as any)[item.label]}
+              {(t.dashboard as Record<string, string>)[item.label]}
             </Link>
           )
         })}
@@ -46,7 +46,7 @@ export default function Sidebar({ role }: { role?: string }) {
               return (
                 <Link key={item.href} href={item.href} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'}`}>
                   <item.icon size={18} />
-                  {(t.dashboard as any)[item.label]}
+                  {(t.dashboard as Record<string, string>)[item.label]}
                 </Link>
               )
             })}

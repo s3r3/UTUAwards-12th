@@ -17,8 +17,8 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit
 
     const where: Prisma.ProductWhereInput = {}
-    if (category && category !== 'all') where.category = category as any
-    if (status) where.status = status as any
+    if (category && category !== 'all') where.category = category as Prisma.ProductWhereInput["category"]
+    if (status) where.status = status as Prisma.ProductWhereInput["status"]
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },

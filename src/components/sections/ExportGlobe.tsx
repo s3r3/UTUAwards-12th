@@ -58,7 +58,7 @@ export default function ExportGlobe() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
+    setTimeout(() => setMounted(true))
   }, [])
 
   if (!mounted) {
@@ -97,27 +97,27 @@ export default function ExportGlobe() {
         arcDashGap={4}
         arcDashInitialGap={() => Math.random() * 5}
         arcDashAnimateTime={1000}
-        arcLabel={(d: any) => `${d.flag} ${d.city}, ${d.country}`}
+        arcLabel={(d: { flag: string; city: string; country: string }) => `${d.flag} ${d.city}, ${d.country}`}
         ringsData={MARKER_DATA}
         ringLat="lat"
         ringLng="lng"
-        ringMaxRadius={(d: any) => d.size * 2}
-        ringColor={(d: any) => d.color}
+        ringMaxRadius={(d: { size: number }) => d.size * 2}
+        ringColor={(d: { color: string }) => d.color}
         ringPropagationSpeed={0.5}
         ringRepeatPeriod={1000}
         labelsData={MARKER_DATA}
         labelLat="lat"
         labelLng="lng"
-        labelText={(d: any) => d.label}
+        labelText={(d: { label: string }) => d.label}
         labelSize={0.6}
-        labelColor={(d: any) => d.color}
+        labelColor={(d: { color: string }) => d.color}
         labelAltitude={0.01}
       />
 
       {/* Destination cards overlay */}
       <div className="absolute bottom-4 left-4 right-4 overflow-x-auto">
         <div className="flex gap-3 pb-2">
-          {EXPORT_DESTINATIONS.slice(0, 6).map((dest: any) => {
+          {EXPORT_DESTINATIONS.slice(0, 6).map((dest: { country: string }) => {
             const sampleProduct = SAMPLE_PRODUCTS.find(p => p.exportDestinations?.includes(dest.country))
             return (
               <div

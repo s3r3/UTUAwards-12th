@@ -8,7 +8,7 @@ import { ShoppingCart, Search, Heart, ArrowRight, ChevronDown } from 'lucide-rea
 import { useCartStore } from '@/store/cart.store'
 import { useUIStore } from '@/store/ui.store'
 import { useTranslations } from '@/lib/i18n'
-import type { Product } from '@/types'
+import type { Product, CartItem } from '@/types'
 import { PRODUCT_CATEGORIES } from '@/constants/products'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -74,8 +74,14 @@ export default function ProductsClient() {
   }, [searchParams])
 
   useEffect(() => {
-    setPage(1)
-    fetchData(1)
+    let cancelled = false
+    setTimeout(() => {
+      if (!cancelled) {
+        setPage(1)
+        fetchData(1)
+      }
+    })
+    return () => { cancelled = true }
   }, [fetchData])
 
   const updateParam = useCallback((key: string, value: string) => {
@@ -133,7 +139,7 @@ export default function ProductsClient() {
   )
 }
 
-function ProductCard({ product, addItem }: { product: Product; addItem: (item: any) => void }) {
+function ProductCard({ product, addItem }: { product: Product; addItem: (item: CartItem) => void }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

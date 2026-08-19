@@ -30,7 +30,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { theme, setTheme } = useUIStore()
   const isDark = theme === 'dark'
 
-  useEffect(() => { setSidebarOpen(false) }, [pathname])
+  useEffect(() => {
+    let cancelled = false
+    setTimeout(() => {
+      if (!cancelled) setSidebarOpen(false)
+    })
+    return () => { cancelled = true }
+  }, [pathname])
 
   const NavLink = ({ item }: { item: typeof allMenuItems[0] }) => {
     const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
@@ -45,7 +51,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         }`}
       >
         <item.icon size={18} />
-        {(t.dashboard as any)[item.label]}
+        {(t.dashboard as Record<string, unknown>)[item.label]}
       </Link>
     )
   }
@@ -85,7 +91,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <>
             <div className="px-3 pt-4 mt-2 border-t border-gray-200 dark:border-gray-800">
               <p className="px-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">
-                {(t.dashboard as any).adminPanel}
+                {(t.dashboard as Record<string, unknown>).adminPanel}
               </p>
             </div>
             <nav className="px-3 space-y-1">

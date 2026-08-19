@@ -102,7 +102,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://acelora.id'
 
   // Calculate rating stats
-  const avgRating = reviews.length > 0 ? Math.round((reviews.reduce((sum: any, r: any) => sum + r.rating, 0) / reviews.length) * 20) / 20 : 0
+  const avgRating = reviews.length > 0 ? Math.round((reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length) * 20) / 20 : 0
   const reviewCount = reviews.length
 
   const breadcrumb = {
@@ -177,7 +177,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
         {related.length > 0 && (
           <RelatedProducts
-            product={product as any}
+            product={product}
             products={related.map((r) => ({
               id: r.id,
               name: r.name,

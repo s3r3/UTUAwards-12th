@@ -7,7 +7,7 @@ export async function getProducts(params?: {
   search?: string
   ownerId?: string
 }) {
-  const where: any = {}
+  const where: Record<string, unknown> = {}
   if (params?.category) where.category = params.category
   if (params?.status) where.status = params.status
   if (params?.ownerId) where.ownerId = params.ownerId

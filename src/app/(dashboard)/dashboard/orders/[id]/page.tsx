@@ -16,6 +16,8 @@ const statusColors: Record<string, { bg: string; text: string; border: string }>
   PENDING: { bg: 'bg-amber-50 dark:bg-amber-900/20', text: 'text-amber-700 dark:text-amber-400', border: 'border-amber-200 dark:border-amber-800' },
 }
 
+const RENDER_TIME = Date.now()
+
 const trackingSteps = [
   { key: 'ordered', label: 'Order Placed', description: 'Pesanan berhasil ditempatkan' },
   { key: 'processing', label: 'Processing', description: 'Persiapan pengiriman' },
@@ -35,12 +37,11 @@ export default function DashboardOrderDetailPage() {
   useEffect(() => {
     const id = Array.isArray(params?.id) ? params.id[0] : params?.id
     if (!id) return
-    fetch(`/api/orders/${id}`)
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) setOrder(d.data)
-      })
-      .finally(() => setLoading(false))
+    ;(async () => {
+      const r = await fetch(`/api/orders/${id}`)
+      const d = await r.json()
+      if (d.success) setOrder(d.data)
+    })()
   }, [params?.id])
 
   if (loading) return <div>{t.common.loading}</div>
@@ -158,7 +159,7 @@ export default function DashboardOrderDetailPage() {
                     <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded">
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                         <Clock size={16} className="inline mr-1" />
-                        Estimasi Sampai: {new Date(Date.now() + (5 - progress) * 24 * 60 * 60 * 1000).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        Estimasi Sampai: {new Date(RENDER_TIME + (5 - progress) * 24 * 60 * 60 * 1000).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </p>
                       <div className="aspect-square bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-3">
                         <div className="text-center">

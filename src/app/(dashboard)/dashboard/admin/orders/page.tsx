@@ -9,7 +9,7 @@ interface AdminOrder {
   total: number
   createdAt: string
   user: { name: string; email: string }
-  items: any[]
+  items: { name: string; quantity: number; price: number; product?: { image?: string | null; name: string } }[]
 }
 
 export default function AdminOrdersPage() {

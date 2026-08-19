@@ -99,7 +99,7 @@ export default function Footer() {
               </p>
             </div>
             <div className="pt-8">
-              <p className="uppercase text-xs tracking-widest">LET'S TALK FRESH:</p>
+              <p className="uppercase text-xs tracking-widest">LET{`'`}S TALK FRESH:</p>
               <p className="text-sm">hello@acelora.com</p>
             </div>
           </div>

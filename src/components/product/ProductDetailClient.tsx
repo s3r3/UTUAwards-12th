@@ -12,7 +12,7 @@ interface ProductDetailClientProps {
   product: Product & { owner?: { name: string; email: string } | null }
   category?: { label: string }
   isAvailable: boolean
-  reviews?: any[]
+  reviews?: { id: string; rating: number; comment: string; user: { name: string | null } | null }[]
   rating?: number
   reviewCount?: number
 }
@@ -129,9 +129,13 @@ export default function ProductDetailClient({ product, category, isAvailable, re
   }
 
   useEffect(() => {
-    const saved = localStorage.getItem('acelora-wishlist') || '[]'
-    const wishlist = JSON.parse(saved)
-    setIsWishlisted(wishlist.includes(product.id))
+    let cancelled = false
+    setTimeout(() => {
+      const saved = localStorage.getItem('acelora-wishlist') || '[]'
+      const wishlist = JSON.parse(saved)
+      if (!cancelled) setIsWishlisted(wishlist.includes(product.id))
+    })
+    return () => { cancelled = true }
   }, [product.id])
 
   return (

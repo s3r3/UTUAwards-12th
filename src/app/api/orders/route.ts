@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 
 export async function GET(request: NextRequest) {
   const session = await auth()
   if (!session?.user?.id) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
   const searchParams = request.nextUrl.searchParams
   const status = searchParams.get('status')
-  const where: any = { userId: session.user.id }
+  const where: Prisma.OrderWhereInput = { userId: session.user.id }
   if (status) where.status = status
   const orders = await prisma.order.findMany({
     where,
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'Missing items or address' }, { status: 400 })
   }
 
-  const productIds = items.map((i: any) => i.productId)
+  const productIds = items.map((i: { productId: string }) => i.productId)
   const products = await prisma.product.findMany({ where: { id: { in: productIds } } })
   const productMap = new Map(products.map(p => [p.id, p]))
 
@@ -41,14 +42,14 @@ export async function POST(request: NextRequest) {
   const address = await prisma.address.findFirst({ where: { id: addressId, userId: session.user.id } })
   if (!address) return NextResponse.json({ success: false, error: 'Address not found' }, { status: 404 })
 
-  const total = items.reduce((sum: number, i: any) => sum + productMap.get(i.productId)!.price * i.quantity, 0)
+  const total = items.reduce((sum: number, i: { productId: string; quantity: number }) => sum + productMap.get(i.productId)!.price * i.quantity, 0)
 
   const order = await prisma.order.create({
     data: {
       userId: session.user.id,
       total,
       addressId,
-      items: { create: items.map((i: any) => ({ productId: i.productId, quantity: i.quantity, price: productMap.get(i.productId)!.price })) },
+      items: { create: items.map((i: { productId: string; quantity: number }) => ({ productId: i.productId, quantity: i.quantity, price: productMap.get(i.productId)!.price })) },
     },
     include: { items: { include: { product: true } } },
   })
