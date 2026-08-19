@@ -22,17 +22,18 @@ import { useTranslations } from "@/lib/i18n";
 import { useSession, signOut } from "next-auth/react";
 import type { ReactNode } from "react";
 import type { Translations } from "@/lib/i18n/en";
+import type { LucideIcon } from "lucide-react";
 
 type DashboardTranslationKey = keyof Translations['dashboard'];
 
-const allMenuItems: { href: string; label: DashboardTranslationKey; icon: any }[] = [
+const allMenuItems: { href: string; label: DashboardTranslationKey; icon: LucideIcon }[] = [
   { href: "/dashboard", label: "overviewTitle", icon: LayoutDashboard },
   { href: "/dashboard/orders", label: "myOrders", icon: ShoppingBag },
   { href: "/dashboard/profile", label: "profile", icon: User },
   { href: "/dashboard/settings", label: "settings", icon: Settings },
 ];
 
-const adminMenuItems: { href: string; label: DashboardTranslationKey; icon: any }[] = [
+const adminMenuItems: { href: string; label: DashboardTranslationKey; icon: LucideIcon }[] = [
   { href: "/dashboard/admin", label: "adminOrders", icon: ShoppingBag },
   { href: "/dashboard/admin/products", label: "adminProducts", icon: Package },
   { href: "/dashboard/admin/users", label: "adminUsers", icon: Users },

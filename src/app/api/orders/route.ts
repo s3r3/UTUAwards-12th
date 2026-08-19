@@ -6,10 +6,12 @@ import type { Prisma } from '@prisma/client'
 export async function GET(request: NextRequest) {
   const session = await auth()
   if (!session?.user?.id) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
-  const searchParams = request.nextUrl.searchParams
+  import type { OrderStatus } from '@prisma/client'
+
+const searchParams = request.nextUrl.searchParams
   const status = searchParams.get('status')
   const where: Prisma.OrderWhereInput = { userId: session.user.id }
-  if (status) where.status = status as any
+  if (status) where.status = status as OrderStatus
   const orders = await prisma.order.findMany({
     where,
     include: { items: { include: { product: true } }, address: true },
