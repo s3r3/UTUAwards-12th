@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const status = searchParams.get('status')
   const where: Prisma.OrderWhereInput = { userId: session.user.id }
-  if (status) where.status = status
+  if (status) where.status = status as any
   const orders = await prisma.order.findMany({
     where,
     include: { items: { include: { product: true } }, address: true },
