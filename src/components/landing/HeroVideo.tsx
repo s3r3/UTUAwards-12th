@@ -56,7 +56,7 @@ export default function HeroVideo() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.35 }}
-            className="font-serif-display text-5xl md:text-7xl font-semibold text-white leading-tight drop-shadow-lg"
+            className="font-serif text-5xl md:text-7xl font-semibold text-white leading-tight drop-shadow-lg"
           >
             Freshness,
             <span className="block bg-gradient-to-r from-emerald-300 to-sky-300 bg-clip-text text-transparent">Harvested to Perfection</span>
