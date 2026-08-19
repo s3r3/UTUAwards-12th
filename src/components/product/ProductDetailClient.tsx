@@ -160,7 +160,10 @@ export default function ProductDetailClient({ product, category, isAvailable, re
     try {
       const saved = localStorage.getItem('acelora-wishlist') || '[]'
       const wishlist: string[] = JSON.parse(saved)
-      if (!cancelled) setIsWishlisted(wishlist.includes(product.id))
+      const value = wishlist.includes(product.id)
+      requestAnimationFrame(() => {
+        if (!cancelled) setIsWishlisted(value)
+      })
     } catch {
       // corrupted localStorage — ignore
     }
