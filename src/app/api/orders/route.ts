@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import type { Prisma } from '@prisma/client'
+import type { Prisma, OrderStatus } from '@prisma/client'
 
 export async function GET(request: NextRequest) {
   const session = await auth()
   if (!session?.user?.id) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
-  import type { OrderStatus } from '@prisma/client'
 
 const searchParams = request.nextUrl.searchParams
   const status = searchParams.get('status')

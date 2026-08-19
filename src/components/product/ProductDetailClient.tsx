@@ -12,7 +12,7 @@ interface ProductDetailClientProps {
   product: Product & { owner?: { name: string; email: string } | null }
   category?: { label: string }
   isAvailable: boolean
-  reviews?: { id: string; rating: number; comment: string; user: { name: string | null } | null }[]
+  reviews?: { id: string; rating: number; comment: string | null; user: { name: string | null } | null }[]
   rating?: number
   reviewCount?: number
 }

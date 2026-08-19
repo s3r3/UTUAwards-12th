@@ -177,7 +177,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
         {related.length > 0 && (
           <RelatedProducts
-            product={product}
+            product={{ ...product, image: product.image || undefined, compareAt: product.compareAt || undefined, weight: product.weight || undefined, legality: product.legality || undefined }}
             products={related.map((r) => ({
               id: r.id,
               name: r.name,

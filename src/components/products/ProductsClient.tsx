@@ -164,7 +164,7 @@ function ProductCard({ product, addItem }: { product: Product; addItem: (item: C
       </div>
 
       <button
-        onClick={() => addItem({ ...product, productId: product.id, quantity: 1 })}
+        onClick={() => addItem({ ...product, image: product.image || '', productId: product.id, quantity: 1 })}
         className="w-full bg-emerald-950 text-white py-3 text-[10px] tracking-widest uppercase hover:bg-emerald-800 transition-colors"
       >
         ADD TO CART
