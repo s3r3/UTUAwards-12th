@@ -68,10 +68,10 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, category, description, image, origin, legality, ownerId } = body
+    const { name, category, description, image, origin, legality, ownerId, packageDesign } = body
 
     const product = await prisma.product.create({
-      data: { name, category, description, image, origin, legality, ownerId, status: 'PENDING' },
+      data: { name, category, description, image, origin, legality, ownerId, packageDesign, status: 'PENDING' },
     })
 
     return NextResponse.json({

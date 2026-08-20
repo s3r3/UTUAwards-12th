@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect } from 'react'
-import Image from 'next/image'
 import { X } from 'lucide-react'
 
 export default function PackageDesignLightbox({
@@ -59,13 +58,10 @@ export default function PackageDesignLightbox({
       </button>
 
       <div className="relative h-[80vh] w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>
-        <Image
+        <img
           src={images[index]}
           alt={`${folder} package design ${index + 1}`}
-          fill
-          unoptimized
-          className="object-contain"
-          sizes="(max-width: 768px) 100vw, 768px"
+          className="h-full w-full object-contain"
         />
       </div>
 

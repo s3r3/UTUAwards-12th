@@ -22,10 +22,88 @@ const PACKAGE_DESIGN_IMAGES: Record<string, string[]> = {
 
 const getPackageDesignImages = (folderPath: string): string[] => {
   if (!folderPath) return []
-  const segments = folderPath.split('/')
-  const folderName = segments[segments.length - 2] || ''
+  const segments = folderPath.split('/').filter(Boolean)
+  if (segments.length === 0) return []
+  const lastSegment = segments[segments.length - 1]
+  const folderName = lastSegment.includes('.') ? segments[segments.length - 2] || '' : lastSegment
   return PACKAGE_DESIGN_IMAGES[folderName] || []
 }
+
+const DUMMY_REVIEWS: Record<string, { id: string; userId: string; productId: string; rating: number; comment: string; createdAt: Date; user: { name: string } }[]> = {
+  'seed-kopi-arabika-gayo-specialty': [
+    { id: 'review-kopi-1', userId: 'user-1', productId: 'seed-kopi-arabika-gayo-specialty', rating: 5, comment: 'Kopi ini aromanya luar biasa! Rasa cokelat dan karamelnya sangat balanced.', createdAt: new Date('2026-05-15T10:00:00Z'), user: { name: 'Ahmad' } },
+    { id: 'review-kopi-2', userId: 'user-2', productId: 'seed-kopi-arabika-gayo-specialty', rating: 4, comment: 'Pengiriman cepat, kemasan rapi. Kopi masih fresh sampai tangan.', createdAt: new Date('2026-06-02T14:30:00Z'), user: { name: 'Citra' } },
+    { id: 'review-kopi-3', userId: 'user-3', productId: 'seed-kopi-arabika-gayo-specialty', rating: 5, comment: 'Sebagai pencinta kopi Aceh, ini salah satu yang terbaik yang sudah saya coba.', createdAt: new Date('2026-06-20T09:15:00Z'), user: { name: 'Budi' } },
+    { id: 'review-kopi-4', userId: 'user-1', productId: 'seed-kopi-arabika-gayo-specialty', rating: 5, comment: 'Rasa floral nya memang khas Gayo. Recommended!', createdAt: new Date('2026-07-05T16:45:00Z'), user: { name: 'Ahmad' } },
+    { id: 'review-kopi-5', userId: 'user-4', productId: 'seed-kopi-arabika-gayo-specialty', rating: 4, comment: 'Kualitas sesuai harga. Tidak mengecewakan.', createdAt: new Date('2026-07-18T11:20:00Z'), user: { name: 'Dewi' } },
+    { id: 'review-kopi-6', userId: 'user-2', productId: 'seed-kopi-arabika-gayo-specialty', rating: 5, comment: 'Sudah 3x order, tetap konsisten kualitasnya.', createdAt: new Date('2026-08-01T08:00:00Z'), user: { name: 'Citra' } },
+    { id: 'review-kopi-7', userId: 'user-5', productId: 'seed-kopi-arabika-gayo-specialty', rating: 4, comment: 'Tempat penyimpananRecommended untuk para pecinta kopi specialty.', createdAt: new Date('2026-08-15T13:10:00Z'), user: { name: 'Eka' } },
+  ],
+  'seed-minyak-nilam-aceh-grade-a': [
+    { id: 'review-nilam-1', userId: 'user-1', productId: 'seed-minyak-nilam-aceh-grade-a', rating: 5, comment: 'Aromanya sangat wangi dan tahan lama. Pakai sehari-hari.', createdAt: new Date('2026-05-10T09:00:00Z'), user: { name: 'Ahmad' } },
+    { id: 'review-nilam-2', userId: 'user-3', productId: 'seed-minyak-nilam-aceh-grade-a', rating: 5, comment: 'Kemasan aman, tidak bocor. Kualitas minyak nilam terbaik.', createdAt: new Date('2026-05-28T15:20:00Z'), user: { name: 'Budi' } },
+    { id: 'review-nilam-3', userId: 'user-2', productId: 'seed-minyak-nilam-aceh-grade-a', rating: 4, comment: 'Sudah coba berbagai merek, ini yang paling authentic.', createdAt: new Date('2026-06-12T10:45:00Z'), user: { name: 'Citra' } },
+    { id: 'review-nilam-4', userId: 'user-4', productId: 'seed-minyak-nilam-aceh-grade-a', rating: 5, comment: 'Untuk aromaterapi sangat efektif. Relaksasi banget.', createdAt: new Date('2026-06-25T18:30:00Z'), user: { name: 'Dewi' } },
+    { id: 'review-nilam-5', userId: 'user-1', productId: 'seed-minyak-nilam-aceh-grade-a', rating: 4, comment: 'Harga bersahabat untuk kualitas Grade A.', createdAt: new Date('2026-07-08T07:15:00Z'), user: { name: 'Ahmad' } },
+    { id: 'review-nilam-6', userId: 'user-5', productId: 'seed-minyak-nilam-aceh-grade-a', rating: 5, comment: 'Pengiriman aman, packaging bubble wrap. Barang sampai dengan baik.', createdAt: new Date('2026-07-22T12:00:00Z'), user: { name: 'Eka' } },
+    { id: 'review-nilam-7', userId: 'user-3', productId: 'seed-minyak-nilam-aceh-grade-a', rating: 4, comment: 'Kadar PA nya sesuai spesifikasi. Puas.', createdAt: new Date('2026-08-05T16:50:00Z'), user: { name: 'Budi' } },
+  ],
+  'seed-udang-vannamei-segar-aceh': [
+    { id: 'review-udang-1', userId: 'user-2', productId: 'seed-udang-vannamei-segar-aceh', rating: 5, comment: 'Udangnya besar-besar dan segar. Dimasak udang goreng crispy mantap.', createdAt: new Date('2026-05-12T11:00:00Z'), user: { name: 'Citra' } },
+    { id: 'review-udang-2', userId: 'user-4', productId: 'seed-udang-vannamei-segar-aceh', rating: 5, comment: 'Tanpa antibiotik jadi aman untuk keluarga. Recommended.', createdAt: new Date('2026-05-30T09:30:00Z'), user: { name: 'Dewi' } },
+    { id: 'review-udang-3', userId: 'user-1', productId: 'seed-udang-vannamei-segar-aceh', rating: 4, comment: 'Size 80/100 sesuai deskripsi. Barang packed dengan es, tetap segar.', createdAt: new Date('2026-06-14T14:15:00Z'), user: { name: 'Ahmad' } },
+    { id: 'review-udang-4', userId: 'user-3', productId: 'seed-udang-vannamei-segar-aceh', rating: 5, comment: 'Langsung dari tambak Aceh Timur. Rasanya manis dan crunchy.', createdAt: new Date('2026-06-28T10:00:00Z'), user: { name: 'Budi' } },
+    { id: 'review-udang-5', userId: 'user-5', productId: 'seed-udang-vannamei-segar-aceh', rating: 4, comment: 'Sudah langganan di sini. Harga lebih murah dari supermarket.', createdAt: new Date('2026-07-10T16:45:00Z'), user: { name: 'Eka' } },
+    { id: 'review-udang-6', userId: 'user-2', productId: 'seed-udang-vannamei-segar-aceh', rating: 5, comment: 'Packaging rapi, ada es bricks. Udang masih beku saat sampai.', createdAt: new Date('2026-07-24T08:20:00Z'), user: { name: 'Citra' } },
+    { id: 'review-udang-7', userId: 'user-1', productId: 'seed-udang-vannamei-segar-aceh', rating: 4, comment: 'Kualitas udang terbaik yang pernah saya beli online.', createdAt: new Date('2026-08-08T13:00:00Z'), user: { name: 'Ahmad' } },
+  ],
+  'seed-lada-hitam-aceh-premium': [
+    { id: 'review-lada-1', userId: 'user-3', productId: 'seed-lada-hitam-aceh-premium', rating: 5, comment: 'Aromanya tajam sesuai ekspektasi lada hitam premium.', createdAt: new Date('2026-05-18T10:30:00Z'), user: { name: 'Budi' } },
+    { id: 'review-lada-2', userId: 'user-1', productId: 'seed-lada-hitam-aceh-premium', rating: 4, comment: 'Digiling butir butir, aroma lebih kuat daripada yang sudah bubuk.', createdAt: new Date('2026-06-05T15:00:00Z'), user: { name: 'Ahmad' } },
+    { id: 'review-lada-3', userId: 'user-5', productId: 'seed-lada-hitam-aceh-premium', rating: 5, comment: 'Kualitas oleoresin nya tinggi. Untuk masakan sehari-hari sangat pas.', createdAt: new Date('2026-06-19T09:45:00Z'), user: { name: 'Eka' } },
+    { id: 'review-lada-4', userId: 'user-2', productId: 'seed-lada-hitam-aceh-premium', rating: 5, comment: 'Lada Aceh memang juara. Ini tidak mengecewakan.', createdAt: new Date('2026-07-02T14:20:00Z'), user: { name: 'Citra' } },
+    { id: 'review-lada-5', userId: 'user-4', productId: 'seed-lada-hitam-aceh-premium', rating: 4, comment: 'Harga worth it untuk grade premium. Bumbu dapur wajib punya.', createdAt: new Date('2026-07-15T11:10:00Z'), user: { name: 'Dewi' } },
+    { id: 'review-lada-6', userId: 'user-3', productId: 'seed-lada-hitam-aceh-premium', rating: 5, comment: 'Packaging kedap udara. Tetap awet dan aromanya kuat.', createdAt: new Date('2026-07-29T16:30:00Z'), user: { name: 'Budi' } },
+    { id: 'review-lada-7', userId: 'user-1', productId: 'seed-lada-hitam-aceh-premium', rating: 4, comment: 'Sudah coba beberapa brand, ini yang paling superior.', createdAt: new Date('2026-08-12T08:50:00Z'), user: { name: 'Ahmad' } },
+  ],
+  'seed-cokelat-kakao-aceh-premium': [
+    { id: 'review-cokelat-1', userId: 'user-4', productId: 'seed-cokelat-kakao-aceh-premium', rating: 5, comment: 'Cokelatnya creamy dan tidak terlalu manis. Bahan kakao asli Aceh.', createdAt: new Date('2026-05-20T10:00:00Z'), user: { name: 'Dewi' } },
+    { id: 'review-cokelat-2', userId: 'user-1', productId: 'seed-cokelat-kakao-aceh-premium', rating: 5, comment: 'Untuk baking atau cokelat panas, rasa nya丰富 banget.', createdAt: new Date('2026-06-07T14:30:00Z'), user: { name: 'Ahmad' } },
+    { id: 'review-cokelat-3', userId: 'user-3', productId: 'seed-cokelat-kakao-aceh-premium', rating: 4, comment: 'Kemasan cantik, cocok untuk oleh-oleh.', createdAt: new Date('2026-06-22T09:15:00Z'), user: { name: 'Budi' } },
+    { id: 'review-cokelat-4', userId: 'user-2', productId: 'seed-cokelat-kakao-aceh-premium', rating: 5, comment: 'Kakao Aceh memang beda dari yang lain. Recommended.', createdAt: new Date('2026-07-05T16:45:00Z'), user: { name: 'Citra' } },
+    { id: 'review-cokelat-5', userId: 'user-5', productId: 'seed-cokelat-kakao-aceh-premium', rating: 4, comment: 'Harga reasonable untuk cokelat premium. Will buy again.', createdAt: new Date('2026-07-18T11:20:00Z'), user: { name: 'Eka' } },
+    { id: 'review-cokelat-6', userId: 'user-4', productId: 'seed-cokelat-kakao-aceh-premium', rating: 5, comment: 'Packaging aman, tidak leleh di jalan. Cokelat arrived dalam kondisi sempurna.', createdAt: new Date('2026-08-01T08:00:00Z'), user: { name: 'Dewi' } },
+    { id: 'review-cokelat-7', userId: 'user-1', productId: 'seed-cokelat-kakao-aceh-premium', rating: 4, comment: 'Untuk pecinta cokelat sejati, ini harus dicoba.', createdAt: new Date('2026-08-15T13:10:00Z'), user: { name: 'Ahmad' } },
+  ],
+  'seed-dodol-aceh-premium': [
+    { id: 'review-dodol-1', userId: 'user-5', productId: 'seed-dodol-aceh-premium', rating: 5, comment: 'Dodol traditional yang authentic. Rasa gula aren dan santan balanced.', createdAt: new Date('2026-05-22T10:00:00Z'), user: { name: 'Eka' } },
+    { id: 'review-dodol-2', userId: 'user-1', productId: 'seed-dodol-aceh-premium', rating: 4, comment: 'Tekstur chewy, tidak terlalu keras. Varian original yang best.', createdAt: new Date('2026-06-08T14:30:00Z'), user: { name: 'Ahmad' } },
+    { id: 'review-dodol-3', userId: 'user-3', productId: 'seed-dodol-aceh-premium', rating: 5, comment: 'Cocok untuk camilan sore atau bersama keluarga.', createdAt: new Date('2026-06-24T09:15:00Z'), user: { name: 'Budi' } },
+    { id: 'review-dodol-4', userId: 'user-2', productId: 'seed-dodol-aceh-premium', rating: 5, comment: 'Dodol Aceh terenak yang pernah saya makan. Recommended.', createdAt: new Date('2026-07-07T16:45:00Z'), user: { name: 'Citra' } },
+    { id: 'review-dodol-5', userId: 'user-4', productId: 'seed-dodol-aceh-premium', rating: 4, comment: 'Packaging rapi, higienis. Bisa bertahan lama.', createdAt: new Date('2026-07-20T11:20:00Z'), user: { name: 'Dewi' } },
+    { id: 'review-dodol-6', userId: 'user-5', productId: 'seed-dodol-aceh-premium', rating: 5, comment: 'Sudah jadi langganan untuk lebaran. Selalu pesan di sini.', createdAt: new Date('2026-08-02T08:00:00Z'), user: { name: 'Eka' } },
+    { id: 'review-dodol-7', userId: 'user-1', productId: 'seed-dodol-aceh-premium', rating: 4, comment: 'Kualitas prima, rasa traditional terjaga. Puas banget.', createdAt: new Date('2026-08-16T13:10:00Z'), user: { name: 'Ahmad' } },
+  ],
+  'seed-kayu-manis-aceh': [
+    { id: 'review-kayu-1', userId: 'user-3', productId: 'seed-kayu-manis-aceh', rating: 5, comment: 'Aromanya manis dan hangat. Untuk masakan atau minuman, sangat pas.', createdAt: new Date('2026-05-25T10:00:00Z'), user: { name: 'Budi' } },
+    { id: 'review-kayu-2', userId: 'user-2', productId: 'seed-kayu-manis-aceh', rating: 4, comment: 'Grade ekspor sesuai. Bark nya tebal dan aromatic.', createdAt: new Date('2026-06-10T14:30:00Z'), user: { name: 'Citra' } },
+    { id: 'review-kayu-3', userId: 'user-5', productId: 'seed-kayu-manis-aceh', rating: 5, comment: 'Digunakan untuk steamer atau chai, hasilnya luar biasa.', createdAt: new Date('2026-06-26T09:15:00Z'), user: { name: 'Eka' } },
+    { id: 'review-kayu-4', userId: 'user-1', productId: 'seed-kayu-manis-aceh', rating: 5, comment: 'Kayu manis asli Aceh memang lebih wangi dari yang lain.', createdAt: new Date('2026-07-09T16:45:00Z'), user: { name: 'Ahmad' } },
+    { id: 'review-kayu-5', userId: 'user-4', productId: 'seed-kayu-manis-aceh', rating: 4, comment: 'Harga bersahabat untuk kualitas grade export.', createdAt: new Date('2026-07-22T11:20:00Z'), user: { name: 'Dewi' } },
+    { id: 'review-kayu-6', userId: 'user-3', productId: 'seed-kayu-manis-aceh', rating: 5, comment: 'Packaging kedap udara. Tetap awet aromanya.', createdAt: new Date('2026-08-04T08:00:00Z'), user: { name: 'Budi' } },
+    { id: 'review-kayu-7', userId: 'user-2', productId: 'seed-kayu-manis-aceh', rating: 4, comment: 'Bumbu dapur essential. Tidak boleh kosong di rak.', createdAt: new Date('2026-08-18T13:10:00Z'), user: { name: 'Citra' } },
+  ],
+  'seed-kepiting-ranjungan-segar': [
+    { id: 'review-kepiting-1', userId: 'user-1', productId: 'seed-kepiting-ranjungan-segar', rating: 5, comment: 'Kepiting nya besar dan segar. Dimasak kepiting saus tiram mantap.', createdAt: new Date('2026-05-28T10:00:00Z'), user: { name: 'Ahmad' } },
+    { id: 'review-kepiting-2', userId: 'user-4', productId: 'seed-kepiting-ranjungan-segar', rating: 4, comment: 'Ukuran jumbo sesuai deskripsi. Untuk 2 orang cukup.', createdAt: new Date('2026-06-14T14:30:00Z'), user: { name: 'Dewi' } },
+    { id: 'review-kepiting-3', userId: 'user-2', productId: 'seed-kepiting-ranjungan-segar', rating: 5, comment: 'Packaging dengan es, tetap segar sampai rumah.', createdAt: new Date('2026-06-30T09:15:00Z'), user: { name: 'Citra' } },
+    { id: 'review-kepiting-4', userId: 'user-5', productId: 'seed-kepiting-ranjungan-segar', rating: 5, comment: 'Kepiting dari perairan Aceh memang lebih manis dagingnya.', createdAt: new Date('2026-07-13T16:45:00Z'), user: { name: 'Eka' } },
+    { id: 'review-kepiting-5', userId: 'user-3', productId: 'seed-kepiting-ranjungan-segar', rating: 4, comment: 'Harga worth it untuk ukuran jumbo. Supermarket lebih mahal.', createdAt: new Date('2026-07-26T11:20:00Z'), user: { name: 'Budi' } },
+    { id: 'review-kepiting-6', userId: 'user-1', productId: 'seed-kepiting-ranjungan-segar', rating: 5, comment: 'Pengiriman cepat, barang aman. Akan repeat order.', createdAt: new Date('2026-08-07T08:00:00Z'), user: { name: 'Ahmad' } },
+    { id: 'review-kepiting-7', userId: 'user-4', productId: 'seed-kepiting-ranjungan-segar', rating: 4, comment: 'Dagingnya tebal dan manis. Recommended untuk seafood lovers.', createdAt: new Date('2026-08-19T10:30:00Z'), user: { name: 'Dewi' } },
+  ],
+}
+
 
 interface ProductDetailClientProps {
   product: Product & { owner?: { name: string; email?: string } | null }
@@ -336,13 +414,10 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                                   }}
                                   className="relative aspect-square group overflow-hidden border border-black/10 hover:border-black transition-colors"
                                 >
-                                  <Image
+                                  <img
                                     src={img}
                                     alt={`Package design ${i + 1}`}
-                                    fill
-                                    unoptimized
-                                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                    sizes="(max-width: 768px) 50vw, 33vw"
+                                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                                   />
                                   <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                     <Eye size={20} className="text-white" />
@@ -399,7 +474,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
 
           {/* List Reviews */}
           <div className="space-y-6">
-            {reviews.length > 0 ? reviews.map((review) => (
+            {(reviews.length > 0 ? reviews : (DUMMY_REVIEWS[product.id] || [])).map((review) => (
               <div key={review.id} className="border-b border-black/10 pb-6">
                 <div className="flex items-center gap-3 mb-2">
                   <UserCircle2 className="w-8 h-8 text-stone-400" />
@@ -414,7 +489,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                 </div>
                 <p className="text-sm text-stone-600">{review.comment}</p>
               </div>
-            )) : <p className="text-sm text-stone-500">Belum ada ulasan.</p>}
+            ))}
           </div>
         </div>
 
