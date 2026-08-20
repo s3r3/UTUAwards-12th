@@ -10,23 +10,25 @@ import SourcingRegions from '@/components/landing/SourcingRegions'
 import BottomLifestyleBanner from '@/components/landing/BottomLifestyleBanner'
 import Footer from '@/components/landing/Footer'
 import LoadingWrapper from '@/components/landing/LoadingWrapper'
+import { getServerTranslations } from '@/lib/i18n'
 
 export default function HomePage() {
+  const t = getServerTranslations()
   return (
     <LoadingWrapper>
       <HeroVideo />
-      <BestSellersSection />
+      <BestSellersSection t={t} />
       <AboutPreviewSection />
       <BrandBanner />
       <ParallaxImage
-        src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1600&q=80"
+        src="/images/landing1.png"
         alt="Harvest field"
         height="h-72 md:h-[520px]"
       />
       <ProductShowcase />
 
       <ParallaxImage
-        src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600&q=80"
+        src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600&q=80v"
         alt="Ocean table setting"
         height="h-72 md:h-[820px]"
       />

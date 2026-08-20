@@ -38,9 +38,13 @@ export default function DashboardOrderDetailPage() {
     const id = Array.isArray(params?.id) ? params.id[0] : params?.id
     if (!id) return
     ;(async () => {
-      const r = await fetch(`/api/orders/${id}`)
-      const d = await r.json()
-      if (d.success) setOrder(d.data)
+      try {
+        const r = await fetch(`/api/orders/${id}`)
+        const d = await r.json()
+        if (d.success) setOrder(d.data)
+      } finally {
+        setLoading(false)
+      }
     })()
   }, [params?.id])
 

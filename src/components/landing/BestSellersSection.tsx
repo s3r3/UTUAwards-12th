@@ -4,9 +4,11 @@ import Image from 'next/image'
 interface ProductCardProps {
   product: BestSellerProduct
   comingSoon?: boolean
+  addToCartLabel: string
+  comingSoonLabel: string
 }
 
-function ProductCard({ product, comingSoon = false }: ProductCardProps) {
+function ProductCard({ product, comingSoon = false, addToCartLabel, comingSoonLabel }: ProductCardProps) {
   return (
     <div className="w-full overflow-hidden border border-black/20 bg-white/80 shadow-none dark:border-white/15 dark:bg-gray-950/80">
       <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-amber-100 via-stone-100 to-emerald-50 dark:from-emerald-950 dark:via-slate-900 dark:to-cyan-950">
@@ -49,7 +51,7 @@ function ProductCard({ product, comingSoon = false }: ProductCardProps) {
                 : 'bg-primary-600 text-white hover:bg-primary-700 dark:bg-ocean-600 dark:hover:bg-ocean-500'
             }`}
           >
-            {comingSoon ? 'COMING SOON!' : 'ADD TO CART'}
+            {comingSoon ? comingSoonLabel : addToCartLabel}
           </button>
         </div>
       </div>
@@ -57,7 +59,7 @@ function ProductCard({ product, comingSoon = false }: ProductCardProps) {
   )
 }
 
-export default async function BestSellersSection() {
+export default async function BestSellersSection({ t }: { t: any }) {
   const { farmProduct, seaProduct } = await getBestSellers()
 
   return (
@@ -65,7 +67,7 @@ export default async function BestSellersSection() {
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-3 md:gap-12">
           <div className="w-full">
-            <ProductCard product={farmProduct} />
+            <ProductCard product={farmProduct} addToCartLabel={t?.landing?.addToCart || 'ADD TO CART'} comingSoonLabel={t?.landing?.comingSoon || 'COMING SOON!'} />
           </div>
 
           <div className="flex h-full flex-col items-center justify-center text-center">
@@ -76,12 +78,12 @@ export default async function BestSellersSection() {
               Acelora
             </h2>
             <button className="mt-8 rounded-full bg-slate-900 px-8 py-3 text-sm font-semibold uppercase tracking-[0.24em] text-white transition-colors hover:bg-slate-800 dark:bg-ocean-900 dark:hover:bg-ocean-800">
-              SHOP ALL
+              {t?.landing?.shopAll || 'SHOP ALL'}
             </button>
           </div>
 
           <div className="w-full">
-            <ProductCard product={seaProduct} comingSoon />
+            <ProductCard product={seaProduct} comingSoon addToCartLabel={t?.landing?.addToCart || 'ADD TO CART'} comingSoonLabel={t?.landing?.comingSoon || 'COMING SOON!'} />
           </div>
         </div>
       </div>

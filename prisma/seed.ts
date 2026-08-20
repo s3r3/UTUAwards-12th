@@ -175,6 +175,44 @@ async function main() {
     await prisma.address.create({ data: a });
   }
 
+  // Sample orders (various statuses) for the demo user
+  const userAddress = await prisma.address.findFirst({ where: { userId: user.id, isDefault: true } });
+  const allProducts = await prisma.product.findMany({});
+  const pMap = new Map(allProducts.map((p) => [p.name, p]));
+
+  const orderSeeds = [
+    { status: "DELIVERED" as const, items: [{ p: "Kopi Arabika Gayo Specialty", qty: 2 }, { p: "Lada Hitam Aceh Premium", qty: 1 }] },
+    { status: "PAID" as const, items: [{ p: "Cokelat Kakao Aceh Premium", qty: 1 }, { p: "Dodol Aceh Premium", qty: 3 }] },
+    { status: "SHIPPING" as const, items: [{ p: "Udang Vannamei Segar Aceh", qty: 1 }] },
+    { status: "PROCESSING" as const, items: [{ p: "Minyak Nilam Aceh Grade A", qty: 1 }, { p: "Kayu Manis Aceh", qty: 2 }] },
+    { status: "PENDING" as const, items: [{ p: "Kepiting Ranjungan Segar", qty: 1 }, { p: "Kopi Arabika Gayo Specialty", qty: 1 }] },
+  ];
+
+  for (let i = 0; i < orderSeeds.length; i++) {
+    const os = orderSeeds[i];
+    const orderItems = os.items
+      .map((it) => {
+        const prod = pMap.get(it.p);
+        if (!prod) return null;
+        return { productId: prod.id, quantity: it.qty, price: prod.price };
+      })
+      .filter(Boolean) as { productId: string; quantity: number; price: number }[];
+    if (!orderItems.length || !userAddress) continue;
+
+    const total = orderItems.reduce((s, it) => s + it.price * it.quantity, 0);
+    await prisma.order.create({
+      data: {
+        id: `seed-order-${i + 1}`,
+        userId: user.id,
+        addressId: userAddress.id,
+        status: os.status,
+        total,
+        shippingCost: 15000,
+        items: { create: orderItems },
+      },
+    });
+  }
+
   console.log("Seed completed");
   console.log("Admin: admin@acelora.id / admin123");
   console.log("User: user@acelora.id / user123");

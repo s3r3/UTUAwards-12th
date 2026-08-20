@@ -18,7 +18,7 @@ export async function getBestSellers(): Promise<{
       variant: 'Premium Grade A',
       weight: '1 kg',
       price: 'Rp 185.000',
-      image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=80',
+      image: '/images/ladahitam.jpg',
     },
     seaProduct: {
       id: 'sea-001',

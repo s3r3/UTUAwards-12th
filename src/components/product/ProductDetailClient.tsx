@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { ShoppingCart, Minus, Plus, Heart, Share2, UserCircle2, Star, Package, Eye } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCartStore } from '@/store/cart.store'
+import { useTranslations, useSeedProduct } from '@/lib/i18n'
 import type { Product } from '@/types'
 import PackageDesignLightbox from './PackageDesignLightbox'
 
@@ -116,28 +117,30 @@ interface ProductDetailClientProps {
 
 const ACCORDION_DATA = [
   {
-    title: 'ORIGIN & SOURCING',
-    content:
-      'Sourced directly from the fertile volcanic highlands of Central Aceh. Our farmers use traditional, pesticide-free cultivation methods passed down through generations.',
+    titleKey: 'originTitle',
+    contentKey: 'originContent',
   },
   {
-    title: 'QUALITY & PROCESSING',
-    content:
-      'Cold-pressed to extract the highest grade of essential oils, preserving its deep, earthy, and musky aroma. 100% pure without additives.',
+    titleKey: 'qualityTitle',
+    contentKey: 'qualityContent',
   },
   {
-    title: 'SHIPPING & STORAGE',
-    content: '',
+    titleKey: 'shippingStorage',
+    contentKey: 'shippingStorageText',
   },
   {
-    title: 'FAQ',
-    content:
-      'Q: Is this food grade?\nA: Please refer to the specific variant label, as some oils are for aromatherapy only.',
+    titleKey: 'faqTitle',
+    contentKey: 'faqContent',
   },
 ]
 
 export default function ProductDetailClient({ product, category, isAvailable, reviews = [], rating = 0, reviewCount = 0 }: ProductDetailClientProps) {
+  const t = useTranslations()
   const addItem = useCartStore((s) => s.addItem)
+  const seed = useSeedProduct(product.id)
+  const displayName = seed?.name ?? product.name
+  const displayDesc = seed?.desc ?? product.description
+  const displayOrigin = seed?.origin ?? (product.origin || '')
   const [quantity, setQuantity] = useState(1)
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [newRating, setNewRating] = useState(5)
@@ -292,7 +295,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
             }`}
           >
             <Heart size={18} fill={isWishlisted ? 'currentColor' : 'none'} />
-            {isWishlisted ? 'Saved' : 'Save'}
+            {isWishlisted ? t.landing.saved : (t.landing.saved || 'Save')}
           </button>
           <button
             onClick={handleShare}
@@ -300,7 +303,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
             aria-label="Bagikan"
           >
             <Share2 size={18} />
-            Share
+            {t.landing.share || 'Share'}
           </button>
         </div>
       </div>
@@ -309,15 +312,15 @@ export default function ProductDetailClient({ product, category, isAvailable, re
       <div className="py-4">
         {/* Breadcrumbs */}
         <nav className="mb-6 text-sm text-stone-500">
-          <Link href="/" className="hover:underline">Home</Link>
-          <span className="mx-2">•</span>
-          <Link href="/products" className="hover:underline">Farm Produce</Link>
-          <span className="mx-2">•</span>
-          <span className="text-stone-900">{product.name}</span>
+          <Link href="/" className="hover:underline">{t.landing.homeBreadcrumb || 'Home'}</Link>
+          <span className="mx-2">{t.landing.breadcrumbsSep || '•'}</span>
+          <Link href="/products" className="hover:underline">{t.landing.farmProduceBreadcrumb || 'Farm Produce'}</Link>
+          <span className="mx-2">{t.landing.breadcrumbsSep || '•'}</span>
+          <span className="text-stone-900">{displayName}</span>
         </nav>
 
         <h1 className="font-serif text-4xl md:text-5xl font-bold text-stone-900 leading-tight mb-4">
-          {product.name}
+          {displayName}
         </h1>
 
         <p className="text-3xl font-bold text-red-800 mb-6">
@@ -332,19 +335,19 @@ export default function ProductDetailClient({ product, category, isAvailable, re
             className="w-full bg-emerald-950 px-6 py-4 text-white text-sm font-semibold uppercase tracking-widest hover:bg-emerald-800 transition-colors flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <ShoppingCart size={18} />
-            {isAvailable ? `ADD TO CART | Rp ${product.price.toLocaleString('id-ID')}` : 'OUT OF STOCK'}
+            {isAvailable ? `${t.landing.addToCart} | Rp ${product.price.toLocaleString('id-ID')}` : t.landing.outOfStockLong}
           </button>
 
           {/* Stock */}
           <p className="mt-2 text-xs text-stone-500">
-            {isAvailable ? `In stock (${product.stock} available)` : 'Out of stock'}
+            {isAvailable ? `${t.landing.inStockShort} (${product.stock} available)` : t.landing.outOfStockShort}
           </p>
         </div>
 
         {/* Quantity Selector */}
         {isAvailable && (
           <div className="flex items-center gap-4 mb-6">
-            <span className="text-sm uppercase tracking-widest text-stone-500">Quantity</span>
+            <span className="text-sm uppercase tracking-widest text-stone-500">{t.landing.quantity}</span>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => handleQuantity(-1)}
@@ -373,15 +376,15 @@ export default function ProductDetailClient({ product, category, isAvailable, re
         {/* Accordion */}
         <div className="border-b border-black/10">
           {ACCORDION_DATA.map((item) => {
-            const isOpen = openSection === item.title
+            const isOpen = openSection === item.titleKey
             return (
-              <div key={item.title} className="border-t border-black/10">
+              <div key={item.titleKey} className="border-t border-black/10">
                 <button
-                  onClick={() => setOpenSection(isOpen ? null : item.title)}
+                  onClick={() => setOpenSection(isOpen ? null : item.titleKey)}
                   className="flex w-full items-center justify-between py-5 text-left"
                 >
                   <span className="text-xs font-bold uppercase tracking-wide text-stone-900">
-                    {item.title}
+                    {t.landing[item.titleKey as keyof typeof t.landing] as string}
                   </span>
                   {isOpen ? (
                     <Minus size={16} className="text-stone-500" />
@@ -398,10 +401,10 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      {item.title === 'SHIPPING & STORAGE' ? (
+                      {item.titleKey === 'shippingStorage' ? (
                         <div className="pb-5">
                           <p className="text-sm leading-relaxed text-stone-600 mb-4">
-                            Stored in amber glass bottles to prevent UV degradation. Ships within 24 hours via cold-chain or secure packaging.
+                            {t.landing.shippingStorageText}
                           </p>
                           {packageDesignImages.length > 0 && (
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -429,7 +432,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                         </div>
                       ) : (
                         <p className="pb-5 text-sm leading-relaxed whitespace-pre-line text-stone-600">
-                          {item.content}
+                          {(t.landing[item.contentKey as keyof typeof t.landing] as string) || item.contentKey}
                         </p>
                       )}
                     </motion.div>
