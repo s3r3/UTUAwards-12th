@@ -1,4 +1,5 @@
 import { getBestSellers, type BestSellerProduct } from '@/lib/products'
+import type { Translations } from '@/lib/i18n/en'
 import Image from 'next/image'
 
 interface ProductCardProps {
@@ -59,7 +60,7 @@ function ProductCard({ product, comingSoon = false, addToCartLabel, comingSoonLa
   )
 }
 
-export default async function BestSellersSection({ t }: { t: any }) {
+export default async function BestSellersSection({ t }: { t: Translations }) {
   const { farmProduct, seaProduct } = await getBestSellers()
 
   return (
