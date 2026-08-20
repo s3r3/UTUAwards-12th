@@ -4,7 +4,12 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ArrowLeft, MapPin, Package, Truck, Clock } from 'lucide-react'
-import DeliveryTracker from '@/components/RealDeliveryTracker'
+import dynamic from 'next/dynamic'
+
+const DeliveryTracker = dynamic(() => import('@/components/RealDeliveryTracker'), {
+  ssr: false,
+  loading: () => <div className="w-full h-80 bg-gray-200 dark:bg-gray-800 animate-pulse" />
+})
 import { useTranslations } from '@/lib/i18n'
 import type { Order } from '@/types'
 
