@@ -9,10 +9,11 @@ import CategoryChoiceSection from '@/components/landing/CategoryChoiceSection'
 import SourcingRegions from '@/components/landing/SourcingRegions'
 import BottomLifestyleBanner from '@/components/landing/BottomLifestyleBanner'
 import Footer from '@/components/landing/Footer'
+import LoadingWrapper from '@/components/landing/LoadingWrapper'
 
 export default function HomePage() {
   return (
-    <main>
+    <LoadingWrapper>
       <HeroVideo />
       <BestSellersSection />
       <AboutPreviewSection />
@@ -23,8 +24,7 @@ export default function HomePage() {
         height="h-72 md:h-[520px]"
       />
       <ProductShowcase />
-      
-      
+
       <ParallaxImage
         src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600&q=80"
         alt="Ocean table setting"
@@ -34,6 +34,6 @@ export default function HomePage() {
       <SourcingRegions />
       <BottomLifestyleBanner />
       <Footer />
-    </main>
+    </LoadingWrapper>
   )
 }
