@@ -48,7 +48,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-cream dark:bg-gray-950 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <Link href="/" className="inline-flex items-center justify-center mb-6">
@@ -69,7 +69,7 @@ export default function LoginPage() {
               priority
             />
           </Link>
-          <h2 className=" text-3xl font-bold text-gray-900 dark:text-white">
+          <h2 className="font-serif text-3xl font-bold text-emerald-950 dark:text-emerald-300">
             {t.auth.loginDesc}
           </h2>
           <p className="mt-2  text-sm text-gray-600 dark:text-gray-400">
