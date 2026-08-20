@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -16,9 +17,11 @@ import {
   LogOut,
   Sun,
   Moon,
+  Globe,
+  Store,
 } from "lucide-react";
 import { useUIStore } from "@/store/ui.store";
-import { useTranslations } from "@/lib/i18n";
+import { useI18NStore, useTranslations } from "@/lib/i18n";
 import { useSession, signOut } from "next-auth/react";
 import type { ReactNode } from "react";
 import type { Translations } from "@/lib/i18n/en";
@@ -46,6 +49,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const t = useTranslations();
   const isAdmin = session?.user?.role === "ADMIN";
   const { theme, setTheme } = useUIStore();
+  const lang = useI18NStore((s) => s.lang);
+  const setLang = useI18NStore((s) => s.setLang);
   const isDark = theme === "dark";
 
   useEffect(() => {
@@ -152,6 +157,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </button>
 
           <div className="flex-1" />
+
+          {/* Shop link */}
+          <Link
+            href="/products"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          >
+            <Store size={16} />
+            <span className="hidden sm:inline">Shop</span>
+          </Link>
+
+          {/* Language toggle */}
+          <button
+            onClick={() => setLang(lang === "id" ? "en" : "id")}
+            className="p-2 rounded-lg text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-label="Toggle language"
+          >
+            <Globe size={16} />
+            <span className="sr-only">{lang === "id" ? "English" : "Bahasa"}</span>
+          </button>
 
           {/* Theme toggle */}
           <button

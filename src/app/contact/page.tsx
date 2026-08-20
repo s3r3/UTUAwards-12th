@@ -1,4 +1,5 @@
 import ContactSection from '@/components/contact/ContactSection'
+import Footer from '@/components/landing/Footer'
 
 export const metadata = {
   title: 'Contact Us | Acelora',
@@ -9,6 +10,7 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-[#faf7f2]">
       <ContactSection />
+      <Footer />
     </main>
   )
 }

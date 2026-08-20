@@ -13,6 +13,17 @@
   font-size: 9px;
 }
 
+/* Marching ants animation for delivery path */
+@keyframes dash {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+.leaflet-overlay-pane polyline.animate-dash {
+  animation: dash 0.8s linear infinite;
+}
+
 :root {
   --primary-50: #f0fdf4;
   --primary-100: #dcfce7;

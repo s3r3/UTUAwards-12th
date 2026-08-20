@@ -51,6 +51,9 @@ export default function Navbar() {
 
   const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.startsWith(href)
 
+  const c = isDark ? 'rgba(255,255,255,0.8)' : 'rgba(17,24,39,0.8)'
+  const cl = isDark ? 'rgba(255,255,255,0.9)' : 'rgba(17,24,39,0.9)'
+
   return (
     <>
       <motion.nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-500" style={{ backgroundColor: scrolled ? isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(250, 247, 242, 0.95)' : isDark ? 'rgba(15, 23, 42, 0.35)' : 'rgba(250, 247, 242, 0.35)', borderBottom: scrolled ? isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)' : '1px solid transparent', boxShadow: scrolled ? isDark ? '0 1px 40px rgba(0,0,0,0.3)' : '0 1px 40px rgba(0,0,0,0.06)' : 'none' }}>
@@ -60,12 +63,8 @@ export default function Navbar() {
             <div className="flex items-center gap-6">
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden p-2 rounded-xl transition-colors"
-                style={{
-                  color: scrolled
-                    ? isDark ? 'rgba(255,255,255,0.8)' : 'rgba(17,24,39,0.8)'
-                    : isDark ? 'rgba(255,255,255,0.8)' : 'rgba(17,24,39,0.8)'
-                }}
+                className="md:hidden px-2.5 py-2 rounded-xl transition-colors"
+                style={{ color: c }}
                 aria-label="Toggle menu"
               >
                 {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -75,7 +74,7 @@ export default function Navbar() {
                 {[{ key: 'shop', href: '/products', label: t.nav.shop }].map((item) => {
                   const active = isActive(item.href)
                   return (
-                    <Link key={item.key} href={item.href} className="group relative px-1 py-1 text-sm font-semibold uppercase tracking-widest transition-colors duration-300" style={{ color: scrolled ? isDark ? 'rgba(255,255,255,0.9)' : 'rgba(17,24,39,0.9)' : isDark ? 'rgba(255,255,255,0.9)' : 'rgba(17,24,39,0.9)' }}>
+                    <Link key={item.key} href={item.href} className="group relative px-1 py-1 text-sm font-semibold uppercase tracking-widest transition-colors duration-300" style={{ color: cl }}>
                       {item.label}
                       <span className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-300 group-hover:w-full" style={{ width: active ? '100%' : '0%' }} />
                     </Link>
@@ -91,7 +90,7 @@ export default function Navbar() {
                   {[{ key: 'shop', href: '/products', label: t.nav.shop }, { key: 'contact', href: '/contact', label: t.nav.contact }].map((item) => {
                     const active = isActive(item.href)
                     return (
-                      <Link key={item.key} href={item.href} onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-base font-semibold uppercase tracking-widest" style={{ color: active ? (isDark ? '#ffffff' : '#111827') : (isDark ? 'rgba(255,255,255,0.7)' : 'rgba(17,24,39,0.7)') }}>
+                      <Link key={item.key} href={item.href} onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-base font-semibold uppercase tracking-widest" style={{ color: active ? cl : (isDark ? 'rgba(255,255,255,0.7)' : 'rgba(17,24,39,0.7)') }}>
                         {item.label}
                       </Link>
                     )
@@ -116,31 +115,31 @@ export default function Navbar() {
 
             <div className="flex items-center gap-1 mr-2">
               {[{ key: 'contact', href: '/contact', label: t.nav.contact }].map((item) => (
-                <Link key={item.key} href={item.href} className="group relative hidden md:block px-1 py-1 text-sm font-semibold uppercase tracking-widest transition-colors duration-300" style={{ color: scrolled ? isDark ? 'rgba(255,255,255,0.9)' : 'rgba(17,24,39,0.9)' : isDark ? 'rgba(255,255,255,0.9)' : 'rgba(17,24,39,0.9)' }}>
+                <Link key={item.key} href={item.href} className="group relative hidden md:block px-1 py-1 text-sm font-semibold uppercase tracking-widest transition-colors duration-300" style={{ color: cl }}>
                   {item.label}
                   <span className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-300 group-hover:w-full" style={{ width: isActive(item.href) ? '100%' : '0%' }} />
                 </Link>
               ))}
 
-              <span className="hidden md:inline-block w-px h-5 mx-2" style={{ backgroundColor: scrolled ? 'rgba(100,116,139,0.4)' : isDark ? 'rgba(255,255,255,0.3)' : 'rgba(100,116,139,0.4)' }} />
+              <span className={`hidden md:inline-block w-px h-5 mx-2 ${isDark ? 'bg-white/30' : 'bg-stone-400/40'}`} />
 
-              <button onClick={() => setLang(lang === 'id' ? 'en' : 'id')} className="relative flex items-center gap-1 px-2 py-2 rounded-xl transition-colors duration-300 text-xs font-semibold uppercase tracking-wider" style={{ color: scrolled ? isDark ? 'rgba(255,255,255,0.8)' : 'rgba(17,24,39,0.8)' : isDark ? 'rgba(255,255,255,0.8)' : 'rgba(17,24,39,0.8)' }} aria-label="Toggle language">
+              <button onClick={() => setLang(lang === 'id' ? 'en' : 'id')} className="relative flex items-center gap-1 px-2.5 py-2 rounded-xl transition-colors duration-300 text-xs font-semibold uppercase tracking-wider" style={{ color: c }} aria-label="Toggle language">
                 <Globe size={16} />
                 <span className="hidden sm:inline">{lang === 'id' ? 'EN' : 'ID'}</span>
               </button>
 
-              <button onClick={() => setTheme(isDark ? 'light' : 'dark')} className="relative p-2 rounded-xl transition-colors duration-300" style={{ color: scrolled ? isDark ? 'rgba(255,255,255,0.8)' : 'rgba(17,24,39,0.8)' : isDark ? 'rgba(255,255,255,0.8)' : 'rgba(17,24,39,0.8)' }} aria-label="Toggle theme">
+              <button onClick={() => setTheme(isDark ? 'light' : 'dark')} className="relative px-2.5 py-2 rounded-xl transition-colors duration-300" style={{ color: c }} aria-label="Toggle theme">
                 {isDark ? <Sun size={18} /> : <Moon size={18} />}
               </button>
 
-              <button onClick={() => setCartOpen(true)} className="relative flex items-center justify-center rounded-xl p-2 text-sm font-semibold uppercase tracking-wider transition-colors duration-300" style={{ color: scrolled ? isDark ? 'rgba(255,255,255,0.8)' : 'rgba(17,24,39,0.8)' : isDark ? 'rgba(255,255,255,0.8)' : 'rgba(17,24,39,0.8)' }} aria-label="Open cart">
+              <button onClick={() => setCartOpen(true)} className="relative flex items-center justify-center rounded-xl px-2.5 py-2 text-sm font-semibold uppercase tracking-wider transition-colors duration-300" style={{ color: c }} aria-label="Open cart">
                 <Package size={18} />
                 {count > 0 && <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 text-[9px] font-bold text-white">{count}</span>}
               </button>
 
               {session?.user ? (
                 <div className="relative">
-                  <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center gap-2 pl-3 pr-2 py-2 rounded-xl transition-colors duration-300" style={{ color: scrolled ? isDark ? 'rgba(255,255,255,0.9)' : 'rgba(17,24,39,0.9)' : isDark ? 'rgba(255,255,255,0.9)' : 'rgba(17,24,39,0.9)' }}>
+                  <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center gap-2 pl-3 pr-2 py-2 rounded-xl transition-colors duration-300" style={{ color: cl }}>
                     <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-sky-500 flex items-center justify-center text-white text-xs font-bold">{session.user.name?.[0] || 'U'}</span>
                     <ChevronDown size={14} className="hidden sm:block" />
                   </button>

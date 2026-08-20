@@ -49,11 +49,12 @@ const vehicleIcon: DivIcon = createVehicleIcon()
 export default function RealDeliveryTracker({ order }: RealDeliveryTrackerProps) {
   const [showTracking, setShowTracking] = useState(false)
   const [zoom, setZoom] = useState(6)
-  const [mapCenter, setMapCenter] = useState<[number, number]>([5.5483, 95.3247])
+  const [mapCenter, setMapCenter] = useState<[number, number]>([5.3789, 95.9632])
   const mapRef = useRef<L.Map | null>(null)
 
   // Coordinate lookup per city (Aceh region focus)
   const cityCoords: Record<string, [number, number]> = {
+    'Sigli': [5.3789, 95.9632],
     'Banda Aceh': [5.5483, 95.3247],
     'Aceh Besar': [5.3554, 95.4856],
     'Aceh Selatan': [3.6986, 97.4486],
@@ -64,10 +65,12 @@ export default function RealDeliveryTracker({ order }: RealDeliveryTrackerProps)
     'Lhokseumawe': [5.18, 97.15],
     'Langsa': [4.4761, 97.9694],
     'Sabang': [5.8244, 95.3247],
+    'Meulaboh': [4.1316, 96.1189],
+    'Takengon': [4.6157, 96.8317],
     'Medan': [3.5952, 98.6722],
   }
 
-  const startPoint: [number, number] = [5.5483, 95.3247] // Banda Aceh
+  const startPoint: [number, number] = cityCoords['Sigli'] // Acelora base = Sigli
   const destPoint: [number, number] = cityCoords[order.address.city] || startPoint
   const progress = useMemo(() => ({
     PENDING: 0.05,
@@ -83,7 +86,7 @@ export default function RealDeliveryTracker({ order }: RealDeliveryTrackerProps)
   const handleZoomOut = () => setZoom(z => Math.max(3, z - 1))
   const handleReset = () => {
     setZoom(6)
-    setMapCenter([5.5483, 95.3247])
+    setMapCenter([5.3789, 95.9632])
   }
 
   // Interpolate position along the great-circle-ish line
@@ -123,19 +126,20 @@ export default function RealDeliveryTracker({ order }: RealDeliveryTrackerProps)
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {/* Animated delivery path (dashed) */}
+            {/* Animated delivery path (marching ants) */}
             <Polyline
               positions={[startPoint, destPoint]}
               color="#059669"
               dashArray="10, 6"
               weight={4}
               opacity={0.8}
+              className="animate-dash"
             />
 
             {/* Origin marker */}
             <Marker position={startPoint} icon={originIcon}>
               <Popup>
-                <strong className="text-emerald-700">Asal:</strong> Banda Aceh, Aceh
+                <strong className="text-emerald-700">Asal:</strong> Sigli, Aceh (Acelora HQ)
               </Popup>
             </Marker>
 
