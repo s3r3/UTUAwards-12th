@@ -12,7 +12,7 @@ export default function HeroVideo() {
       <div className="absolute inset-0 -z-10">
         <video
           className="h-full w-full object-cover scale-105"
-          src="/images/movie.mp4"
+          src="/images/output.mp4"
           autoPlay
           muted
           loop
