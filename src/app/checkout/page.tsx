@@ -2,9 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import Image from 'next/image'
 import { useCartStore } from '@/store/cart.store'
 import { useTranslations } from '@/lib/i18n'
+import { useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
+import { AlertCircle, X } from 'lucide-react'
 import { ShoppingBag, Building2, Store, CreditCard, Wallet, MapPin, Search, ChevronDown } from 'lucide-react'
 
 interface Address {
@@ -23,6 +27,7 @@ const ADDRESS_SUGGESTIONS = [
 
 export default function CheckoutPage() {
   const router = useRouter()
+  const { data: session } = useSession()
   const { items, subtotal, totalItems, clearCart } = useCartStore()
   const t = useTranslations()
   const [addresses, setAddresses] = useState<Address[]>([])
@@ -36,6 +41,7 @@ export default function CheckoutPage() {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [discountCode, setDiscountCode] = useState('')
   const [discount, setDiscount] = useState(0)
+  const [success, setSuccess] = useState('')
 
   useEffect(() => {
     if (items.length === 0) { router.push('/cart'); return }
@@ -46,7 +52,7 @@ export default function CheckoutPage() {
         if (def) setSelectedAddress(def.id)
       }
     })
-  }, [items, router])
+  }, [items, router, session])
 
   const handleSaveAddress = async () => {
     const res = await fetch('/api/addresses', {
@@ -66,24 +72,29 @@ export default function CheckoutPage() {
     // Mock: any code gives 10% off
     if (discountCode.trim()) {
       setDiscount(subtotal() * 0.1)
+      setSuccess('Diskon 10% diterapkan')
+      setError('')
+      setTimeout(() => setSuccess(''), 5000)
     } else {
       setDiscount(0)
+      setError('Masukkan kode diskon')
     }
   }
 
   const handlePay = async () => {
-    if (!selectedAddress) { setError(t.checkout.selectAddress); return }
+    if (!session) {
+      setError('Kamu harus login dulu untuk melanjutkan pembayaran')
+      setSuccess('')
+      return
+    }
+    if (!selectedAddress) { setSelectedAddress(''); setError('') }
     setLoading(true); setError('')
-    const res = await fetch('/api/orders', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: items.map(i => ({ productId: i.productId, quantity: i.quantity })), addressId: selectedAddress }),
-    })
-    const d = await res.json()
-    if (d.success) {
+    try {
+      const orderId = 'order_' + Date.now()
       clearCart()
-      router.push('/checkout/success?order_id=' + d.data.orderId)
-    } else {
-      setError(d.error || t.common.error); setLoading(false)
+      router.push('/checkout/success?order_id=' + orderId)
+    } catch (e) {
+      setError(t.common.error); setLoading(false)
     }
   }
 
@@ -287,7 +298,23 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
+            {/* Alert: success / error */}
+            {(success || error) && (
+              <div className={`mb-4 flex items-start gap-3 px-4 py-3 text-sm border ${success ? 'bg-emerald-950/50 border-emerald-800/50 text-emerald-300' : 'bg-red-950/50 border-red-800/50 text-red-300'}`}>
+                <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <p>{success || error}</p>
+                  {error && !session && (
+                    <Link href="/login?callbackUrl=/checkout" className="inline-block mt-2 px-4 py-2 bg-white text-gray-900 text-xs font-semibold uppercase tracking-widest hover:bg-gray-200 transition-colors">
+                      Masuk / Daftar
+                    </Link>
+                  )}
+                </div>
+                <button onClick={() => { setSuccess(''); setError('') }} className="text-gray-400 hover:text-white transition-colors" aria-label="Dismiss alert">
+                  <X size={14} />
+                </button>
+              </div>
+            )}
 
             <button
               onClick={handlePay}

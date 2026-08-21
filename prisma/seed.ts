@@ -145,34 +145,90 @@ async function main() {
     }
   }
 
-  // Sample addresses
-  const addresses = [
-    {
-      userId: user.id,
-      label: "Rumah",
-      name: "User Acelora",
-      phone: "081234567890",
-      street: "Jl. Teuku Nyak Arief No. 1",
-      city: "Banda Aceh",
-      province: "Aceh",
-      postalCode: "23111",
-      isDefault: true,
-    },
-    {
-      userId: admin.id,
-      label: "Kantor",
-      name: "Admin Acelora",
-      phone: "081234567891",
-      street: "Jl. Sultan Iskandar Muda No. 45",
-      city: "Banda Aceh",
-      province: "Aceh",
-      postalCode: "23241",
-      isDefault: true,
-    },
+  // Sample addresses — one per order (each customer has a different city)
+  const customerAddresses = [
+    { id: "seed-addr-0", label: "Rumah", name: "User Acelora", phone: "081234567890", street: "Jl. Teuku Nyak Arief No. 1", city: "Banda Aceh", province: "Aceh", postalCode: "23111", isDefault: true },
+    { id: "seed-addr-1", label: "Kantor", name: "Ahmad Ramdani", phone: "081234567891", street: "Jl. Pembangunan No. 23", city: "Lhokseumawe", province: "Aceh", postalCode: "24351" },
+    { id: "seed-addr-2", label: "Rumah", name: "Siti Rahma", phone: "0821 4567 8901", street: "Jl. Ahmad Yani No. 12", city: "Langsa", province: "Aceh", postalCode: "24411" },
+    { id: "seed-addr-3", label: "Kantor", name: "Budi Santoso", phone: "0812 9876 5432", street: "Jl. Merdeka No. 45", city: "Meulaboh", province: "Aceh", postalCode: "23611" },
+    { id: "seed-addr-4", label: "Rumah", name: "Cut Nyak Dhien", phone: "0831 2345 6789", street: "Jl. Sriwijaya No. 7", city: "Takengon", province: "Aceh", postalCode: "24511" },
   ];
 
-  for (const a of addresses) {
-    await prisma.address.create({ data: a });
+  const createdAddresses: string[] = [];
+  for (const a of customerAddresses) {
+    const existing = await prisma.address.findUnique({ where: { id: a.id } });
+    if (existing) {
+      await prisma.address.update({ where: { id: a.id }, data: a });
+      createdAddresses.push(a.id);
+      continue;
+    }
+    const addr = await prisma.address.create({ data: { ...a, userId: user.id } });
+    createdAddresses.push(addr.id);
+  }
+
+  // Admin kantor address (Acelora base = Sigli)
+  const adminAddr = await prisma.address.findFirst({ where: { userId: admin.id } });
+  if (!adminAddr) {
+    await prisma.address.create({
+      data: {
+        userId: admin.id,
+        label: "Kantor",
+        name: "Admin Acelora",
+        phone: "081234567891",
+        street: "Jl. Sultan Iskandar Muda No. 45",
+        city: "Sigli",
+        province: "Aceh",
+        postalCode: "24111",
+        isDefault: true,
+      },
+    });
+  }
+
+  // Sample orders (various statuses) for the demo user
+  const allProducts = await prisma.product.findMany({});
+  const pMap = new Map(allProducts.map((p) => [p.name, p]));
+
+  const orderSeeds = [
+    { status: "DELIVERED" as const, cityIdx: 0, items: [{ p: "Kopi Arabika Gayo Specialty", qty: 2 }, { p: "Lada Hitam Aceh Premium", qty: 1 }] },
+    { status: "PAID" as const, cityIdx: 1, items: [{ p: "Cokelat Kakao Aceh Premium", qty: 1 }, { p: "Dodol Aceh Premium", qty: 3 }] },
+    { status: "SHIPPING" as const, cityIdx: 2, items: [{ p: "Udang Vannamei Segar Aceh", qty: 1 }] },
+    { status: "PROCESSING" as const, cityIdx: 3, items: [{ p: "Minyak Nilam Aceh Grade A", qty: 1 }, { p: "Kayu Manis Aceh", qty: 2 }] },
+    { status: "PENDING" as const, cityIdx: 4, items: [{ p: "Kepiting Ranjungan Segar", qty: 1 }, { p: "Kopi Arabika Gayo Specialty", qty: 1 }] },
+  ];
+
+  for (let i = 0; i < orderSeeds.length; i++) {
+    const os = orderSeeds[i];
+    const orderItems = os.items
+      .map((it) => {
+        const prod = pMap.get(it.p);
+        if (!prod) return null;
+        return { productId: prod.id, quantity: it.qty, price: prod.price };
+      })
+      .filter(Boolean) as { productId: string; quantity: number; price: number }[];
+    const userAddress = await prisma.address.findFirst({ where: { id: createdAddresses[os.cityIdx] } });
+    if (!orderItems.length || !userAddress) continue;
+
+    const total = orderItems.reduce((s, it) => s + it.price * it.quantity, 0);
+    const orderId = `seed-order-${i + 1}`;
+    const existingOrder = await prisma.order.findUnique({ where: { id: orderId } });
+    if (existingOrder) {
+      await prisma.order.update({
+        where: { id: orderId },
+        data: { userId: user.id, addressId: userAddress.id, status: os.status, total, shippingCost: 15000 },
+      });
+      continue;
+    }
+    await prisma.order.create({
+      data: {
+        id: orderId,
+        userId: user.id,
+        addressId: userAddress.id,
+        status: os.status,
+        total,
+        shippingCost: 15000,
+        items: { create: orderItems },
+      },
+    });
   }
 
   console.log("Seed completed");

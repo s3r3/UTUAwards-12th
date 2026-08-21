@@ -191,7 +191,7 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
                         <span className={`text-[10px] ${textMuted}`}>No product</span>
                       </div>
                       <button className="rounded-full border border-gray-500 px-4 py-1 text-[10px] font-medium uppercase tracking-wider text-gray-700 dark:text-gray-300">
-                        COMING SOON!
+                        SEDEKAPAN DATANG!
                       </button>
                     </>
                   )}

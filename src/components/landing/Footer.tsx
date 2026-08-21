@@ -4,22 +4,19 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import { useUIStore } from '@/store/ui.store'
-
-const testimonial = {
-  quote: "THE FRESHEST HARVEST AND CATCH WE'VE EVER EXPERIENCED!",
-  author: "— THE CULINARY TIMES"
-}
+import { useTranslations } from '@/lib/i18n'
 
 const footerLinks = {
-  privacy: "/privacy",
-  terms: "/terms",
-  instagram: "https://instagram.com/acelora"
+  privacy: '/privacy',
+  terms: '/terms',
+  instagram: 'https://instagram.com/acelora',
 }
 
 export default function Footer() {
+  const t = useTranslations()
   const { theme } = useUIStore()
   const isDark = theme === 'dark'
-  
+
   return (
     <footer className={isDark ? 'bg-gray-900 text-gray-300' : 'bg-white text-stone-800'}>
       {/* Testimonial Section */}
@@ -30,7 +27,6 @@ export default function Footer() {
         transition={{ duration: 0.8, delay: 0.5 }}
         className="relative border p-8 md:p-16 mx-6 md:mx-12 mt-24 mb-16"
       >
-        {/* Animated border lines */}
         <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: '100%' }}
@@ -69,10 +65,10 @@ export default function Footer() {
             className="text-3xl md:text-5xl font-serif uppercase tracking-wider mb-6"
             style={{ WebkitTextStroke: isDark ? '1px rgba(255,255,255,0.3)' : '1px rgba(0,0,0,0.3)', color: 'transparent' }}
           >
-            {testimonial.quote}
+            {t.landing.testimonialQuote}
           </h2>
           <p className="text-sm font-mono tracking-wider">
-            {testimonial.author}
+            {t.landing.testimonialAuthor}
           </p>
         </div>
       </motion.div>
@@ -95,31 +91,31 @@ export default function Footer() {
           <div className="divide-y">
             <div className="pb-8">
               <p className="font-mono text-sm leading-relaxed">
-                Crafting delicious, responsibly-sourced farm produce and seafood rooted in care, community, and great taste.
+                {t.landing.crafting}
               </p>
             </div>
             <div className="pt-8">
-              <p className="uppercase text-xs tracking-widest">LET{`'`}S TALK FRESH:</p>
-              <p className="text-sm">hello@acelora.com</p>
+              <p className="uppercase text-xs tracking-widest">{t.landing.letstTalk}</p>
+              <p className="text-sm">{t.landing.helloEmail}</p>
             </div>
           </div>
 
           {/* Newsletter Column */}
           <div>
             <div className="flex justify-between items-center mb-6">
-              <h3 className="font-serif text-lg font-bold">CONNECT WITH US</h3>
+              <h3 className="font-serif text-lg font-bold">{t.landing.connectWithUs}</h3>
               <a
                 href={footerLinks.instagram}
                 className="text-xs font-mono tracking-wider hover:underline"
               >
-                INSTAGRAM
+                {t.landing.instagram}
               </a>
             </div>
 
             <div className="relative">
               <input
                 type="email"
-                placeholder="Enter your email"
+                placeholder={t.landing.newsletterPlaceholder}
                 className="w-full py-3 border-b bg-transparent focus:outline-none focus:ring-0 placeholder"
                 style={{ borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' }}
               />
@@ -132,12 +128,12 @@ export default function Footer() {
       {/* Sub-footer */}
       <div className="border-t py-6 px-6 md:px-12">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-[10px] tracking-widest uppercase">ACELORA © 2026</p>
+          <p className="text-[10px] tracking-widest uppercase">{t.landing.rights}</p>
           <div className="flex gap-6">
-            <a href={footerLinks.privacy} className="text-[10px] tracking-widest uppercase hover:underline">PRIVACY POLICY</a>
-            <a href={footerLinks.terms} className="text-[10px] tracking-widest uppercase hover:underline">TERMS OF SERVICE</a>
+            <a href={footerLinks.privacy} className="text-[10px] tracking-widest uppercase hover:underline">{t.landing.privacy}</a>
+            <a href={footerLinks.terms} className="text-[10px] tracking-widest uppercase hover:underline">{t.landing.terms}</a>
           </div>
-          <p className="text-[10px] tracking-widest uppercase">SITE BY KANASA</p>
+          <p className="text-[10px] tracking-widest uppercase">{t.landing.siteBy}</p>
         </div>
       </div>
     </footer>

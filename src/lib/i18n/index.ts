@@ -27,6 +27,13 @@ export function useTranslations() {
   return translations[lang]
 }
 
+// Translate seed product fields (id-based) for the active language.
+export function useSeedProduct(id?: string | null) {
+  const t = useTranslations()
+  if (!id) return null
+  return (t.landing.productSeedNames as Record<string, { name: string; desc: string; origin: string }>)[id] ?? null
+}
+
 export function t(lang: Lang): Translations {
   return translations[lang]
 }

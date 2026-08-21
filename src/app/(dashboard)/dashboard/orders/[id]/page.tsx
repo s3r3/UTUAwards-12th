@@ -4,6 +4,12 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ArrowLeft, MapPin, Package, Truck, Clock } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+const DeliveryTracker = dynamic(() => import('@/components/RealDeliveryTracker'), {
+  ssr: false,
+  loading: () => <div className="w-full h-80 bg-gray-200 dark:bg-gray-800 animate-pulse" />
+})
 import { useTranslations } from '@/lib/i18n'
 import type { Order } from '@/types'
 
@@ -38,9 +44,13 @@ export default function DashboardOrderDetailPage() {
     const id = Array.isArray(params?.id) ? params.id[0] : params?.id
     if (!id) return
     ;(async () => {
-      const r = await fetch(`/api/orders/${id}`)
-      const d = await r.json()
-      if (d.success) setOrder(d.data)
+      try {
+        const r = await fetch(`/api/orders/${id}`)
+        const d = await r.json()
+        if (d.success) setOrder(d.data)
+      } finally {
+        setLoading(false)
+      }
     })()
   }, [params?.id])
 
@@ -130,47 +140,7 @@ export default function DashboardOrderDetailPage() {
 
                 {isOpen && (
                   <div className="px-6 pb-6 border-t border-black/5 pt-4">
-                    <h3 className="font-serif text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                      <Truck size={18} /> Tracking Pengiriman
-                    </h3>
-
-                    {/* Progress Bar */}
-                    <div className="mb-6">
-                      <div className="flex text-xs font-mono mb-2">
-                        {trackingSteps.map((step, i) => (
-                          <span key={step.key} className="text-gray-400 flex-1 text-center">{step.label}</span>
-                        ))}
-                      </div>
-                      <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded">
-                        <div
-                          className="absolute left-0 top-0 h-2 bg-emerald-500 rounded-r"
-                          style={{ width: `${(progress + 1) * 20}%` }}
-                        />
-                        {/* Markers */}
-                        {trackingSteps.map((step, i) => (
-                          <div key={step.key} className="absolute -bottom-4 left-0" style={{ width: `${i * 20}%` }}>
-                            <div className={`w-3 h-3 rounded-full ${i <= progress ? 'bg-emerald-500' : 'bg-gray-300 dark:bg-gray-600'}`} />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* ETA & Map Placeholder */}
-                    <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded">
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                        <Clock size={16} className="inline mr-1" />
-                        Estimasi Sampai: {new Date(RENDER_TIME + (5 - progress) * 24 * 60 * 60 * 1000).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                      </p>
-                      <div className="aspect-square bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-3">
-                        <div className="text-center">
-                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Peta Pengiriman</p>
-                          <div className="w-24 h-24 border-2 border-dashed border-gray-400 dark:border-gray-500 rounded full animate-pulse" />
-                        </div>
-                      </div>
-                      <p className="text-xs text-gray-400 dark:text-gray-500">
-                        {itemTracking?.product?.name || 'Item'} sedang dalam perjalanan ke {order.address.city}
-                      </p>
-                    </div>
+                    <DeliveryTracker order={order} />
                   </div>
                 )}
               </div>
