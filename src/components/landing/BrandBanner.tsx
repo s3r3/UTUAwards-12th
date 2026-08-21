@@ -44,7 +44,7 @@ export default function BrandBanner() {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="mx-auto mt-6 max-w-2xl text-lg text-teal-50/80 font-light leading-relaxed"
         >
-          Acelora is committed to delivering the freshest organic produce and premium seafood — harvested responsibly, packed at peak freshness, and shipped with a promise of uncompromising quality.
+          {t.landing.brandDescription}
         </motion.p>
 
         <div className="mt-20 grid gap-6 md:grid-cols-3">

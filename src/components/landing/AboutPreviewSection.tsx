@@ -31,9 +31,7 @@ export default function AboutPreviewSection() {
           </h2>
 
           <p className="max-w-md text-base leading-relaxed text-gray-700 dark:text-gray-300">
-            We bridge the gap between fertile soils and pristine waters. Acelora is dedicated
-            to bringing you the highest quality organic produce and sustainably caught seafood,
-            straight from local farmers and fishermen to your table.
+            {t.landing.aboutDesc}
           </p>
 
           <button className="mt-8 rounded-full border-2 border-gray-900 px-8 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-gray-900 transition-colors hover:bg-gray-900 hover:text-white dark:border-gray-100 dark:text-gray-100 dark:hover:bg-gray-100 dark:hover:text-gray-900">

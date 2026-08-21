@@ -209,6 +209,7 @@ const en = {
     terms: 'TERMS OF SERVICE',
     siteBy: 'SITE BY KANASA',
     crafting: 'Crafting delicious, responsibly-sourced farm produce and seafood rooted in care, community, and great taste.',
+    brandDescription: 'Acelora is committed to delivering the freshest organic produce and premium seafood — harvested responsibly, packed at peak freshness, and shipped with a promise of uncompromising quality.',
     testimonialQuote: "THE FRESHEST HARVEST AND CATCH WE'VE EVER EXPERIENCED!",
     testimonialAuthor: '— THE CULINARY TIMES',
     originTitle: 'ORIGIN & SOURCING',
