@@ -95,7 +95,7 @@ export default function ProductsClient() {
   return (
     <div className={`min-h-screen ${isDark ? 'bg-gray-950 text-stone-200' : 'bg-white text-stone-900'}`}>
       <div className={`mt-20 border-b py-4 px-6 md:px-12 flex items-center justify-between ${isDark ? 'bg-gray-950 border-white/10' : 'bg-white border-black/10'}`}>
-        <span className={`font-serif text-sm ${isDark ? 'text-stone-200' : 'text-stone-900'}`}>Showing {products.length} products</span>
+        <span className={`font-sans text-sm ${isDark ? 'text-stone-200' : 'text-stone-900'}`}>Showing {products.length} products</span>
         <div className="flex items-center gap-8">
             <div className="relative group">
                 <button className={`flex items-center gap-1 text-sm tracking-widest uppercase ${isDark ? 'text-white' : 'text-stone-900'}`}>
@@ -148,7 +148,7 @@ function ProductCard({ product, addItem }: { product: Product; addItem: (item: C
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="group"
+      className="group flex flex-col h-full"
     >
       <Link href={`/products/${product.id}`} className="block relative aspect-[4/5] overflow-hidden bg-stone-100 mb-4">
         <Image
@@ -161,7 +161,7 @@ function ProductCard({ product, addItem }: { product: Product; addItem: (item: C
         <Heart className="absolute top-4 right-4 text-stone-900 hover:fill-stone-900 transition-colors" size={20} />
       </Link>
 
-      <div className="mb-4">
+      <div className="mb-4 flex-grow">
         <h3 className="font-serif text-lg ">{displayName}</h3>
         {displayDesc && <p className="text-xs text-gray-500 mt-1 line-clamp-2">{displayDesc}</p>}
         <p className="text-xs tracking-wider">Rp {product.price.toLocaleString('id-ID')}</p>

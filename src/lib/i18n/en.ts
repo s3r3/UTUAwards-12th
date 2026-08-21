@@ -283,6 +283,8 @@ const en = {
       },
     },
     farmSeaDesc: 'Premium farm produce & seafood, sourced directly from Aceh\'s fertile land and pristine waters.',
+    bestSellerFarm: { name: 'ACEH BLACK PEPPER', variant: 'Premium Grade A', weight: '1 kg' },
+    bestSellerSea: { name: 'WILD CAUGHT PRAWNS', variant: 'Fresh XL', weight: '1 kg' },
     freshness: 'FRESHNESS',
     exploreProducts: 'Explore Our Products',
   },

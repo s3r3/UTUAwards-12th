@@ -280,6 +280,8 @@ const id: Translations = {
         origin: 'Aceh Timur',
       },
     },
+    bestSellerFarm: { name: 'LADA HITAM ACEH', variant: 'Premium Grade A', weight: '1 kg' },
+    bestSellerSea: { name: 'UDANG TANGKAPAN LIAR', variant: 'Segar XL', weight: '1 kg' },
     farmSeaDesc: 'Hasil pertanian premium & produk laut, diambil langsung dari tanah subur dan air laut Aceh.',
     freshness: 'KELEMBAPAN',
     exploreProducts: 'Jelajahi Produk Kami',

@@ -7,10 +7,7 @@ export interface BestSellerProduct {
   image: string
 }
 
-export async function getBestSellers(): Promise<{
-  farmProduct: BestSellerProduct
-  seaProduct: BestSellerProduct
-}> {
+export function getBestSellers() {
   return {
     farmProduct: {
       id: 'farm-001',

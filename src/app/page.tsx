@@ -17,7 +17,7 @@ export default function HomePage() {
   return (
     <LoadingWrapper>
       <HeroVideo />
-      <BestSellersSection t={t} />
+      <BestSellersSection />
       <AboutPreviewSection />
       <BrandBanner />
       <ParallaxImage

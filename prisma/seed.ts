@@ -184,16 +184,18 @@ async function main() {
     });
   }
 
-  // Sample orders (various statuses) for the demo user
+  // Sample orders with all statuses (PENDING, PAID, PROCESSING, SHIPPING, DELIVERED)
+  // Each order has multiple products and ships to different destinations in Pidie/Sigli region
+  // HQ Acelora berada di Sigli; order ini menampilkan jaringan distribusi ke kota/kab berbeda
   const allProducts = await prisma.product.findMany({});
   const pMap = new Map(allProducts.map((p) => [p.name, p]));
 
   const orderSeeds = [
-    { status: "DELIVERED" as const, cityIdx: 0, items: [{ p: "Kopi Arabika Gayo Specialty", qty: 2 }, { p: "Lada Hitam Aceh Premium", qty: 1 }] },
+    { status: "PENDING" as const, cityIdx: 0, items: [{ p: "Kopi Arabika Gayo Specialty", qty: 2 }, { p: "Lada Hitam Aceh Premium", qty: 1 }] },
     { status: "PAID" as const, cityIdx: 1, items: [{ p: "Cokelat Kakao Aceh Premium", qty: 1 }, { p: "Dodol Aceh Premium", qty: 3 }] },
-    { status: "SHIPPING" as const, cityIdx: 2, items: [{ p: "Udang Vannamei Segar Aceh", qty: 1 }] },
-    { status: "PROCESSING" as const, cityIdx: 3, items: [{ p: "Minyak Nilam Aceh Grade A", qty: 1 }, { p: "Kayu Manis Aceh", qty: 2 }] },
-    { status: "PENDING" as const, cityIdx: 4, items: [{ p: "Kepiting Ranjungan Segar", qty: 1 }, { p: "Kopi Arabika Gayo Specialty", qty: 1 }] },
+    { status: "PROCESSING" as const, cityIdx: 2, items: [{ p: "Udang Vannamei Segar Aceh", qty: 1 }, { p: "Kayu Manis Aceh", qty: 2 }] },
+    { status: "SHIPPING" as const, cityIdx: 3, items: [{ p: "Minyak Nilam Aceh Grade A", qty: 1 }, { p: "Kepiting Ranjungan Segar", qty: 1 }] },
+    { status: "DELIVERED" as const, cityIdx: 4, items: [{ p: "Kepiting Ranjungan Segar", qty: 1 }, { p: "Kopi Arabika Gayo Specialty", qty: 1 }, { p: "Dodol Aceh Premium", qty: 2 }] },
   ];
 
   for (let i = 0; i < orderSeeds.length; i++) {
