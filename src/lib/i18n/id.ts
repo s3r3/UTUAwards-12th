@@ -208,7 +208,6 @@ const id: Translations = {
     terms: 'SYAAKAT LAYANAN',
     siteBy: 'SITE BY KANASA',
     crafting: 'Membuat hasil pertanian dan produk laut yang enak, secara bertanggung jawab, yang berakar pada perawatan, komunitas, dan rasa yang hebat.',
-    brandDescription: 'Acelora berkomitmen menyediakan hasil pertanian organik segar dan seafood premium — dipanen secara bertanggung jawab, dikemas pada puncak kesegaran, dan dikirim dengan jaminan kualitas tanpa kompromi.',
     testimonialQuote: "PANEN DAN TANGKAPAN TERSEGAR YANG PERNAH KAMI COBA!",
     testimonialAuthor: '— THE CULINARY TIMES',
     originTitle: 'ASAL & PENGALIHAN',
