@@ -27,12 +27,12 @@ const { handlers: { GET, POST }, auth } = NextAuth({
   pages: { signIn: '/login' },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) (token as any).role = (user as any).role
+      if (user) (token as Record<string, unknown>).role = (user as Record<string, unknown>).role
       return token
     },
     async session({ session, token }) {
       if (session.user) {
-        return { ...session, user: { ...session.user, id: token.sub, role: (token as any).role || 'USER' } }
+        return { ...session, user: { ...session.user, id: token.sub, role: (token as Record<string, unknown>).role as 'USER' | 'ADMIN' | 'PARTNER' || 'USER' } }
       }
       return session
     },

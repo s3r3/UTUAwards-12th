@@ -4,7 +4,10 @@ import { ArrowLeft } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { PRODUCT_CATEGORIES } from '@/constants/products'
 import ProductDetailClient, { RelatedProducts } from '@/components/product/ProductDetailClient'
-import TraceabilityTimeline from '@/components/product/TraceabilityTimeline'
+
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export async function generateStaticParams() {
   const products = await prisma.product.findMany({
@@ -51,17 +54,18 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const [product, rawReviews] = await Promise.all([
     prisma.product.findUnique({
       where: { id },
-      include: { owner: { select: { name: true, email: true } } },
+      include: { owner: { select: { name: true } } },
     }),
     prisma.review.findMany({
       where: { productId: id },
-      include: { user: { select: { id: true, name: true, email: true, image: true } } },
+      include: { user: { select: { id: true, name: true } } },
       orderBy: { createdAt: 'desc' },
       take: 10,
     }),
   ])
 
   const reviews = rawReviews.map(r => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString() }))
+  const displayReviews = reviews.length > 0 ? reviews : []
 
   if (!product) {
     return (
@@ -77,10 +81,10 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     related = await prisma.product.findMany({
       where: { category: product.category, status: 'APPROVED', id: { not: product.id } },
       select: {
-        id: true, name: true, category: true, description: true, image: true, images: true, origin: true, price: true, compareAt: true, stock: true, weight: true, status: true, legality: true, ownerId: true, createdAt: true, updatedAt: true,
+        id: true, name: true, category: true, description: true, image: true, images: true, origin: true, price: true, compareAt: true, stock: true, weight: true, status: true, legality: true, packageDesign: true, ownerId: true, createdAt: true, updatedAt: true,
         owner: { select: { name: true, email: true } }, // Include owner here
       },
-      take: 4,
+      take: 3,
     })
   } catch {} // DB down → empty section hide-able
 
@@ -89,7 +93,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://acelora.id'
 
   // Calculate rating stats
-  const avgRating = reviews.length > 0 ? Math.round((reviews.reduce((sum: any, r: any) => sum + r.rating, 0) / reviews.length) * 20) / 20 : 0
+  const avgRating = reviews.length > 0 ? Math.round((reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length) * 20) / 20 : 0
   const reviewCount = reviews.length
 
   const breadcrumb = {
@@ -120,10 +124,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     },
   }
 
+  const escapeScriptTags = (html: string) => html.replace(/<\//g, '\\u003c/')
+
   return (
     <div className="min-h-screen pt-24 pb-12">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeScriptTags(JSON.stringify(breadcrumb)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeScriptTags(JSON.stringify(productSchema)) }} />
 
       <div className="max-w-6xl mx-auto px-4">
         <Link
@@ -149,22 +155,23 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             weight: product.weight || undefined,
             status: product.status,
             legality: product.legality || undefined,
+            packageDesign: product.packageDesign || undefined,
             ownerId: product.ownerId,
             createdAt: product.createdAt,
             owner: product.owner,
           }}
           category={category}
           isAvailable={isAvailable}
-          reviews={reviews}
+          reviews={displayReviews}
           rating={avgRating}
           reviewCount={reviewCount}
         />
 
-        <TraceabilityTimeline />
+
 
         {related.length > 0 && (
           <RelatedProducts
-            product={product as any}
+            product={{ ...product, image: product.image || undefined, compareAt: product.compareAt || undefined, weight: product.weight || undefined, legality: product.legality || undefined, packageDesign: product.packageDesign || undefined }}
             products={related.map((r) => ({
               id: r.id,
               name: r.name,
@@ -179,6 +186,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               weight: r.weight || undefined,
               status: r.status,
               legality: r.legality || undefined,
+              packageDesign: r.packageDesign || undefined,
               ownerId: r.ownerId,
               createdAt: r.createdAt,
             }))}
