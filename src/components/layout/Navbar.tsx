@@ -95,6 +95,19 @@ export default function Navbar() {
                       </Link>
                     )
                   })}
+
+                  {/* Language + theme toggles (mobile only) */}
+                  <div className="md:hidden flex items-center gap-2 px-3 py-2">
+                    <button onClick={() => setLang(lang === 'id' ? 'en' : 'id')} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold uppercase tracking-wider bg-gray-100 dark:bg-gray-800" style={{ color: c }} aria-label="Toggle language">
+                      <Globe size={16} />
+                      {lang === 'id' ? 'English' : 'Indonesia'}
+                    </button>
+                    <button onClick={() => setTheme(isDark ? 'light' : 'dark')} className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold bg-gray-100 dark:bg-gray-800" style={{ color: c }} aria-label="Toggle theme">
+                      {isDark ? <Sun size={16} /> : <Moon size={16} />}
+                      {isDark ? 'Terang' : 'Gelap'}
+                    </button>
+                  </div>
+
                   {!session?.user && (
                     <Link
                       href="/login"
@@ -123,12 +136,12 @@ export default function Navbar() {
 
               <span className={`hidden md:inline-block w-px h-5 mx-2 ${isDark ? 'bg-white/30' : 'bg-stone-400/40'}`} />
 
-              <button onClick={() => setLang(lang === 'id' ? 'en' : 'id')} className="relative flex items-center gap-1 px-2.5 py-2 rounded-xl transition-colors duration-300 text-xs font-semibold uppercase tracking-wider" style={{ color: c }} aria-label="Toggle language">
+              <button onClick={() => setLang(lang === 'id' ? 'en' : 'id')} className="relative hidden md:flex items-center gap-1 px-2.5 py-2 rounded-xl transition-colors duration-300 text-xs font-semibold uppercase tracking-wider" style={{ color: c }} aria-label="Toggle language">
                 <Globe size={16} />
-                <span className="hidden sm:inline">{lang === 'id' ? 'EN' : 'ID'}</span>
+                <span>{lang === 'id' ? 'EN' : 'ID'}</span>
               </button>
 
-              <button onClick={() => setTheme(isDark ? 'light' : 'dark')} className="relative px-2.5 py-2 rounded-xl transition-colors duration-300" style={{ color: c }} aria-label="Toggle theme">
+              <button onClick={() => setTheme(isDark ? 'light' : 'dark')} className="relative hidden md:block px-2.5 py-2 rounded-xl transition-colors duration-300" style={{ color: c }} aria-label="Toggle theme">
                 {isDark ? <Sun size={18} /> : <Moon size={18} />}
               </button>
 
