@@ -266,7 +266,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
               className="object-cover"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center text-stone-400">
+            <div className="absolute inset-0 flex items-center justify-center text-stone-400 dark:text-gray-500">
               <span className="text-xs">No Image</span>
             </div>
           )}
@@ -277,7 +277,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
             {product.images.map((img, idx) => (
               <button
                 key={idx}
-                className="aspect-square w-20 flex-shrink-0 overflow-hidden border border-black/10 hover:border-black"
+                className="aspect-square w-20 flex-shrink-0 overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500"
               >
                 <img src={img} alt={`${product.name} ${idx + 1}`} className="h-full w-full object-cover" />
               </button>
@@ -290,8 +290,8 @@ export default function ProductDetailClient({ product, category, isAvailable, re
             onClick={handleWishlist}
             className={`flex items-center gap-2 px-4 py-2 text-sm transition-colors ${
               isWishlisted
-                ? 'text-red-600'
-                : 'text-stone-600 hover:text-stone-900'
+                ? 'text-red-600 dark:text-red-400'
+                : 'text-stone-600 hover:text-stone-900 dark:text-gray-300 dark:hover:text-white'
             }`}
           >
             <Heart size={18} fill={isWishlisted ? 'currentColor' : 'none'} />
@@ -299,7 +299,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
           </button>
           <button
             onClick={handleShare}
-            className="flex items-center gap-2 px-4 py-2 text-sm text-stone-600 hover:text-stone-900 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm text-stone-600 hover:text-stone-900 dark:text-gray-300 dark:hover:text-white transition-colors"
             aria-label="Bagikan"
           >
             <Share2 size={18} />
@@ -311,19 +311,19 @@ export default function ProductDetailClient({ product, category, isAvailable, re
       {/* Product Info */}
       <div className="py-4">
         {/* Breadcrumbs */}
-        <nav className="mb-6 text-sm text-stone-500">
-          <Link href="/" className="hover:underline">{t.landing.homeBreadcrumb || 'Home'}</Link>
+        <nav className="mb-6 text-sm text-stone-500 dark:text-gray-400">
+          <Link href="/" className="hover:underline text-stone-600 dark:text-gray-300">{t.landing.homeBreadcrumb || 'Home'}</Link>
           <span className="mx-2">{t.landing.breadcrumbsSep || '•'}</span>
-          <Link href="/products" className="hover:underline">{t.landing.farmProduceBreadcrumb || 'Farm Produce'}</Link>
+          <Link href="/products" className="hover:underline text-stone-600 dark:text-gray-300">{t.landing.farmProduceBreadcrumb || 'Farm Produce'}</Link>
           <span className="mx-2">{t.landing.breadcrumbsSep || '•'}</span>
-          <span className="text-stone-900">{displayName}</span>
+          <span className="text-stone-900 dark:text-white">{displayName}</span>
         </nav>
 
-        <h1 className="font-serif text-4xl md:text-5xl font-bold text-stone-900 leading-tight mb-4">
+        <h1 className="font-serif text-4xl md:text-5xl font-bold text-stone-900 dark:text-white leading-tight mb-4">
           {displayName}
         </h1>
 
-        <p className="text-3xl font-bold text-red-800 mb-6">
+        <p className="text-3xl font-bold text-red-800 dark:text-red-400 mb-6">
           Rp {product.price.toLocaleString('id-ID')}
         </p>
 
@@ -339,7 +339,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
           </button>
 
           {/* Stock */}
-          <p className="mt-2 text-xs text-stone-500">
+          <p className="mt-2 text-xs text-stone-500 dark:text-gray-400">
             {isAvailable ? `${t.landing.inStockShort} (${product.stock} available)` : t.landing.outOfStockShort}
           </p>
         </div>
@@ -374,22 +374,22 @@ export default function ProductDetailClient({ product, category, isAvailable, re
         </p>
 
         {/* Accordion */}
-        <div className="border-b border-black/10">
+        <div className="border-b border-gray-200 dark:border-gray-700">
           {ACCORDION_DATA.map((item) => {
             const isOpen = openSection === item.titleKey
             return (
-              <div key={item.titleKey} className="border-t border-black/10">
+              <div key={item.titleKey} className="border-t border-gray-200 dark:border-gray-700">
                 <button
                   onClick={() => setOpenSection(isOpen ? null : item.titleKey)}
                   className="flex w-full items-center justify-between py-5 text-left"
                 >
-                  <span className="text-xs font-bold uppercase tracking-wide text-stone-900">
+                  <span className="text-xs font-bold uppercase tracking-wide text-stone-900 dark:text-white">
                     {t.landing[item.titleKey as keyof typeof t.landing] as string}
                   </span>
                   {isOpen ? (
-                    <Minus size={16} className="text-stone-500" />
+                    <Minus size={16} className="text-stone-500 dark:text-gray-400" />
                   ) : (
-                    <Plus size={16} className="text-stone-500" />
+                    <Plus size={16} className="text-stone-500 dark:text-gray-400" />
                   )}
                 </button>
                 <AnimatePresence initial={false}>
@@ -403,7 +403,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                     >
                       {item.titleKey === 'shippingStorage' ? (
                         <div className="pb-5">
-                          <p className="text-sm leading-relaxed text-stone-600 mb-4">
+                          <p className="text-sm leading-relaxed text-stone-600 dark:text-gray-300 mb-4">
                             {t.landing.shippingStorageText}
                           </p>
                           {packageDesignImages.length > 0 && (
@@ -415,7 +415,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                                     setLightboxIndex(i)
                                     setLightboxOpen(true)
                                   }}
-                                  className="relative aspect-square group overflow-hidden border border-black/10 hover:border-black transition-colors"
+                                  className="relative aspect-square group overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
                                 >
                                   <img
                                     src={img}
@@ -431,7 +431,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                           )}
                         </div>
                       ) : (
-                        <p className="pb-5 text-sm leading-relaxed whitespace-pre-line text-stone-600">
+                        <p className="pb-5 text-sm leading-relaxed whitespace-pre-line text-stone-600 dark:text-gray-300">
                           {(t.landing[item.contentKey as keyof typeof t.landing] as string) || item.contentKey}
                         </p>
                       )}
@@ -444,24 +444,24 @@ export default function ProductDetailClient({ product, category, isAvailable, re
         </div>
 
         {/* Reviews */}
-        <div className="mt-10 pt-10 border-t border-black/10">
-          <h3 className="text-lg font-bold text-stone-900 mb-6">ULASAN PELANGGAN</h3>
-          
+        <div className="mt-10 pt-10 border-t border-gray-200 dark:border-gray-700">
+          <h3 className="text-lg font-bold text-stone-900 dark:text-white mb-6">ULASAN PELANGGAN</h3>
+
           {/* Add Review Form */}
-          <div className="mb-8 p-6 bg-stone-50 border border-black/10">
-            <h4 className="text-sm font-semibold text-stone-900 mb-4 uppercase tracking-widest">Tulis Ulasan Anda</h4>
+          <div className="mb-8 p-6 bg-stone-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700">
+            <h4 className="text-sm font-semibold text-stone-900 dark:text-white mb-4 uppercase tracking-widest">Tulis Ulasan Anda</h4>
             <form onSubmit={handleSubmitReview} className="space-y-4">
               <select
                 value={newRating}
                 onChange={(e) => setNewRating(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-black/15 bg-white text-stone-900 text-sm"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-stone-900 dark:text-white text-sm"
               >
                 {[5, 4, 3, 2, 1].map((r) => <option key={r} value={r}>{r} ★</option>)}
               </select>
               <textarea
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                className="w-full px-3 py-2 border border-black/15 bg-white text-stone-900 h-24 resize-none text-sm"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-stone-900 dark:text-white h-24 resize-none text-sm placeholder:text-stone-400 dark:placeholder:text-gray-500"
                 placeholder="Bagikan pengalaman Anda..."
                 required
               ></textarea>
@@ -478,11 +478,11 @@ export default function ProductDetailClient({ product, category, isAvailable, re
           {/* List Reviews */}
           <div className="space-y-6">
             {(reviews.length > 0 ? reviews : (DUMMY_REVIEWS[product.id] || [])).map((review) => (
-              <div key={review.id} className="border-b border-black/10 pb-6">
+              <div key={review.id} className="border-b border-gray-200 dark:border-gray-700 pb-6">
                 <div className="flex items-center gap-3 mb-2">
-                  <UserCircle2 className="w-8 h-8 text-stone-400" />
+                  <UserCircle2 className="w-8 h-8 text-stone-400 dark:text-gray-500" />
                   <div>
-                    <span className="text-sm font-medium text-stone-900">{review.user?.name || 'Anonim'}</span>
+                    <span className="text-sm font-medium text-stone-900 dark:text-white">{review.user?.name || 'Anonim'}</span>
                     <div className="flex text-yellow-400 text-xs">
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star key={i} size={12} fill={i < review.rating ? 'currentColor' : 'none'} />
@@ -490,7 +490,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                     </div>
                   </div>
                 </div>
-                <p className="text-sm text-stone-600">{review.comment}</p>
+                <p className="text-sm text-stone-600 dark:text-gray-300">{review.comment}</p>
               </div>
             ))}
           </div>
@@ -516,7 +516,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
 export function RelatedProducts({ product, products }: { product: Product; products: Product[] }) {
   return (
     <div className="mt-12">
-      <h3 className="font-serif text-xl text-stone-900 mb-6">
+      <h3 className="font-serif text-xl text-stone-900 dark:text-white mb-6">
         You May Also Like
       </h3>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -526,7 +526,7 @@ export function RelatedProducts({ product, products }: { product: Product; produ
             href={`/products/${p.id}`}
             className="group"
           >
-            <div className="relative aspect-square bg-stone-100 overflow-hidden">
+            <div className="relative aspect-square bg-stone-100 dark:bg-gray-800 overflow-hidden">
               {p.image && (
                 <Image
                   src={p.image}
@@ -538,10 +538,10 @@ export function RelatedProducts({ product, products }: { product: Product; produ
               )}
             </div>
             <div className="p-3">
-              <h4 className="font-serif text-sm text-stone-900 truncate">
+              <h4 className="font-serif text-sm text-stone-900 dark:text-white truncate">
                 {p.name}
               </h4>
-              <p className="text-red-800 text-xs mt-1">
+              <p className="text-red-800 dark:text-red-400 text-xs mt-1">
                 Rp {p.price.toLocaleString('id-ID')}
               </p>
             </div>
