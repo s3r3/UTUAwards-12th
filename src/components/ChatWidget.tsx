@@ -33,28 +33,20 @@ export default function ChatWidget() {
 
   const t = TRANSLATIONS[lang] || TRANSLATIONS.id;
 
-  // Reset/Initialize greeting when language changes or opened first time
-  useEffect(() => {
-    if (open) {
-      setMsgs((prev) => {
-        if (prev.length === 0) {
-          return [{ role: "assistant", content: t.greeting }];
-        }
-        // Update greeting message language in history if it hasn't been removed/changed
-        return prev.map((m, idx) => {
-          if (idx === 0 && m.role === "assistant" && (m.content === TRANSLATIONS.id.greeting || m.content === TRANSLATIONS.en.greeting)) {
-            return { ...m, content: t.greeting };
-          }
-          return m;
-        });
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, lang]);
-
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
   }, [msgs, loading]);
+
+  function toggleChat() {
+    if (open) {
+      setOpen(false);
+      setMsgs([]);
+      return;
+    }
+    // ponytail: greeting only on open; lang switches while open can wait until a future reopen.
+    setMsgs([{ role: "assistant", content: t.greeting }]);
+    setOpen(true);
+  }
 
   async function send() {
     if (!input.trim()) return;
@@ -83,7 +75,6 @@ export default function ChatWidget() {
         <div className={`mb-2 flex h-96 w-80 flex-col overflow-hidden rounded-2xl border shadow-2xl transition-colors duration-200 ${
           isDark ? "border-gray-800 bg-gray-900 text-white" : "border-gray-200 bg-white text-gray-850"
         }`}>
-          {/* Header */}
           <div className={`flex items-center gap-3 border-b px-4 py-3 ${
             isDark ? "border-gray-800 bg-gray-900" : "border-gray-100 bg-white"
           }`}>
@@ -101,13 +92,11 @@ export default function ChatWidget() {
             </div>
           </div>
 
-          {/* Messages */}
           <div ref={scrollRef} className={`flex-1 space-y-3 overflow-y-auto px-3 py-3 ${
             isDark ? "bg-gray-950" : "bg-white"
           }`}>
             {msgs.map((m, i) => (
               <div key={i} className={`flex items-end gap-1.5 ${m.role === "user" ? "flex-row-reverse" : ""}`}>
-                {/* Avatar */}
                 {m.role === "assistant" ? (
                   <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] ring-1 ${
                     isDark ? "bg-gray-800 ring-gray-700" : "bg-primary-50 ring-primary-200"
@@ -154,7 +143,6 @@ export default function ChatWidget() {
             )}
           </div>
 
-          {/* Input */}
           <div className={`flex items-center gap-2 border-t p-2.5 ${
             isDark ? "border-gray-800 bg-gray-900" : "border-gray-100 bg-white"
           }`}>
@@ -181,7 +169,7 @@ export default function ChatWidget() {
         </div>
       )}
       <button
-        onClick={() => setOpen(!open)}
+        onClick={toggleChat}
         aria-label="Chat"
         className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-600 text-xl text-white shadow-lg transition hover:bg-primary-700 active:scale-95"
       >
