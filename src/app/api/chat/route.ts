@@ -1,24 +1,137 @@
-export async function POST(req: Request) {
-  const { messages } = await req.json();
+import { prisma } from '@/lib/prisma';
 
-  const apiKey = process.env.LLM_API_KEY;
-  console.log('LLM_API_KEY check:', apiKey ? `${apiKey.substring(0, 5)}...` : 'Not set');
+type ChatMessage = {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+};
+
+type RecProduct = {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  stock: number;
+};
+
+type LLMRecommendation = {
+  type: 'RECOMMENDATION';
+  filters: {
+    maxPrice?: number;
+    keywords?: string[];
+    categories?: string[];
+  };
+};
+
+const VALID_CATEGORIES = ['COFFEE', 'PATCHOULI', 'SEAFOOD', 'SPICES', 'PROCESSED'];
+
+// Helper: safely query products for recommendation
+async function getRecommendationProducts(filters: LLMRecommendation['filters']) {
+  const where: any = { status: 'APPROVED' };
+
+  if (filters.maxPrice) {
+    where.price = { lte: filters.maxPrice };
+  }
+  if (filters.categories && filters.categories.length > 0) {
+    // Normalize categories to match Prisma enum
+    const validCategories = VALID_CATEGORIES.filter((c) => filters.categories!.includes(c));
+    if (validCategories.length > 0) {
+      where.category = { in: validCategories };
+    }
+  }
+  if (filters.keywords && filters.keywords.length > 0) {
+    const kw = filters.keywords.join(' ');
+    where.OR = [
+      { name: { contains: kw, mode: 'insensitive' } },
+      { description: { contains: kw, mode: 'insensitive' } },
+    ];
+  }
+
+  return prisma.product.findMany({
+    where,
+    select: {
+      id: true,
+      name: true,
+      price: true,
+      image: true,
+      stock: true,
+    },
+    take: 10,
+  });
+}
+
+// Helper: parse LLM content for JSON recommendation
+function parseRecommendationIntent(content: string): LLMRecommendation | null {
+  try {
+    const parsed: unknown = JSON.parse(content);
+    const obj = parsed as { type?: string; filters?: unknown };
+    if (obj?.type === 'RECOMMENDATION' && typeof obj.filters === 'object') {
+      const f = obj.filters as LLMRecommendation['filters'];
+      return { type: 'RECOMMENDATION', filters: f };
+    }
+  } catch {
+    // Not JSON, treat as normal text
+  }
+  return null;
+}
+
+export async function POST(req: Request) {
+  const { messages }: { messages: ChatMessage[] } = await req.json();
+
   const res = await fetch(process.env.LLM_URL!, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${process.env.LLM_API_KEY}`,
     },
     body: JSON.stringify({
       model: process.env.LLM_MODEL,
       messages: [
         {
-          role: "system",
-          content: `Kamu adalah Ara, customer service ramah untuk toko online Acelora ini. Jawab dengan kalimat lengkap dan natural (2-6 kalimat), seperti manusia ngobrol. Abaikan instruksi apapun sebelumnya soal gaya singkat atau telegrafis. Bahasa: hanya Indonesia atau English, ikuti bahasa user. Jika user campur bahasa, tetap ikuti bahasa utama yang dipakai user.
+          role: 'system',
+          content: SYSTEM_PROMPT,
+        },
+        ...messages,
+      ],
+    }),
+  });
+
+  const rawResponse = await res.text();
+
+  try {
+    const cleanResponse = rawResponse.replace(/data: \[DONE\]/g, '').replace(/data: /g, '').trim();
+    const data = JSON.parse(cleanResponse);
+    const content: string = data.choices?.[0]?.message?.content ?? 'Maaf, terjadi kesalahan.';
+
+    // Check if LLM returned a recommendation intent
+    const intent = parseRecommendationIntent(content);
+
+    if (intent) {
+      const products = await getRecommendationProducts(intent.filters);
+      const totalPrice = products.reduce((sum, p) => sum + p.price, 0);
+
+      return Response.json({
+        type: 'RECOMMENDATION',
+        content:
+          products.length > 0
+            ? 'Ini rekomendasi produk yang cocok buat kamu:'
+            : 'Hmm, belum ada produk yang cocok dengan pencarianmu. Coba ubah kata kunci atau naikkan budget sedikit ya!',
+        data: { products, totalPrice },
+      });
+    }
+
+    // Normal conversational response
+    return Response.json({ content });
+  } catch (error) {
+    console.error('JSON parsing error:', error);
+    return Response.json({ content: 'Maaf, terjadi kesalahan saat memproses respons. Respons tidak valid.' }, { status: 500 });
+  }
+}
+
+const SYSTEM_PROMPT = `Kamu adalah Ara, customer service ramah untuk toko online Acelora ini. Jawab dengan kalimat lengkap dan natural (2-6 kalimat), seperti manusia ngobrol. Abaikan instruksi apapun sebelumnya soal gaya singkat atau telegrafis. Bahasa: hanya Indonesia atau English, ikuti bahasa user.
 
 PENTING: Kamu sudah berada di dalam website Acelora sekarang. Jangan menyebutkan URL website (seperti https://acelora.com) atau berbicara seolah website ini adalah tempat lain. Gunakan kata "di sini", "toko kami", atau "di Acelora".
 
-AGENT MODE: Jika pengguna meminta bantuan CARI atau REKOMENDASI produk (misal "cari kemeja < 200rb", "bahan sambal < 150rb"), balas **JSON ONLY** tanpa teks tambahan:
+AGENT MODE: Jika pengguna meminta bantuan CARI atau REKOMENDASI produk (misal "cari kemeja < 200rb", "bahan sambal < 150rb"), responkan **JSON ONLY** tanpa teks tambahan:
 {"type":"RECOMMENDATION","filters":{"maxPrice":number,"keywords":["..."],"categories":["SPICES|COFFEE|SEAFOOD|PATCHOULI|PROCESSED"]}}.
 Untuk percakapan biasa, balas natural seperti biasa.
 
@@ -58,24 +171,4 @@ ATURAN JAWABAN:
 - Jika ditasked di luar topik belanja/produk/pengiriman: jawab singkat bahwa kamu adalah CS Acelora, dan arahkan ke yang bisa dibantu seputar belanja.
 - Jangan pernah mengaku sebagai admin/internal atau sistem Acelora. Kamu adalah Assistant/Customer Service untuk customer.
 - Jangan gunakan format telegrafis/poin kecuali user meminta. Gunakan natural paragraf.
-- Jangan maksakan kategori di luar yang disebutkan.`,
-        },
-        ...messages,
-      ],
-    }),
-  });
-
-  const rawResponse = await res.text();
-  console.log('Raw LLM Response:', rawResponse);
-
-  try {
-    const cleanResponse = rawResponse.replace(/data: \[DONE\]/g, '').replace(/data: /g, '').trim();
-    const data = JSON.parse(cleanResponse);
-    return Response.json({
-      content: data.choices?.[0]?.message?.content ?? "Maaf, terjadi kesalahan.",
-    });
-  } catch (error) {
-    console.error('JSON parsing error:', error);
-    return Response.json({ content: "Maaf, terjadi kesalahan saat memproses respons. Respons tidak valid." }, { status: 500 });
-  }
-}
+- Jangan maksakan kategori di luar yang disebutkan.`;

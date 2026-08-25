@@ -3,6 +3,25 @@ import { useState, useRef, useEffect } from "react";
 import { useI18NStore } from "@/lib/i18n";
 import { useUIStore } from "@/store/ui.store";
 
+type RecProduct = {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  stock: number;
+  category: string;
+};
+
+type ChatMsg = {
+  role: "user" | "assistant";
+  content: string;
+  type?: "RECOMMENDATION";
+  data?: {
+    products: RecProduct[];
+    totalPrice: number;
+  };
+};
+
 const TRANSLATIONS = {
   id: {
     greeting: "Hai! 👋 Aku Ara, asisten Acelora. Ada yang bisa kubantu? Tanya soal produk, pengiriman, atau cara belanja aja.",
@@ -22,7 +41,7 @@ const TRANSLATIONS = {
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState<{ role: string; content: string }[]>([]);
+  const [msgs, setMsgs] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -50,7 +69,7 @@ export default function ChatWidget() {
 
   async function send() {
     if (!input.trim()) return;
-    const history = [...msgs, { role: "user", content: input }];
+    const history = [...msgs, { role: "user" as const, content: input }];
     setMsgs(history);
     setInput("");
     setLoading(true);
@@ -58,10 +77,22 @@ export default function ChatWidget() {
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({ messages: history.map(({ role, content }) => ({ role, content })) }),
       });
       const data = await res.json();
-      setMsgs([...history, { role: "assistant", content: data.content }]);
+      if (data.type === "RECOMMENDATION" && data.data?.products) {
+        setMsgs([
+          ...history,
+          {
+            role: "assistant",
+            content: data.content || "Berikut rekomendasi produk:",
+            type: "RECOMMENDATION",
+            data: data.data,
+          },
+        ]);
+      } else {
+        setMsgs([...history, { role: "assistant", content: data.content }]);
+      }
     } catch {
       setMsgs([...history, { role: "assistant", content: t.error }]);
     } finally {
