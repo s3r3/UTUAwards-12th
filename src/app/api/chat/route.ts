@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import type { Prisma } from '@prisma/client';
 
 type ChatMessage = {
   role: 'user' | 'assistant' | 'system';
@@ -33,7 +34,7 @@ async function getRecommendationProducts(filters: LLMRecommendation['filters']) 
   }
   if (filters.categories && filters.categories.length > 0) {
     // Normalize categories to match Prisma enum
-    const validCategories = VALID_CATEGORIES.filter((c) => filters.categories!.includes(c));
+    const validCategories = VALID_CATEGORIES.filter((c) => filters.categories!.includes(c)) as Prisma.ProductWhereInput['category'] extends infer T ? T extends { in?: infer U } ? U extends readonly (infer V)[] ? V[] : never : never : never;
     if (validCategories.length > 0) {
       where.category = { in: validCategories };
     }
