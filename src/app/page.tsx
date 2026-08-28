@@ -9,13 +9,12 @@ import CategoryChoiceSection from '@/components/landing/CategoryChoiceSection'
 import SourcingRegions from '@/components/landing/SourcingRegions'
 import BottomLifestyleBanner from '@/components/landing/BottomLifestyleBanner'
 import Footer from '@/components/landing/Footer'
-import LoadingWrapper from '@/components/landing/LoadingWrapper'
 import { getServerTranslations } from '@/lib/i18n'
 
 export default function HomePage() {
   const t = getServerTranslations()
   return (
-    <LoadingWrapper>
+    <>
       <HeroVideo />
       <BestSellersSection />
       <AboutPreviewSection />
@@ -36,6 +35,6 @@ export default function HomePage() {
       <SourcingRegions />
       <BottomLifestyleBanner />
       <Footer />
-    </LoadingWrapper>
+    </>
   )
 }
