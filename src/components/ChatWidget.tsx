@@ -1,7 +1,10 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useI18NStore } from "@/lib/i18n";
 import { useUIStore } from "@/store/ui.store";
+import { useCartStore } from "@/store/cart.store";
 
 type RecProduct = {
   id: string;
@@ -45,6 +48,8 @@ export default function ChatWidget() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const addItem = useCartStore((s) => s.addItem);
 
   const lang = useI18NStore((s) => s.lang);
   const theme = useUIStore((s) => s.theme);
@@ -141,17 +146,56 @@ export default function ChatWidget() {
                     🙂
                   </div>
                 )}
-                <span
+                <div
                   className={
                     m.role === "user"
-                      ? "inline-block max-w-[80%] whitespace-pre-wrap break-words rounded-2xl rounded-br-sm bg-primary-600 px-3 py-1.5 text-left text-sm text-white"
-                      : `inline-block max-w-[80%] whitespace-pre-wrap break-words rounded-2xl rounded-bl-sm border px-3 py-1.5 text-left text-sm ${
+                      ? "max-w-[80%] whitespace-pre-wrap break-words rounded-2xl rounded-br-sm bg-primary-600 px-3 py-1.5 text-left text-sm text-white"
+                      : `max-w-[80%] rounded-2xl rounded-bl-sm border px-3 py-1.5 text-left text-sm ${
                           isDark ? "border-gray-800 bg-gray-900 text-gray-200" : "border-gray-200 bg-white text-gray-800"
                         }`
                   }
                 >
-                  {m.content}
-                </span>
+                  <p className="whitespace-pre-wrap break-words">{m.content}</p>
+                  {m.type === "RECOMMENDATION" && m.data?.products && (
+                    <div className="mt-2 max-w-[260px] space-y-2">
+                      <div className="-mx-1 flex max-h-44 gap-2 overflow-x-auto px-1 pb-1">
+                        {m.data.products.map((p) => (
+                          <Link
+                            key={p.id}
+                            href={`/products/${p.id}`}
+                            onClick={() => setOpen(false)}
+                            className={`flex w-24 shrink-0 flex-col overflow-hidden rounded-xl border transition hover:border-primary-500 ${
+                              isDark ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-white"
+                            }`}
+                          >
+                            <div className="relative aspect-square bg-stone-100">
+                              {p.image && (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
+                              )}
+                            </div>
+                            <div className="p-2">
+                              <p className="line-clamp-2 text-[11px] font-medium">{p.name}</p>
+                              <p className="mt-1 text-[11px] font-semibold">Rp {p.price.toLocaleString("id-ID")}</p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => {
+                          m.data!.products.forEach((p) =>
+                            addItem({ productId: p.id, name: p.name, price: p.price, image: p.image, stock: p.stock })
+                          );
+                          setOpen(false);
+                          router.push("/checkout");
+                        }}
+                        className="w-full rounded-full bg-emerald-950 px-3 py-2 text-center text-xs tracking-widest uppercase text-white hover:bg-emerald-800"
+                      >
+                        Checkout Semua
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
             {loading && (

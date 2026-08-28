@@ -62,6 +62,7 @@ async function getRecommendationProducts(filters: LLMRecommendation['filters']) 
 
 // Helper: parse LLM content for JSON recommendation
 function parseRecommendationIntent(content: string): LLMRecommendation | null {
+  // Try direct parse first
   try {
     const parsed: unknown = JSON.parse(content);
     const obj = parsed as { type?: string; filters?: unknown };
@@ -70,7 +71,21 @@ function parseRecommendationIntent(content: string): LLMRecommendation | null {
       return { type: 'RECOMMENDATION', filters: f };
     }
   } catch {
-    // Not JSON, treat as normal text
+    // fall through to try extracting JSON from text
+  }
+  // Try extracting JSON object from mixed text (AI often prepends explanation)
+  const match = content.match(/\{[\s\S]*?"type"\s*:\s*"RECOMMENDATION"[\s\S]*?\}/);
+  if (match) {
+    try {
+      const parsed: unknown = JSON.parse(match[0]);
+      const obj = parsed as { type?: string; filters?: unknown };
+      if (obj?.type === 'RECOMMENDATION' && typeof obj.filters === 'object') {
+        const f = obj.filters as LLMRecommendation['filters'];
+        return { type: 'RECOMMENDATION', filters: f };
+      }
+    } catch {
+      // Not valid JSON
+    }
   }
   return null;
 }
