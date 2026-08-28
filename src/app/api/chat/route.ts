@@ -26,7 +26,7 @@ const VALID_CATEGORIES = ['COFFEE', 'PATCHOULI', 'SEAFOOD', 'SPICES', 'PROCESSED
 
 // Helper: safely query products for recommendation
 async function getRecommendationProducts(filters: LLMRecommendation['filters']) {
-  const where: any = { status: 'APPROVED' };
+  const where: Prisma.ProductWhereInput = { status: 'APPROVED' };
 
   if (filters.maxPrice) {
     where.price = { lte: filters.maxPrice };
