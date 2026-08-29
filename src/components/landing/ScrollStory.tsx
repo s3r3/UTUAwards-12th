@@ -47,7 +47,7 @@ export default function ScrollStory() {
             <div
               key={step.titleKey}
               ref={(el) => { refs.current[i] = el }}
-              className={`relative flex items-center gap-6 mb-16 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+              className={`relative flex flex-col items-center gap-6 mb-16 md:flex-row ${i % 2 === 0 ? '' : 'md:flex-row-reverse'}`}
             >
               <div className="absolute left-4 md:left-1/2 -translate-x-1/2 z-10">
                 <motion.div

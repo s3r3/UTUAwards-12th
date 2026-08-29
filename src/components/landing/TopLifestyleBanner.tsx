@@ -9,7 +9,7 @@ import { motion } from 'framer-motion'
 export default function TopLifestyleBanner() {
   const t = useTranslations()
   return (
-    <section className="relative h-[60vh] w-full overflow-hidden">
+    <section className="relative h-[50vh] md:h-[60vh] w-full overflow-hidden">
       <Image
         src="https://images.unsplash.com/photo-1504755241915-f736314b92c5?w=1920&q=80"
         alt="People gathering for a meal"
