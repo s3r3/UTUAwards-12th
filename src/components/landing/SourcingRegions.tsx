@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { Coffee, Wheat as WheatIcon, Banana, Fish } from 'lucide-react'
 import { useTranslations } from '@/lib/i18n'
 
 export default function SourcingRegions() {
@@ -37,6 +38,25 @@ export default function SourcingRegions() {
             <p className="mt-2 text-sm text-ocean-700 dark:text-ocean-400">{t.landing.indianOceanDesc}</p>
           </div>
         </motion.div>
+
+        {/* Harvest Calendar mini-section */}
+        <div className="mt-16">
+          <h3 className="font-serif text-xl text-stone-900 dark:text-white mb-6">{t.landing.harvestTitle}</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { season: t.landing.harvestMonths1, Icon: Coffee, product: t.landing.harvestProduct1, color: 'bg-amber-50 dark:bg-amber-900/20' },
+              { season: t.landing.harvestMonths2, Icon: WheatIcon, product: t.landing.harvestProduct2, color: 'bg-emerald-50 dark:bg-emerald-900/20' },
+              { season: t.landing.harvestMonths3, Icon: Banana, product: t.landing.harvestProduct3, color: 'bg-yellow-50 dark:bg-yellow-900/20' },
+              { season: t.landing.harvestMonths4, Icon: Fish, product: t.landing.harvestProduct4, color: 'bg-sky-50 dark:bg-sky-900/20' },
+            ].map((item) => (
+              <div key={item.season} className={`rounded-2xl border border-gray-200 dark:border-gray-700 ${item.color} p-4 text-center transition hover:scale-105`}>
+                <item.Icon className="h-8 w-8 mx-auto mb-2 text-stone-700 dark:text-gray-300" />
+                <div className="text-xs font-semibold uppercase tracking-widest text-stone-500 dark:text-gray-400">{item.season}</div>
+                <div className="mt-1 font-serif text-sm font-bold text-stone-900 dark:text-white">{item.product}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )

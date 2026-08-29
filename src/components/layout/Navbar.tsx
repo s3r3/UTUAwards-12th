@@ -71,7 +71,7 @@ export default function Navbar() {
               </button>
 
               <div className="hidden md:flex items-center gap-6">
-                {[{ key: 'shop', href: '/products', label: t.nav.shop }].map((item) => {
+                {[{ key: 'shop', href: '/products', label: t.nav.shop }, { key: 'map', href: '/map', label: 'MAP' }].map((item) => {
                   const active = isActive(item.href)
                   return (
                     <Link key={item.key} href={item.href} className="group relative px-1 py-1 text-sm font-semibold uppercase tracking-widest transition-colors duration-300" style={{ color: cl }}>
@@ -145,7 +145,7 @@ export default function Navbar() {
                 {isDark ? <Sun size={18} /> : <Moon size={18} />}
               </button>
 
-              <button onClick={() => setCartOpen(true)} className="relative flex items-center justify-center rounded-xl px-2.5 py-2 text-sm font-semibold uppercase tracking-wider transition-colors duration-300" style={{ color: c }} aria-label="Open cart">
+              <button onClick={() => setCartOpen(true)} data-cart-icon className="relative flex items-center justify-center rounded-xl px-2.5 py-2 text-sm font-semibold uppercase tracking-wider transition-colors duration-300" style={{ color: c }} aria-label="Open cart">
                 <Package size={18} />
                 {count > 0 && <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 text-[9px] font-bold text-white">{count}</span>}
               </button>

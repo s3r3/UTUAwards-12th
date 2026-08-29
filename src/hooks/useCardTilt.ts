@@ -17,7 +17,7 @@ interface TiltState {
 }
 
 export function useCardTilt(options: TiltOptions = {}): {
-  ref: RefObject<HTMLDivElement>
+  ref: RefObject<HTMLDivElement | null>
   style: CSSProperties
   shadowStyle: CSSProperties
   isHovering: boolean
@@ -30,7 +30,7 @@ export function useCardTilt(options: TiltOptions = {}): {
     easing = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
   } = options
 
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement | null>(null)
   const [tilt, setTilt] = useState<TiltState>({ rotateX: 0, rotateY: 0, scale: 1 })
   const [isHovering, setIsHovering] = useState(false)
 

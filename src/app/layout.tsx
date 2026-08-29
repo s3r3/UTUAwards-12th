@@ -5,6 +5,7 @@ import Providers from '@/components/Providers'
 import PublicShell from '@/components/layout/PublicShell'
 import ChatWidget from '@/components/ChatWidget'
 import ScrollProgress from '@/components/ScrollProgress'
+import CartFlyAnimation from '@/components/ui/CartFlyAnimation'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -88,6 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ChatWidget />
         </Providers>
         <ScrollProgress />
+        <CartFlyAnimation />
       </body>
     </html>
   )

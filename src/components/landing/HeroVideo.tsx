@@ -20,6 +20,9 @@ export default function HeroVideo() {
         />
         <div className="absolute inset-0 bg-gray-950/60" />
         <div className="absolute inset-0 bg-gradient-to-tr from-primary-900/40 via-ocean-800/20 to-transparent" />
+
+        {/* Aceh cultural pattern overlay — subtle heritage feel */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\' viewBox=\'0 0 60 60\'%3E%3Cg fill=\'none\' stroke=\'%23fff\' stroke-width=\'1\'%3E%3Cpath d=\'M30 5 L55 30 L30 55 L5 30Z\'/%3E%3Ccircle cx=\'30\' cy=\'30\' r=\'8\'/%3E%3C/g%3E%3C/svg%3E")', backgroundSize: '60px 60px' }} />
       </div>
 
       <div className="relative z-10 flex h-full items-center justify-center text-center px-4">

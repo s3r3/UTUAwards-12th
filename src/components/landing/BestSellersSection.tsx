@@ -1,9 +1,11 @@
 'use client'
 
 import { getBestSellers, type BestSellerProduct } from '@/lib/products'
-import type { Translations } from '@/lib/i18n/en'
 import Image from 'next/image'
+import { Leaf, Handshake, Recycle, Factory } from 'lucide-react'
 import { useTranslations } from '@/lib/i18n'
+import { useCardTilt } from '@/hooks/useCardTilt'
+import { motion } from 'framer-motion'
 
 interface ProductCardProps {
   product: BestSellerProduct
@@ -14,9 +16,18 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product, comingSoon = false, addToCartLabel, comingSoonLabel, labels }: ProductCardProps) {
+  const { ref, style, shadowStyle } = useCardTilt({ maxTilt: 12, scale: 1.03 })
+
   return (
-    <div className="w-full overflow-hidden border border-black/20 bg-white/80 shadow-none dark:border-white/15 dark:bg-gray-950/80">
-      <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-amber-100 via-stone-100 to-emerald-50 dark:from-emerald-950 dark:via-slate-900 dark:to-cyan-950">
+    <motion.div
+      ref={ref}
+      style={style}
+      className="w-full overflow-hidden border border-black/20 bg-white/80 shadow-none dark:border-white/15 dark:bg-gray-950/80"
+    >
+      <div
+        className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-amber-100 via-stone-100 to-emerald-50 dark:from-emerald-950 dark:via-slate-900 dark:to-cyan-950"
+        style={shadowStyle}
+      >
         <Image
           src={product.image}
           alt={product.name}
@@ -60,7 +71,7 @@ function ProductCard({ product, comingSoon = false, addToCartLabel, comingSoonLa
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -73,7 +84,7 @@ export default function BestSellersSection() {
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-3 md:gap-12">
           <div className="w-full">
-                        <ProductCard product={farmProduct} labels={t.landing.bestSellerFarm} addToCartLabel={t.landing.addToCart} comingSoonLabel={t.landing.comingSoon} />
+            <ProductCard product={farmProduct} labels={t.landing.bestSellerFarm} addToCartLabel={t.landing.addToCart} comingSoonLabel={t.landing.comingSoon} />
           </div>
 
           <div className="flex h-full flex-col items-center justify-center text-center">
@@ -89,7 +100,42 @@ export default function BestSellersSection() {
           </div>
 
           <div className="w-full">
-                        <ProductCard product={seaProduct} comingSoon labels={t.landing.bestSellerSea} addToCartLabel={t.landing.addToCart} comingSoonLabel={t.landing.comingSoon} />
+            <ProductCard product={seaProduct} comingSoon labels={t.landing.bestSellerSea} addToCartLabel={t.landing.addToCart} comingSoonLabel={t.landing.comingSoon} />
+          </div>
+        </div>
+
+        {/* Sustainability badges */}
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-6 border-t border-black/10 pt-8 dark:border-white/10">
+          {[
+            { Icon: Leaf, label: t.landing.badgeOrganic },
+            { Icon: Handshake, label: t.landing.badgeFairTrade },
+            { Icon: Recycle, label: t.landing.badgeEcoFriendly },
+            { Icon: Factory, label: t.landing.badgeLocal },
+          ].map((b) => (
+            <div key={b.label} className="flex items-center gap-2 text-sm text-stone-600 dark:text-gray-400">
+              <b.Icon className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              <span className="font-medium">{b.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Newsletter CTA */}
+        <div className="mt-10 rounded-2xl border border-primary-200 bg-primary-50/60 p-6 dark:border-primary-800/40 dark:bg-primary-950/20">
+          <div className="flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
+            <div className="flex-1">
+              <h3 className="font-serif text-xl font-bold text-primary-800 dark:text-primary-200">{t.landing.newsletterTitle}</h3>
+              <p className="mt-1 text-sm text-primary-600 dark:text-primary-400">{t.landing.newsletterDesc}</p>
+            </div>
+            <div className="flex w-full gap-2 md:w-auto">
+              <input
+                type="email"
+                placeholder="email@contoh.com"
+                className="flex-1 rounded-full border border-primary-300 bg-white px-4 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-primary-500 focus:outline-none dark:border-primary-700 dark:bg-gray-900 dark:text-gray-100 md:w-56"
+              />
+              <button className="rounded-full bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700">
+                {t.landing.addToCart}
+              </button>
+            </div>
           </div>
         </div>
       </div>

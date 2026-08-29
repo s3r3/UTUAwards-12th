@@ -150,16 +150,20 @@ function ProductCard({ product, addItem }: { product: Product; addItem: (item: C
       viewport={{ once: true }}
       className="group flex flex-col h-full"
     >
-      <Link href={`/products/${product.id}`} className="block relative aspect-[4/5] overflow-hidden bg-stone-100 mb-4">
-        <Image
-          src={product.image || ''}
-          alt={displayName}
-          fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, 33vw"
-        />
-        <Heart className="absolute top-4 right-4 text-stone-900 hover:fill-stone-900 transition-colors" size={20} />
-      </Link>
+      <div className="block relative aspect-[4/5] overflow-hidden bg-stone-100 mb-4">
+        <Link href={`/products/${product.id}`}>
+          <Image
+            src={product.image || ''}
+            alt={displayName}
+            fill
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+        </Link>
+        <div className="absolute top-4 right-4">
+          <Heart className="text-stone-900 hover:fill-stone-900 transition-colors" size={20} />
+        </div>
+      </div>
 
       <div className="mb-4 flex-grow">
         <h3 className="font-serif text-lg ">{displayName}</h3>

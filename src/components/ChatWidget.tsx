@@ -131,6 +131,24 @@ export default function ChatWidget() {
           <div ref={scrollRef} className={`flex-1 space-y-3 overflow-y-auto px-3 py-3 ${
             isDark ? "bg-gray-950" : "bg-white"
           }`}>
+            {msgs.length <= 1 && !loading && (
+              <div className="flex flex-wrap gap-1.5 px-1 pt-1">
+                {(lang === "id"
+                  ? ["Rekomendasi kopi Aceh", "Cara order?", "Produk terlaris", "Lokasi pengiriman"]
+                  : ["Recommend Aceh coffee", "How to order?", "Best sellers", "Delivery areas"]
+                ).map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => { setInput(q); setTimeout(() => send(), 50); }}
+                    className={`rounded-full border px-2.5 py-1 text-[11px] transition hover:border-primary-500 hover:text-primary-600 ${
+                      isDark ? "border-gray-700 text-gray-300" : "border-gray-200 text-gray-600"
+                    }`}
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
             {msgs.map((m, i) => (
               <div key={i} className={`flex items-end gap-1.5 ${m.role === "user" ? "flex-row-reverse" : ""}`}>
                 {m.role === "assistant" ? (
