@@ -7,6 +7,7 @@ import ParallaxImage from '@/components/landing/ParallaxImage'
 import TopLifestyleBanner from '@/components/landing/TopLifestyleBanner'
 import CategoryChoiceSection from '@/components/landing/CategoryChoiceSection'
 import SourcingRegions from '@/components/landing/SourcingRegions'
+import StatsCounter from '@/components/landing/StatsCounter'
 import BottomLifestyleBanner from '@/components/landing/BottomLifestyleBanner'
 import Footer from '@/components/landing/Footer'
 import { getServerTranslations } from '@/lib/i18n'
@@ -19,6 +20,7 @@ export default function HomePage() {
       <BestSellersSection />
       <AboutPreviewSection />
       <BrandBanner />
+      <StatsCounter />
       <ParallaxImage
         src="/images/landing1.png"
         alt="Harvest field"

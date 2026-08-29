@@ -4,6 +4,7 @@ import './globals.css'
 import Providers from '@/components/Providers'
 import PublicShell from '@/components/layout/PublicShell'
 import ChatWidget from '@/components/ChatWidget'
+import ScrollProgress from '@/components/ScrollProgress'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -86,6 +87,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <PublicShell>{children}</PublicShell>
           <ChatWidget />
         </Providers>
+        <ScrollProgress />
       </body>
     </html>
   )
