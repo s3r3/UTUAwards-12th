@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { Package, ShoppingBag, Users, Shield } from 'lucide-react';
 import { useTranslations } from '@/lib/i18n';
-import { useUIStore } from '@/store/ui.store';
 
 // ponytail: dummy data until real payments API exists
 const dummyPayments = [

@@ -324,6 +324,7 @@ const en = {
     mapZoneFishing: 'Fishing Zone',
     mapZoneFarming: 'Farming Zone',
     mapNewsTitle: 'Latest News',
+    mapSelectRegionForNews: 'Select a region to see the latest news',
     mapAllRegions: 'All Regions',
     mapPickRegion: 'Pick a Region',
     mapPickRegionDesc: 'Click a marker on the map to see source details',

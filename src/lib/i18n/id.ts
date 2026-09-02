@@ -322,6 +322,7 @@ const id: Translations = {
     mapZoneFishing: 'Zona Perikanan',
     mapZoneFarming: 'Zona Pertanian',
     mapNewsTitle: 'Berita Terkini',
+    mapSelectRegionForNews: 'Pilih wilayah untuk melihat berita terkini',
     mapAllRegions: 'Semua Wilayah',
     mapPickRegion: 'Pilih Wilayah',
     mapPickRegionDesc: 'Klik marker di peta untuk melihat detail sumber',

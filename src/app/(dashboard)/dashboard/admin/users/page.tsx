@@ -1,6 +1,6 @@
 'use client'
 
-import { Users, Search, Shield, UserX } from 'lucide-react'
+import { Search, UserX } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslations } from '@/lib/i18n'
 
