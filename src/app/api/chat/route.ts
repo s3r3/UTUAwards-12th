@@ -60,6 +60,57 @@ async function getRecommendationProducts(filters: LLMRecommendation['filters']) 
   });
 }
 
+// Helper: detect product recommendation intent from user message (rule-based, no LLM)
+function detectProductIntent(message: string): LLMRecommendation | null {
+  const lower = message.toLowerCase();
+
+  // Category keywords
+  const categoryMap: Record<string, string[]> = {
+    SPICES: ['rempah', 'bumbu', 'lada', 'kayu manis', 'kunyit', 'jahe', 'kencur', 'cabe', 'cabai', 'merica'],
+    COFFEE: ['kopi', 'coffee'],
+    SEAFOOD: ['udang', 'ikan', 'seafood', 'lele', 'kerang', 'ikan asin', 'ikan kering', 'udang kering'],
+    PATCHOULI: ['minyak nilam', 'patchouli', 'essential oil', 'aromaterapi'],
+    PROCESSED: ['dodol', 'keripik', 'kue', 'snack', 'olahan'],
+  };
+
+  const detectedCategories: string[] = [];
+  const keywords: string[] = [];
+
+  for (const [cat, words] of Object.entries(categoryMap)) {
+    for (const w of words) {
+      if (lower.includes(w)) {
+        detectedCategories.push(cat);
+        keywords.push(w);
+        break;
+      }
+    }
+  }
+
+  // Budget detection (e.g. "dibawah 50rb", "harga 30000", "< 100000")
+  let maxPrice: number | undefined;
+  const budgetMatch = lower.match(/(?:dibawah|di bawah|d bawah|max|maks|harga|harga\s*<|budget|Rp\s*)(\d[\d.]*\d+)/);
+  if (budgetMatch) {
+    const numStr = budgetMatch[1].replace(/\./g, '');
+    const num = parseInt(numStr, 10);
+    if (num > 0) maxPrice = num;
+  }
+
+  // Trigger keywords: user is asking for products
+  const triggers = ['kasih', 'cari', 'lihat', 'tunjukkan', 'ada', 'mau', 'beli', 'produk', 'rekomendasi', 'recommend'];
+  const isProductRequest = triggers.some((t) => lower.includes(t)) && (detectedCategories.length > 0 || keywords.length > 0);
+
+  if (!isProductRequest) return null;
+
+  return {
+    type: 'RECOMMENDATION',
+    filters: {
+      maxPrice,
+      keywords: keywords.length > 0 ? keywords : undefined,
+      categories: detectedCategories.length > 0 ? [...new Set(detectedCategories)] : undefined,
+    },
+  };
+}
+
 // Helper: parse LLM content for JSON recommendation
 function parseRecommendationIntent(content: string): LLMRecommendation | null {
   // Try direct parse first
@@ -93,6 +144,23 @@ function parseRecommendationIntent(content: string): LLMRecommendation | null {
 export async function POST(req: Request) {
   const { messages }: { messages: ChatMessage[] } = await req.json();
 
+  // Rule-based: detect product request from user's last message before calling LLM
+  const lastUserMsg = [...messages].reverse().find((m) => m.role === 'user')?.content ?? '';
+  const ruleIntent = detectProductIntent(lastUserMsg);
+
+  if (ruleIntent) {
+    const products = await getRecommendationProducts(ruleIntent.filters);
+    const reply = products.length > 0
+      ? 'Ini rekomendasi produk yang cocok buat kamu:'
+      : 'Hmm, belum ada produk yang cocok dengan pencarianmu. Coba ubah kata kunci atau naikkan budget sedikit ya!';
+    return Response.json({
+      type: 'RECOMMENDATION',
+      content: reply,
+      data: { products, totalPrice: products.reduce((s, p) => s + p.price, 0) },
+    });
+  }
+
+  // No rule match → ask LLM
   const res = await fetch(process.env.LLM_URL!, {
     method: 'POST',
     headers: {
