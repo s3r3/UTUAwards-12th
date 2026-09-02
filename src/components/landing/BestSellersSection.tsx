@@ -61,7 +61,7 @@ function ProductCard({ product, comingSoon = false, addToCartLabel, comingSoonLa
 
         <div className="border-t border-black/20 dark:border-white/15">
           <button
-            className={`block w-full px-4 py-3 text-center text-sm uppercase tracking-[0.28em] transition-colors ${
+            className={`block w-full px-2 py-3 text-center text-xs md:text-sm uppercase tracking-widest md:tracking-[0.28em] transition-colors ${
               comingSoon
                 ? 'bg-transparent text-gray-900 hover:bg-black/5 dark:text-gray-100 dark:hover:bg-white/10'
                 : 'bg-primary-600 text-white hover:bg-primary-700 dark:bg-ocean-600 dark:hover:bg-ocean-500'
@@ -126,7 +126,7 @@ export default function BestSellersSection() {
               <h3 className="font-serif text-xl font-bold text-primary-800 dark:text-primary-200">{t.landing.newsletterTitle}</h3>
               <p className="mt-1 text-sm text-primary-600 dark:text-primary-400">{t.landing.newsletterDesc}</p>
             </div>
-            <div className="flex w-full gap-2 md:w-auto">
+            <div className="flex flex-col w-full gap-2 md:flex-row md:w-auto">
               <input
                 type="email"
                 placeholder="email@contoh.com"
