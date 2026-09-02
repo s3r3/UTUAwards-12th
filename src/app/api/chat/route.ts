@@ -101,6 +101,7 @@ export async function POST(req: Request) {
     },
     body: JSON.stringify({
       model: process.env.LLM_MODEL,
+      stream: false,
       messages: [
         {
           role: 'system',
@@ -113,10 +114,46 @@ export async function POST(req: Request) {
 
   const rawResponse = await res.text();
 
+  // Validate response structure before parsing
+  if (!rawResponse || typeof rawResponse !== 'string') {
+    return Response.json({ content: 'Maaf, respons dari server tidak valid.' }, { status: 500 });
+  }
+
+  // Check for empty or malformed response
+  if (rawResponse.trim() === '' || rawResponse === '[DONE]') {
+    return Response.json({ content: 'Maaf, server tidak memberikan respons yang valid.' }, { status: 500 });
+  }
+
   try {
-    const cleanResponse = rawResponse.replace(/data: \[DONE\]/g, '').replace(/data: /g, '').trim();
-    const data = JSON.parse(cleanResponse);
-    const content: string = data.choices?.[0]?.message?.content ?? 'Maaf, terjadi kesalahan.';
+    // Parse SSE or plain JSON response
+    let jsonStr = rawResponse.trim();
+    if (jsonStr.startsWith('data: ')) {
+      // SSE format: extract last non-[DONE] data line
+      const lines = jsonStr.split('\n');
+      const dataLines = lines
+        .filter((l) => l.startsWith('data: ') && !l.includes('[DONE]'))
+        .map((l) => l.slice(6)); // strip "data: " prefix
+      if (dataLines.length === 0) {
+        return Response.json({ content: 'Maaf, LLM tidak mengembalikan respons.' }, { status: 500 });
+      }
+      jsonStr = dataLines[dataLines.length - 1];
+    }
+    const data = JSON.parse(jsonStr);
+
+    // Validate LLM response structure — handle multiple formats
+    const content: string =
+      data?.choices?.[0]?.message?.content ?? // OpenAI format
+      data?.response ?? // some local LLMs
+      data?.content ?? // direct content
+      data?.choices?.[0]?.text ?? // older completions format
+      '';
+
+    if (!content) {
+      console.error('Invalid LLM response structure:', data);
+      return Response.json({
+        content: 'Maaf, format respons dari server tidak sesuai. Silakan coba lagi.'
+      }, { status: 500 });
+    }
 
     // Check if LLM returned a recommendation intent
     const intent = parseRecommendationIntent(content);
@@ -139,7 +176,10 @@ export async function POST(req: Request) {
     return Response.json({ content });
   } catch (error) {
     console.error('JSON parsing error:', error);
-    return Response.json({ content: 'Maaf, terjadi kesalahan saat memproses respons. Respons tidak valid.' }, { status: 500 });
+    console.error('Raw response:', rawResponse);
+    return Response.json({
+      content: 'Maaf, terjadi kesalahan saat memproses respons. Silakan coba lagi nanti.'
+    }, { status: 500 });
   }
 }
 
