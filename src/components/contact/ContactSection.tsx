@@ -32,24 +32,24 @@ export default function ContactSection() {
       <motion.div variants={stagger} initial="hidden" animate="visible" className="mx-auto mb-16 md:mb-24">
         <motion.h1
           variants={fadeUp}
-          className="text-center font-serif text-5xl font-semibold uppercase tracking-[0.15em] text-slate-950 md:text-7xl"
+          className="text-center font-serif text-5xl font-semibold uppercase tracking-[0.15em] text-slate-950 dark:text-white md:text-7xl"
         >
           {t.landing.questions}
         </motion.h1>
-        <motion.p variants={fadeUp} className="mt-4 text-center text-base text-slate-600 md:text-lg">
+        <motion.p variants={fadeUp} className="mt-4 text-center text-base text-slate-600 dark:text-gray-400 md:text-lg">
           We are here to help with your harvest, catch, or order.
         </motion.p>
-        <motion.div variants={fadeUp} className="mx-auto mt-6 h-px w-16 bg-slate-950/15" />
+        <motion.div variants={fadeUp} className="mx-auto mt-6 h-px w-16 bg-slate-950/15 dark:bg-white/15" />
       </motion.div>
 
-      <motion.div variants={stagger} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 md:divide-x md:divide-slate-950/10">
+      <motion.div variants={stagger} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 md:divide-x md:divide-slate-950/10 dark:md:divide-white/10">
         <motion.div variants={fadeUp} className="flex flex-col space-y-10 pb-12 pr-0 md:pr-12 md:pb-0">
           {contactInfo.map(({ label, value }) => (
             <div key={label} className="space-y-1">
-              <h3 className="font-serif text-2xl font-semibold uppercase tracking-wider text-slate-950 md:text-3xl">
+              <h3 className="font-serif text-2xl font-semibold uppercase tracking-wider text-slate-950 dark:text-white md:text-3xl">
                 {label}
               </h3>
-              <p className="font-mono text-sm text-slate-600 md:text-base">{value}</p>
+              <p className="font-mono text-sm text-slate-600 dark:text-gray-400 md:text-base">{value}</p>
             </div>
           ))}
         </motion.div>
@@ -70,7 +70,7 @@ export default function ContactSection() {
                 name={field.name}
                 type={field.type}
                 placeholder={field.placeholder}
-                className="w-full border-b border-slate-950/20 bg-transparent py-3 text-sm text-slate-950 outline-none transition-colors placeholder:text-slate-500/60 focus:border-slate-950/60"
+                className="w-full border-b border-slate-950/20 bg-transparent py-3 text-sm text-slate-950 outline-none transition-colors placeholder:text-slate-500/60 focus:border-slate-950/60 dark:border-white/20 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-white/60"
               />
             </div>
           ))}
@@ -80,14 +80,14 @@ export default function ContactSection() {
             <select
               id="subject"
               name="subject"
-              className="w-full border-b border-slate-950/20 bg-transparent py-3 text-sm text-slate-950 outline-none transition-colors focus:border-slate-950/60"
+              className="w-full border-b border-slate-950/20 bg-transparent py-3 text-sm text-slate-950 outline-none transition-colors focus:border-slate-950/60 dark:border-white/20 dark:text-white dark:focus:border-white/60"
               defaultValue=""
             >
               <option value="" disabled className="text-slate-500">{t.landing.selectSubject}</option>
-              <option value="inquiry">{t.landing.subjectInquiry}</option>
-              <option value="partnership">{t.landing.subjectPartnership}</option>
-              <option value="order">{t.landing.subjectOrder}</option>
-              <option value="other">{t.landing.subjectOther}</option>
+              <option value="inquiry" className="dark:bg-gray-800 dark:text-white">{t.landing.subjectInquiry}</option>
+              <option value="partnership" className="dark:bg-gray-800 dark:text-white">{t.landing.subjectPartnership}</option>
+              <option value="order" className="dark:bg-gray-800 dark:text-white">{t.landing.subjectOrder}</option>
+              <option value="other" className="dark:bg-gray-800 dark:text-white">{t.landing.subjectOther}</option>
             </select>
           </div>
 
@@ -98,13 +98,13 @@ export default function ContactSection() {
               name="message"
               rows={4}
               placeholder="Message"
-              className="w-full resize-none border-b border-slate-950/20 bg-transparent py-3 text-sm text-slate-950 outline-none transition-colors placeholder:text-slate-500/60 focus:border-slate-950/60"
+              className="w-full resize-none border-b border-slate-950/20 bg-transparent py-3 text-sm text-slate-950 outline-none transition-colors placeholder:text-slate-500/60 focus:border-slate-950/60 dark:border-white/20 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-white/60"
             />
           </div>
 
           <button
             type="submit"
-            className="mt-2 w-full bg-emerald-950 px-6 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-emerald-900 rounded-none"
+            className="mt-2 w-full bg-emerald-950 px-6 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-emerald-900 rounded-none dark:bg-emerald-700 dark:hover:bg-emerald-600"
           >
             {t.common.sendButton}
           </button>

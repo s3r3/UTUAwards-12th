@@ -21,8 +21,8 @@ export default function MapPage() {
     <div className="min-h-screen bg-gradient-to-b from-stone-50 via-white to-ocean-50/20 dark:from-gray-950 dark:via-gray-900 dark:to-ocean-950/20">
       <header className="border-b border-gray-200 dark:border-gray-700 bg-white/80 backdrop-blur-md dark:bg-gray-950/80 mt-20">
         <div className="mx-auto max-w-7xl px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex flex-col items-center sm:flex-row sm:justify-between">
+            <div className="text-center sm:text-left min-w-0 mb-4 sm:mb-0">
               <h1 className="font-serif text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">
                 {t.landing.mapPageTitle}
               </h1>
@@ -30,11 +30,11 @@ export default function MapPage() {
                 {t.landing.mapPageSubtitle}
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-ocean-100 dark:bg-ocean-900/40 px-3 py-1.5 text-xs font-medium text-ocean-700 dark:text-ocean-300">
+            <div className="flex flex-nowrap justify-center sm:justify-end gap-2 mt-4 sm:mt-0">
+              <span className="flex-shrink-0 rounded-full bg-ocean-100 dark:bg-ocean-900/40 px-3 py-1.5 text-xs font-medium text-ocean-700 dark:text-ocean-300">
                 {regions.filter((r) => r.type === 'fishing').length} {t.landing.mapZoneFishing}
               </span>
-              <span className="rounded-full bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300">
+              <span className="flex-shrink-0 rounded-full bg-emerald-100 dark:bg-emerald-900/40 px-3 py-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300">
                 {regions.filter((r) => r.type === 'agriculture').length} {t.landing.mapZoneFarming}
               </span>
             </div>
@@ -44,21 +44,25 @@ export default function MapPage() {
 
       <main className="mx-auto max-w-7xl px-6 py-8 pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 relative z-0">
             <RegionalMap onRegionSelect={setSelectedRegionId} />
           </div>
 
           <div className="space-y-6">
             <RegionCard region={selectedRegion} />
 
-            {selectedRegion && (
-              <div className="rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 shadow-xl">
-                <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  <Newspaper size={18} /> {t.landing.mapNewsTitle}
-                </h3>
+            <div className="rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 shadow-xl">
+              <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
+                <Newspaper size={18} /> {t.landing.mapNewsTitle}
+              </h3>
+              {selectedRegion ? (
                 <RegionNews news={selectedRegion.news} />
-              </div>
-            )}
+              ) : (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {t.landing.mapSelectRegionForNews}
+                </p>
+              )}
+            </div>
 
             {!selectedRegion && (
               <div className="rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 shadow-xl">

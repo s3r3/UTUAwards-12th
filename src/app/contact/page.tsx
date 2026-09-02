@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-[#faf7f2]">
+    <main className="min-h-screen bg-[#faf7f2] dark:bg-gray-950">
       <ContactSection />
       <Footer />
     </main>

@@ -24,7 +24,7 @@ export default function DashboardPage() {
   const completed = orders.filter(o => o.status === 'DELIVERED').length
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 overflow-x-hidden">
       <h1 className="font-serif text-3xl font-bold text-gray-900 dark:text-white">
         {t.dashboard.overviewTitle}
       </h1>

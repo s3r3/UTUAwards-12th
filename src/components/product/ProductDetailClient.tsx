@@ -253,14 +253,15 @@ export default function ProductDetailClient({ product, category, isAvailable, re
 
   return (
     <div className="grid md:grid-cols-2 gap-10">
-      {/* Image Gallery — sticky left */}
+      {/* Image Gallery */}
       <div className="md:sticky md:top-24 h-fit">
-        <div className="relative aspect-square bg-stone-100">
+        <div className="relative w-full aspect-square bg-stone-100">
           {product.image ? (
             <Image
               src={product.image}
               alt={product.name}
               fill
+              unoptimized
               sizes="(max-width: 768px) 100vw, 55vw"
               priority
               className="object-cover"
@@ -309,7 +310,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
       </div>
 
       {/* Product Info */}
-      <div className="py-4">
+      <div className="py-4 md:py-0">
         {/* Breadcrumbs */}
         <nav className="mb-6 text-sm text-stone-500 dark:text-gray-400">
           <Link href="/" className="hover:underline text-stone-600 dark:text-gray-300">{t.landing.homeBreadcrumb || 'Home'}</Link>

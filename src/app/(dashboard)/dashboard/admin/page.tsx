@@ -23,33 +23,37 @@ const statusStyles: Record<string, string> = {
 function PaymentList({ payments }: { payments: typeof dummyPayments }) {
   const t = useTranslations();
   return (
-    <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white text-gray-900">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="text-left font-semibold">
-            <th className="p-4">ID</th>
-            <th className="p-4">{t.dashboard.owner}</th>
-            <th className="p-4">{t.dashboard.orderTotal}</th>
-            <th className="p-4">Method</th>
-            <th className="p-4">{t.dashboard.orderStatus}</th>
-            <th className="p-4">{t.dashboard.date}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {payments.map((p) => (
-            <tr key={p.id} className="border-t">
-              <td className="p-4 font-mono text-xs">{p.id}</td>
-              <td className="p-4">{p.user}</td>
-              <td className="p-4">{t.common.currency} {p.amount.toFixed(2)}</td>
-              <td className="p-4">{p.method}</td>
-              <td className="p-4">
-                <span className={`rounded-full px-2 py-1 text-xs ${statusStyles[p.status] ?? ''}`}>{p.status}</span>
-              </td>
-              <td className="p-4">{p.timestamp.toLocaleDateString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="w-full overflow-x-auto">
+      <div className="inline-block min-w-full">
+        <div className="rounded-2xl border border-gray-200 bg-white text-gray-900">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-left font-semibold">
+                <th className="p-4">ID</th>
+                <th className="p-4">{t.dashboard.owner}</th>
+                <th className="p-4">{t.dashboard.orderTotal}</th>
+                <th className="p-4">Method</th>
+                <th className="p-4">{t.dashboard.orderStatus}</th>
+                <th className="p-4">{t.dashboard.date}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {payments.map((p) => (
+                <tr key={p.id} className="border-t">
+                  <td className="p-4 font-mono text-xs">{p.id}</td>
+                  <td className="p-4">{p.user}</td>
+                  <td className="p-4">{t.common.currency} {p.amount.toFixed(2)}</td>
+                  <td className="p-4">{p.method}</td>
+                  <td className="p-4">
+                    <span className={`rounded-full px-2 py-1 text-xs ${statusStyles[p.status] ?? ''}`}>{p.status}</span>
+                  </td>
+                  <td className="p-4">{p.timestamp.toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 }
@@ -63,18 +67,18 @@ export default function AdminDashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="mb-8 flex items-center">
-        <h1 className="text-2xl font-bold">
-          <Shield size={24} className="mr-2 inline-block" /> {t.dashboard.adminPanel}
+    <div className="min-h-screen p-4 sm:p-6 md:p-8 overflow-x-hidden">
+      <div className="mb-6 flex items-center min-w-0">
+        <h1 className="text-2xl font-bold truncate min-w-0">
+          <Shield size={24} className="mr-2 inline-block shrink-0" /> {t.dashboard.adminPanel}
         </h1>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
-          <Link key={item.href} href={item.href} className="flex items-center gap-4 rounded-2xl border p-4 transition-shadow duration-200 hover:shadow-md">
-            <div className="rounded-xl bg-primary-100 p-3 text-primary-600"><item.icon size={24} /></div>
-            <p className="font-semibold">{item.label}</p>
+          <Link key={item.href} href={item.href} className="flex items-center gap-4 rounded-2xl border p-4 transition-shadow duration-200 hover:shadow-md min-w-0">
+            <div className="rounded-xl bg-primary-100 p-3 text-primary-600 shrink-0"><item.icon size={24} /></div>
+            <p className="font-semibold truncate">{item.label}</p>
           </Link>
         ))}
       </div>

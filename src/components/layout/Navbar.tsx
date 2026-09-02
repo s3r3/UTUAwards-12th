@@ -87,7 +87,7 @@ export default function Navbar() {
             {mobileOpen && (
               <div className="absolute top-full left-0 right-0 bg-white dark:bg-gray-950 shadow-2xl z-40 border-t border-gray-200 dark:border-gray-800">
                 <div className="flex flex-col gap-3 p-4">
-                  {[{ key: 'shop', href: '/products', label: t.nav.shop }, { key: 'contact', href: '/contact', label: t.nav.contact }].map((item) => {
+                  {[{ key: 'shop', href: '/products', label: t.nav.shop }, { key: 'map', href: '/map', label: 'MAP' }, { key: 'contact', href: '/contact', label: t.nav.contact }].map((item) => {
                     const active = isActive(item.href)
                     return (
                       <Link key={item.key} href={item.href} onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-base font-semibold uppercase tracking-widest" style={{ color: active ? cl : (isDark ? 'rgba(255,255,255,0.7)' : 'rgba(17,24,39,0.7)') }}>
@@ -122,7 +122,7 @@ export default function Navbar() {
             )}
 
             {/* Logo — center */}
-            <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center group">
+            <Link href="/" className="flex-1 flex justify-center items-center group min-w-0 md:absolute md:left-1/2 md:-translate-x-1/2">
               <Image src={isDark ? '/logo/logoacelorahitam.png' : '/logo/logoaceloraputih.png'} alt="Acelora Logo" width={130} height={40} className="h-8 w-auto object-contain" priority />
             </Link>
 

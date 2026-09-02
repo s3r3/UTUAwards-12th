@@ -142,7 +142,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </aside>
 
-      <div className="flex-1 md:ml-64">
+      <div className="flex-1 md:ml-64 min-w-0 overflow-x-hidden">
         {/* Top Navbar (mengganti header statis) */}
         <header
           className={`sticky top-0 z-20 h-16 flex items-center justify-between border-b px-4 gap-3 ${
@@ -189,7 +189,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <span className="text-sm text-gray-500">{session?.user?.name || "User"}</span>
         </header>
 
-        <main className="p-6 md:p-8">{children}</main>
+        <main className="p-4 sm:p-6 md:p-8 min-w-0">{children}</main>
       </div>
     </div>
   );

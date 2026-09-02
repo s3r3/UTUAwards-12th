@@ -94,9 +94,9 @@ export default function ProductsClient() {
 
   return (
     <div className={`min-h-screen ${isDark ? 'bg-gray-950 text-stone-200' : 'bg-white text-stone-900'}`}>
-      <div className={`mt-20 border-b py-4 px-6 md:px-12 flex items-center justify-between ${isDark ? 'bg-gray-950 border-white/10' : 'bg-white border-black/10'}`}>
+      <div className={`mt-20 border-b py-4 px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 ${isDark ? 'bg-gray-950 border-white/10' : 'bg-white border-black/10'}`}>
         <span className={`font-sans text-sm ${isDark ? 'text-stone-200' : 'text-stone-900'}`}>Showing {products.length} products</span>
-        <div className="flex items-center gap-8">
+        <div className="flex flex-wrap items-center gap-4 md:gap-8 w-full md:w-auto">
             <div className="relative group">
                 <button className={`flex items-center gap-1 text-sm tracking-widest uppercase ${isDark ? 'text-white' : 'text-stone-900'}`}>
                     {t.common.categoryFilter} <ChevronDown size={14} />
@@ -114,7 +114,7 @@ export default function ProductsClient() {
                 </div>
             </div>
             <input
-                className={`w-40 border-b bg-transparent pb-1 text-sm outline-none transition-colors placeholder:tracking-wider focus:w-48 ${isDark ? 'border-white/30 text-white placeholder:text-stone-500 focus:border-white' : 'border-black text-stone-900 placeholder:text-stone-400 focus:border-black'}`}
+                className={`w-full md:w-40 border-b bg-transparent pb-1 text-sm outline-none transition-colors placeholder:tracking-wider focus:md:w-48 ${isDark ? 'border-white/30 text-white placeholder:text-stone-500 focus:border-white' : 'border-black text-stone-900 placeholder:text-stone-400 focus:border-black'}`}
                 placeholder={t.common.searchPlaceholder}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter') updateParam('search', e.currentTarget.value)
@@ -150,12 +150,13 @@ function ProductCard({ product, addItem }: { product: Product; addItem: (item: C
       viewport={{ once: true }}
       className="group flex flex-col h-full"
     >
-      <div className="block relative aspect-[4/5] overflow-hidden bg-stone-100 mb-4">
-        <Link href={`/products/${product.id}`}>
+      <div className="relative w-full aspect-[4/5] overflow-hidden bg-stone-100 mb-4">
+        <Link href={`/products/${product.id}`} className="absolute inset-0">
           <Image
             src={product.image || ''}
             alt={displayName}
             fill
+            unoptimized
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, 33vw"
           />

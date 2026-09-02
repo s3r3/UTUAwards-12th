@@ -239,12 +239,12 @@ export default function CheckoutPage() {
             </section>
           </div>
 
-          {/* ============ RIGHT — Order Summary (dark sticky) ============ */}
-          <aside className="lg:sticky lg:top-28 lg:h-fit bg-gray-950 text-gray-300 px-8 py-10">
+          {/* ============ RIGHT — Order Summary ============ */}
+          <aside className="lg:sticky lg:top-28 lg:h-[calc(100vh-8rem)] flex flex-col bg-gray-950 text-gray-300 px-6 py-10 rounded-t-3xl lg:rounded-none mt-10 lg:mt-0 shadow-[0_-20px_40px_rgba(0,0,0,0.1)] lg:shadow-none">
             <h3 className="font-serif text-xl font-semibold text-white mb-8">Ringkasan Pesanan</h3>
 
             {/* Items */}
-            <div className="space-y-5 mb-8 max-h-[300px] overflow-y-auto pr-2">
+            <div className="space-y-5 mb-8 overflow-y-auto pr-2 flex-1 min-h-[200px]">
               {items.map(item => (
                 <div key={item.productId} className="flex items-center gap-4">
                   <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden bg-gray-800">
