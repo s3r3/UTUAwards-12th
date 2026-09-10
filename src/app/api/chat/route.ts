@@ -40,11 +40,11 @@ async function getRecommendationProducts(filters: LLMRecommendation['filters']) 
     }
   }
   if (filters.keywords && filters.keywords.length > 0) {
-    const kw = filters.keywords.join(' ');
-    where.OR = [
+    // Match ANY keyword (user may list several products, e.g. "kepiting dan udang").
+    where.OR = filters.keywords.flatMap((kw) => [
       { name: { contains: kw, mode: 'insensitive' } },
       { description: { contains: kw, mode: 'insensitive' } },
-    ];
+    ]);
   }
 
   return prisma.product.findMany({
@@ -68,7 +68,7 @@ function detectProductIntent(message: string): LLMRecommendation | null {
   const categoryMap: Record<string, string[]> = {
     SPICES: ['rempah', 'bumbu', 'lada', 'kayu manis', 'kunyit', 'jahe', 'kencur', 'cabe', 'cabai', 'merica'],
     COFFEE: ['kopi', 'coffee'],
-    SEAFOOD: ['udang', 'ikan', 'seafood', 'lele', 'kerang', 'ikan asin', 'ikan kering', 'udang kering'],
+    SEAFOOD: ['udang', 'kepiting', 'rajung', 'crab', 'shrimp', 'lobster', 'ikan', 'seafood', 'lele', 'kerang', 'ikan asin', 'ikan kering', 'udang kering'],
     PATCHOULI: ['minyak nilam', 'patchouli', 'essential oil', 'aromaterapi'],
     PROCESSED: ['dodol', 'keripik', 'kue', 'snack', 'olahan'],
   };
@@ -77,13 +77,14 @@ function detectProductIntent(message: string): LLMRecommendation | null {
   const keywords: string[] = [];
 
   for (const [cat, words] of Object.entries(categoryMap)) {
+    let matched = false;
     for (const w of words) {
       if (lower.includes(w)) {
-        detectedCategories.push(cat);
         keywords.push(w);
-        break;
+        matched = true;
       }
     }
+    if (matched) detectedCategories.push(cat);
   }
 
   // Budget detection (e.g. "dibawah 50rb", "harga 30000", "< 100000")

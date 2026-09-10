@@ -37,15 +37,23 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
   const textMuted = isDark ? 'text-gray-400' : 'text-gray-600'
   const borderClass = isDark ? 'border-gray-800' : 'border-gray-300/50'
 
-  // Close on Escape
+  // Close on Escape + lock background scroll while drawer is open
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     }
     if (isOpen) {
       document.addEventListener('keydown', handleEscape)
+      const prevOverflow = document.body.style.overflow
+      const prevOverscrollY = document.body.style.overscrollBehaviorY
+      document.body.style.overflow = 'hidden'
+      document.body.style.overscrollBehaviorY = 'none'
+      return () => {
+        document.removeEventListener('keydown', handleEscape)
+        document.body.style.overflow = prevOverflow
+        document.body.style.overscrollBehaviorY = prevOverscrollY
+      }
     }
-    return () => document.removeEventListener('keydown', handleEscape)
   }, [isOpen, onClose])
 
   return (
@@ -68,11 +76,11 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 400 }}
-            className={`fixed top-0 right-0 z-[51] flex h-screen w-full max-w-md flex-col border-l ${borderClass} ${bgClass} ${textClass}`}
+            className={`fixed top-0 right-0 z-[51] flex h-screen max-h-screen w-full max-w-md flex-col border-l ${borderClass} ${bgClass} ${textClass}`}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-start justify-between px-6 pt-5 pb-4">
+            <div className="flex shrink-0 items-start justify-between px-6 pt-5 pb-4">
               <div>
                 <h2
                   className="text-3xl font-extralight"
@@ -97,7 +105,7 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
             </div>
 
             {/* Cart items */}
-            <div className="flex-1 overflow-y-auto px-6 py-4">
+            <div className="flex-1 min-h-0 overflow-y-auto px-6 py-4">
               {items.length === 0 ? (
                 <div className="py-10 text-center text-sm" style={{ color: isDark ? '#9ca3af' : '#6b7280' }}>
                   Your cart is empty
@@ -201,7 +209,7 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className={`border-t ${borderClass} p-6`}>
+              <div className={`sticky bottom-0 border-t ${borderClass} ${bgClass} p-6`}>
                 <div className="flex justify-between text-sm">
                   <span className={textMuted}>Subtotal</span>
                   <span className="font-medium">

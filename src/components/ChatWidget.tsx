@@ -108,7 +108,7 @@ export default function ChatWidget() {
   return (
     <div className="fixed bottom-4 right-4 z-50 font-sans">
       {open && (
-        <div className={`mb-2 flex h-96 w-80 flex-col overflow-hidden rounded-2xl border shadow-2xl transition-colors duration-200 ${
+        <div className={`mb-2 flex h-[560px] w-80 flex-col overflow-hidden rounded-2xl border shadow-2xl transition-colors duration-200 ${
           isDark ? "border-gray-800 bg-gray-900 text-white" : "border-gray-200 bg-white text-gray-850"
         }`}>
           <div className={`flex items-center gap-3 border-b px-4 py-3 ${
