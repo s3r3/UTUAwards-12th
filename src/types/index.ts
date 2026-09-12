@@ -14,13 +14,16 @@ export interface Product {
   description: string;
   image?: string;
   images: string[];
-  origin: string;
   price: number;
   compareAt?: number;
   stock: number;
   weight?: number;
   status: ProductStatus;
+  origin?: string;
   legality?: string;
+  quality?: string;
+  shipping?: string;
+  faq?: string;
   packageDesign?: string;
   ownerId: string;
   createdAt: Date;

@@ -115,24 +115,6 @@ interface ProductDetailClientProps {
   reviewCount?: number
 }
 
-const ACCORDION_DATA = [
-  {
-    titleKey: 'originTitle',
-    contentKey: 'originContent',
-  },
-  {
-    titleKey: 'qualityTitle',
-    contentKey: 'qualityContent',
-  },
-  {
-    titleKey: 'shippingStorage',
-    contentKey: 'shippingStorageText',
-  },
-  {
-    titleKey: 'faqTitle',
-    contentKey: 'faqContent',
-  },
-]
 
 export default function ProductDetailClient({ product, category, isAvailable, reviews = [], rating = 0, reviewCount = 0 }: ProductDetailClientProps) {
   const t = useTranslations()
@@ -149,6 +131,30 @@ export default function ProductDetailClient({ product, category, isAvailable, re
   const [openSection, setOpenSection] = useState<string | null>(null)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState(0)
+
+  const ACCORDION_DATA = [
+    {
+      title: t.landing.originTitle || 'ASAL & PENGALIHAN',
+      content: seed?.origin || product.origin || 'Informasi asal produk tidak tersedia.',
+      value: 'origin',
+    },
+    {
+      title: t.landing.qualityTitle || 'KUALITAS & PENGOLAHAN',
+      content: seed?.quality || product.quality || 'Informasi kualitas produk tidak tersedia.',
+      value: 'quality',
+    },
+    {
+      title: t.landing.shippingStorage || 'PENGIRIMAN & PENYIMPANAN',
+      content: seed?.shipping || product.shipping || 'Informasi pengiriman tidak tersedia.',
+      value: 'shipping',
+    },
+    {
+      title: t.landing.faqTitle || 'FAQ',
+      content: seed?.faq || product.faq || 'Belum ada FAQ untuk produk ini.',
+      value: 'faq',
+    },
+  ]
+
 
   const packageDesignImages = getPackageDesignImages(product.packageDesign || '')
 
@@ -348,7 +354,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
         {/* Quantity Selector */}
         {isAvailable && (
           <div className="flex items-center gap-4 mb-6">
-            <span className="text-sm uppercase tracking-widest text-stone-500">{t.landing.quantity}</span>
+            <span className="text-sm uppercase tracking-widest text-stone-500 dark:text-gray-400">{t.landing.quantity}</span>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => handleQuantity(-1)}
@@ -357,7 +363,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
               >
                 <Minus size={14} />
               </button>
-              <span className="w-10 text-center font-medium">{quantity}</span>
+              <span className="w-10 text-center font-medium dark:text-white">{quantity}</span>
               <button
                 onClick={() => handleQuantity(1)}
                 className="h-9 w-9 flex items-center justify-center border border-black/15 hover:bg-stone-100 transition-colors"
@@ -370,22 +376,22 @@ export default function ProductDetailClient({ product, category, isAvailable, re
         )}
 
         {/* Description */}
-        <p className="text-sm leading-relaxed text-stone-600 mb-8">
+        <p className="text-sm leading-relaxed text-stone-600 dark:text-gray-300 mb-8">
           {product.description || 'A premium product sourced with care from our partner communities.'}
         </p>
 
         {/* Accordion */}
         <div className="border-b border-gray-200 dark:border-gray-700">
           {ACCORDION_DATA.map((item) => {
-            const isOpen = openSection === item.titleKey
+            const isOpen = openSection === item.value
             return (
-              <div key={item.titleKey} className="border-t border-gray-200 dark:border-gray-700">
+              <div key={item.value} className="border-t border-gray-200 dark:border-gray-700">
                 <button
-                  onClick={() => setOpenSection(isOpen ? null : item.titleKey)}
+                  onClick={() => setOpenSection(isOpen ? null : item.value)}
                   className="flex w-full items-center justify-between py-5 text-left"
                 >
                   <span className="text-xs font-bold uppercase tracking-wide text-stone-900 dark:text-white">
-                    {t.landing[item.titleKey as keyof typeof t.landing] as string}
+                    {item.title}
                   </span>
                   {isOpen ? (
                     <Minus size={16} className="text-stone-500 dark:text-gray-400" />
@@ -402,39 +408,31 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      {item.titleKey === 'shippingStorage' ? (
-                        <div className="pb-5">
-                          <p className="text-sm leading-relaxed text-stone-600 dark:text-gray-300 mb-4">
-                            {t.landing.shippingStorageText}
-                          </p>
-                          {packageDesignImages.length > 0 && (
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                              {packageDesignImages.map((img, i) => (
-                                <button
-                                  key={img}
-                                  onClick={() => {
-                                    setLightboxIndex(i)
-                                    setLightboxOpen(true)
-                                  }}
-                                  className="relative aspect-square group overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
-                                >
-                                  <img
-                                    src={img}
-                                    alt={`Package design ${i + 1}`}
-                                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                  />
-                                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <Eye size={20} className="text-white" />
-                                  </div>
-                                </button>
-                              ))}
-                            </div>
-                          )}
+                      <p className="pb-5 text-sm leading-relaxed whitespace-pre-line text-stone-600 dark:text-gray-300 mb-4">
+                        {item.content}
+                      </p>
+                      {item.value === 'shipping' && packageDesignImages.length > 0 && (
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                          {packageDesignImages.map((img, i) => (
+                            <button
+                              key={img}
+                              onClick={() => {
+                                setLightboxIndex(i)
+                                setLightboxOpen(true)
+                              }}
+                              className="relative aspect-square group overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
+                            >
+                              <img
+                                src={img}
+                                alt={`Package design ${i + 1}`}
+                                className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <Eye size={20} className="text-white" />
+                              </div>
+                            </button>
+                          ))}
                         </div>
-                      ) : (
-                        <p className="pb-5 text-sm leading-relaxed whitespace-pre-line text-stone-600 dark:text-gray-300">
-                          {(t.landing[item.contentKey as keyof typeof t.landing] as string) || item.contentKey}
-                        </p>
                       )}
                     </motion.div>
                   )}

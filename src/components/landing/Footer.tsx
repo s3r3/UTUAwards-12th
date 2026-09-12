@@ -7,8 +7,6 @@ import { useUIStore } from '@/store/ui.store'
 import { useTranslations } from '@/lib/i18n'
 
 const footerLinks = {
-  privacy: '/privacy',
-  terms: '/terms',
   instagram: 'https://instagram.com/acelora',
 }
 
@@ -129,10 +127,6 @@ export default function Footer() {
       <div className="border-t py-6 px-6 md:px-12">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-[10px] tracking-widest uppercase">{t.landing.rights}</p>
-          <div className="flex gap-6">
-            <a href={footerLinks.privacy} className="text-[10px] tracking-widest uppercase hover:underline">{t.landing.privacy}</a>
-            <a href={footerLinks.terms} className="text-[10px] tracking-widest uppercase hover:underline">{t.landing.terms}</a>
-          </div>
           <p className="text-[10px] tracking-widest uppercase">{t.landing.siteBy}</p>
         </div>
       </div>

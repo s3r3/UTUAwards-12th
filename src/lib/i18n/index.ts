@@ -31,7 +31,7 @@ export function useTranslations() {
 export function useSeedProduct(id?: string | null) {
   const t = useTranslations()
   if (!id) return null
-  return (t.landing.productSeedNames as Record<string, { name: string; desc: string; origin: string }>)[id] ?? null
+  return (t.landing.productSeedNames as Record<string, { name: string; desc: string; origin: string; quality?: string; shipping?: string; faq?: string }>)[id] ?? null
 }
 
 export function t(lang: Lang): Translations {
