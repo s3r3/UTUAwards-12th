@@ -23,7 +23,7 @@ export async function GET() {
       select: { id: true, name: true, category: true, price: true, stock: true, status: true, updatedAt: true, ownerId: true },
     })
 
-    const activeProductsCount = partnerProducts.filter((p) => p.status === 'Active').length
+    const activeProductsCount = partnerProducts.filter((p) => p.status === 'APPROVED').length
     const lowStockProductsCount = partnerProducts.filter(
       (p) => p.stock > 0 && p.stock < 25
     ).length
@@ -45,7 +45,7 @@ export async function GET() {
 
     const totalSalesValue = partnerOrders.reduce((acc: number, order) => acc + order.total, 0)
     const activeOrdersCount = partnerOrders.filter(
-      (order) => order.status !== 'Completed' && order.status !== 'Cancelled'
+      (order) => order.status !== 'DELIVERED' && order.status !== 'CANCELLED'
     ).length
 
     const recentOrders = partnerOrders.map((order) => {
