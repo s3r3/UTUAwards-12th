@@ -5,7 +5,7 @@ import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Sun, Moon, User, LogOut, ListOrdered, Package, Globe, ChevronDown } from 'lucide-react'
+import { Sun, Moon, User, LogOut, ListOrdered, Package, Globe, ChevronDown, LayoutDashboard, Store, Heart, ShieldCheck } from 'lucide-react'
 import Image from 'next/image'
 import CartDrawer, { type UpsellProduct } from '@/components/CartDrawer'
 import { useUIStore } from '@/store/ui.store'
@@ -53,6 +53,35 @@ export default function Navbar() {
 
   const c = isDark ? 'rgba(255,255,255,0.8)' : 'rgba(17,24,39,0.8)'
   const cl = isDark ? 'rgba(255,255,255,0.9)' : 'rgba(17,24,39,0.9)'
+  // Each role lands on its own dashboard.
+  const role = session?.user?.role
+  const dashboardHref =
+    role === 'ADMIN' ? '/dashboard/admin' : role === 'PARTNER' ? '/partner/dashboard' : '/dashboard'
+
+  const roleLabel = role === 'ADMIN' ? 'Admin' : role === 'PARTNER' ? 'Partner' : 'Member'
+
+  // Role-aware dropdown items — admin never sees "Pesanan Saya", etc.
+  const profileItems =
+    role === 'ADMIN'
+      ? [
+          { href: '/dashboard/admin', label: 'Dashboard', icon: LayoutDashboard },
+          { href: '/dashboard/admin/orders', label: 'Kelola Pesanan', icon: ListOrdered },
+          { href: '/dashboard/admin/products', label: 'Kelola Produk', icon: Package },
+          { href: '/dashboard/admin/partners/verification', label: 'Verifikasi Mitra', icon: ShieldCheck },
+        ]
+      : role === 'PARTNER'
+        ? [
+            { href: '/partner/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+            { href: '/partner/pesanan', label: 'Pesanan', icon: ListOrdered },
+            { href: '/partner/produk', label: 'Produk', icon: Package },
+            { href: '/partner/toko', label: 'Toko Saya', icon: Store },
+          ]
+        : [
+            { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+            { href: '/dashboard/orders', label: 'Pesanan Saya', icon: ListOrdered },
+            { href: '/dashboard/wishlist', label: 'Wishlist', icon: Heart },
+            { href: '/dashboard/profile', label: 'Profil', icon: User },
+          ]
 
   return (
     <>
@@ -71,7 +100,7 @@ export default function Navbar() {
               </button>
 
               <div className="hidden md:flex items-center gap-6">
-                {[{ key: 'shop', href: '/products', label: t.nav.shop }, { key: 'map', href: '/map', label: 'MAP' }].map((item) => {
+                {[{ key: 'shop', href: '/products', label: t.nav.shop }, { key: 'map', href: '/map', label: 'MAP' }, { key: 'becomePartner', href: '/menjadi-mitra', label: t.nav.becomePartner }].map((item) => {
                   const active = isActive(item.href)
                   return (
                     <Link key={item.key} href={item.href} className="group relative px-1 py-1 text-sm font-semibold uppercase tracking-widest transition-colors duration-300" style={{ color: cl }}>
@@ -87,7 +116,7 @@ export default function Navbar() {
             {mobileOpen && (
               <div className="absolute top-full left-0 right-0 bg-white dark:bg-gray-950 shadow-2xl z-40 border-t border-gray-200 dark:border-gray-800">
                 <div className="flex flex-col gap-3 p-4">
-                  {[{ key: 'shop', href: '/products', label: t.nav.shop }, { key: 'map', href: '/map', label: 'MAP' }, { key: 'contact', href: '/contact', label: t.nav.contact }].map((item) => {
+                  {[{ key: 'shop', href: '/products', label: t.nav.shop }, { key: 'map', href: '/map', label: 'MAP' }, { key: 'becomePartner', href: '/menjadi-mitra', label: t.nav.becomePartner }, { key: 'contact', href: '/contact', label: t.nav.contact }].map((item) => {
                     const active = isActive(item.href)
                     return (
                       <Link key={item.key} href={item.href} onClick={() => setMobileOpen(false)} className="block px-3 py-2 text-base font-semibold uppercase tracking-widest" style={{ color: active ? cl : (isDark ? 'rgba(255,255,255,0.7)' : 'rgba(17,24,39,0.7)') }}>
@@ -108,13 +137,21 @@ export default function Navbar() {
                     </button>
                   </div>
 
-                  {!session?.user && (
+                  {!session?.user ? (
                     <Link
                       href="/login"
                       onClick={() => setMobileOpen(false)}
                       className="mt-2 flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold text-white bg-gradient-to-r from-emerald-500 to-sky-500 hover:from-emerald-600 hover:to-sky-600 shadow-lg"
                     >
                       Masuk
+                    </Link>
+                  ) : (
+                    <Link
+                      href={dashboardHref}
+                      onClick={() => setMobileOpen(false)}
+                      className="mt-2 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-white bg-gradient-to-r from-emerald-500 to-sky-500 hover:from-emerald-600 hover:to-sky-600 shadow-lg"
+                    >
+                      <LayoutDashboard size={16} /> Dashboard {roleLabel}
                     </Link>
                   )}
                 </div>
@@ -162,19 +199,18 @@ export default function Navbar() {
                       <div className="fixed inset-0 z-40" onClick={() => setProfileOpen(false)} />
                       <div className="absolute right-0 mt-2 w-56 z-50 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-2xl overflow-hidden">
                         <div className="p-4 border-b border-gray-100 dark:border-gray-800">
-                          <p className="font-medium text-sm text-gray-900 dark:text-white truncate">{session.user.name}</p>
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="font-medium text-sm text-gray-900 dark:text-white truncate">{session.user.name}</p>
+                            <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">{roleLabel}</span>
+                          </div>
                           <p className="text-xs text-gray-500 truncate">{session.user.email}</p>
                         </div>
                         <div className="p-2">
-                          <Link href="/orders" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                            <ListOrdered size={16} /> Pesanan Saya
-                          </Link>
-                          <Link href="/dashboard" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                            <Package size={16} /> Dashboard
-                          </Link>
-                          <Link href="/dashboard/profile" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                            <User size={16} /> Profil
-                          </Link>
+                          {profileItems.map((item) => (
+                            <Link key={item.href} href={item.href} onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                              <item.icon size={16} /> {item.label}
+                            </Link>
+                          ))}
                         </div>
                         <div className="p-2 border-t border-gray-100 dark:border-gray-800">
                           <button onClick={() => signOut({ callbackUrl: '/' })} className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">

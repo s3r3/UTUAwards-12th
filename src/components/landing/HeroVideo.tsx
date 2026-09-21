@@ -47,6 +47,14 @@ export default function HeroVideo() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.5 }}
+            className="mt-4 text-center text-2xl md:text-3xl font-serif font-bold text-white drop-shadow-md"
+          >
+            {t.landing.fromLandSea}
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.5 }}
             className="mx-auto mt-6 max-w-xl text-lg text-white/85"
           >
             {t.hero.heroSub}
@@ -65,10 +73,10 @@ export default function HeroVideo() {
               <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
-              href="/products?category=SEAFOOD"
+              href="/menjadi-mitra"
               className="inline-flex items-center gap-2 rounded-full border border-white/40 px-8 py-4 font-semibold text-white backdrop-blur-sm transition-all hover:border-white hover:bg-white/10"
             >
-              {t.hero.tasteOceanBtn}
+              {t.hero.becomePartnerBtn}
             </Link>
           </motion.div>
         </div>

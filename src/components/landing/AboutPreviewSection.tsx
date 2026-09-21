@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useTranslations } from '@/lib/i18n'
 
 export default function AboutPreviewSection() {
@@ -9,10 +10,11 @@ export default function AboutPreviewSection() {
       <div className="grid grid-cols-1 md:grid-cols-2 md:divide-x md:divide-black/20 dark:md:divide-white/15">
         <div className="p-8 md:p-12">
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl">
-            <img
+            <Image
               src="/images/landing4.jpg"
               alt="Fresh vegetables and seafood on wooden cutting board"
-              className="h-full w-full object-cover"
+              fill
+              className="object-cover"
               loading="lazy"
             />
           </div>

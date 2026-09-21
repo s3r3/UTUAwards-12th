@@ -31,6 +31,18 @@ async function main() {
     },
   });
 
+  const partnerPassword = await bcrypt.hash("partner123", 12);
+  const partner = await prisma.user.upsert({
+    where: { email: "partner@acelora.id" },
+    update: { password: partnerPassword, role: "PARTNER", name: "Kopi Gayo Mandiri" },
+    create: {
+      name: "Kopi Gayo Mandiri",
+      email: "partner@acelora.id",
+      password: partnerPassword,
+      role: "PARTNER",
+    },
+  });
+
   const products = [
     {
       name: "Kopi Arabika Gayo Specialty",
@@ -145,6 +157,81 @@ async function main() {
     }
   }
 
+  const partnerProducts = [
+    {
+      name: "Kopi Arabika Gayo",
+      category: "COFFEE" as const,
+      description: "Kopi Arabika Gayo grade 1, proses washed. Profil rasa cokelat, karamel, floral. MOQ 100 kg.",
+      origin: "Aceh Tengah",
+      price: 120000,
+      stock: 420,
+      weight: 1000,
+      image: "/images/kopi.jpg",
+      packageDesign: "/packageDesign/KopiArabikaGayo/kopi.jpeg",
+    },
+    {
+      name: "Tuna Frozen",
+      category: "SEAFOOD" as const,
+      description: "Tuna frozen export grade dari perairan Aceh. Blast frozen, HACCP ready.",
+      origin: "Aceh Besar",
+      price: 92000,
+      stock: 180,
+      weight: 1000,
+      image: "/images/VannameiShrimp.png",
+      packageDesign: "/packageDesign/udangVaname/udang.jpeg",
+    },
+    {
+      name: "Minyak Nilam Aceh",
+      category: "PATCHOULI" as const,
+      description: "Minyak nilam murni distilasi uap. Kadar PA tinggi. Kemasan drum 25 kg.",
+      origin: "Aceh Selatan",
+      price: 150000,
+      stock: 85,
+      weight: 1000,
+      image: "/images/minyaknilam.jpg",
+      packageDesign: "/packageDesign/MinyakNilam/minyaknilam.jpeg",
+    },
+    {
+      name: "Virgin Coconut Oil",
+      category: "PROCESSED" as const,
+      description: "VCO cold-pressed dari kelapa Aceh. Food-grade, tanpa pemanasan.",
+      origin: "Aceh Barat",
+      price: 75000,
+      stock: 8,
+      weight: 1000,
+      image: "/images/coklat.png",
+      packageDesign: "/packageDesign/coklat/coklat.jpeg",
+    },
+    {
+      name: "Kayu Manis Aceh",
+      category: "SPICES" as const,
+      description: "Kayu manis grade ekspor, aroma manis khas. Stick dan powder.",
+      origin: "Aceh Barat",
+      price: 28000,
+      stock: 0,
+      weight: 1000,
+      image: "/images/kayumanis.webp",
+      packageDesign: "/packageDesign/kayumanis/kayumanis.jpeg",
+    },
+  ];
+
+  const partnerStatuses = ["APPROVED", "APPROVED", "APPROVED", "PENDING", "REVIEW"] as const;
+  for (let i = 0; i < partnerProducts.length; i++) {
+    const p = partnerProducts[i];
+    const id = `partner-${p.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+$/, "")}`;
+    const existing = await prisma.product.findUnique({ where: { id } });
+    if (!existing) {
+      await prisma.product.create({
+        data: { id, ...p, images: [p.image], ownerId: partner.id, status: partnerStatuses[i] },
+      });
+    } else {
+      await prisma.product.update({
+        where: { id },
+        data: { ownerId: partner.id, stock: p.stock, price: p.price, status: partnerStatuses[i] },
+      });
+    }
+  }
+
   // Sample addresses — one per order (each customer has a different city)
   const customerAddresses = [
     { id: "seed-addr-0", label: "Rumah", name: "User Acelora", phone: "081234567890", street: "Jl. Teuku Nyak Arief No. 1", city: "Banda Aceh", province: "Aceh", postalCode: "23111", isDefault: true },
@@ -236,6 +323,7 @@ async function main() {
   console.log("Seed completed");
   console.log("Admin: admin@acelora.id / admin123");
   console.log("User: user@acelora.id / user123");
+  console.log("Partner: partner@acelora.id / partner123");
 }
 
 main()

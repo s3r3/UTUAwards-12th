@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { PRODUCT_CATEGORIES } from '@/constants/products'
 import ProductDetailClient, { RelatedProducts } from '@/components/product/ProductDetailClient'
+import { ProductDetailBack, ProductDetailNotFound } from '@/components/product/ProductDetailChrome'
 
 
 export const dynamic = 'force-dynamic'
@@ -90,11 +89,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const displayReviews = reviews.length > 0 ? reviews : []
 
   if (!product) {
-    return (
-      <div className="min-h-screen pt-24 pb-12 flex items-center justify-center">
-        <h1 className="text-2xl font-bold">Produk Tidak Ditemukan</h1>
-      </div>
-    )
+    return <ProductDetailNotFound />
   }
 
   // Related products: same category, excluding current — fallback static if DB down
@@ -173,13 +168,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: escapeScriptTags(JSON.stringify(productSchema)) }} />
 
       <div className="max-w-6xl mx-auto px-4">
-        <Link
-          href="/products"
-          className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 mb-6"
-        >
-          <ArrowLeft size={20} />
-          Kembali
-        </Link>
+        <ProductDetailBack />
 
         <ProductDetailClient
           product={{

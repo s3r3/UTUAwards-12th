@@ -5,7 +5,31 @@ import id from './id'
 import type { Translations } from './en'
 
 export type Lang = 'en' | 'id'
-const translations: Record<Lang, Translations> = { en, id }
+
+// Deep-merge `en` (base) with the locale override. A shallow merge would drop
+// `en`'s values for any section `id` partially defines, so recursing keeps
+// every missing key backed by English instead of throwing
+// `can't access property "X", t.Y is undefined`.
+type PlainRecord = Record<string, unknown>
+
+function isPlainRecord(v: unknown): v is PlainRecord {
+  return !!v && typeof v === 'object' && !Array.isArray(v)
+}
+
+function deepMerge<T extends PlainRecord>(base: T, override: Partial<T>): T {
+  const out: PlainRecord = { ...base }
+  for (const k in override) {
+    const v: unknown = override[k]
+    const current: unknown = base[k]
+    out[k] =
+      isPlainRecord(v) && isPlainRecord(current) && k in base
+        ? deepMerge(current, v)
+        : v
+  }
+  return out as T
+}
+
+const translations: Record<Lang, Translations> = { en, id: deepMerge(en, id) }
 
 interface I18NState {
   lang: Lang

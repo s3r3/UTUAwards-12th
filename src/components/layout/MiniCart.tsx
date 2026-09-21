@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { X, ShoppingCart, Trash2, Minus, Plus, ArrowRight } from 'lucide-react'
 import { useCartStore } from '@/store/cart.store'
+import { useTranslations } from '@/lib/i18n'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function MiniCart() {
+  const t = useTranslations()
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const { items, removeItem, updateQuantity, subtotal, totalItems } = useCartStore()
@@ -23,7 +25,7 @@ export default function MiniCart() {
       <button
         onClick={() => setOpen(true)}
         className="relative p-2.5 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-        aria-label="Shopping cart"
+        aria-label={t.cart.title}
       >
         <ShoppingCart size={18} />
         {mounted && totalItems() > 0 && (
@@ -41,7 +43,7 @@ export default function MiniCart() {
       onClick={(e) => e.stopPropagation()}
     >
       <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
-        <h3 className="font-semibold text-gray-900 dark:text-white">Keranjang ({totalItems()} item)</h3>
+        <h3 className="font-semibold text-gray-900 dark:text-white">{t.cart.title} ({totalItems()} {t.cart.items})</h3>
         <button
           onClick={() => setOpen(false)}
           className="p-1 rounded-lg text-gray-400 hover:text-gray-600"
@@ -54,7 +56,7 @@ export default function MiniCart() {
         {items.length === 0 ? (
           <div className="p-6 text-center">
             <ShoppingCart size={32} className="mx-auto text-gray-300 mb-2" />
-            <p className="text-gray-500">Keranjang kosong</p>
+            <p className="text-gray-500 dark:text-gray-400">{t.cart.empty}</p>
           </div>
         ) : (
           <div className="max-h-80 overflow-y-auto">
@@ -107,7 +109,7 @@ export default function MiniCart() {
       {items.length > 0 && (
         <div className="p-4 border-t border-gray-100 dark:border-gray-800">
           <div className="flex justify-between items-center mb-4">
-            <span className="text-sm text-gray-600 dark:text-gray-400">Subtotal:</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">{t.cart.subtotal}:</span>
             <span className="text-lg font-bold text-gray-900 dark:text-white">Rp {subtotal().toLocaleString('id-ID')}</span>
           </div>
           <Link
@@ -116,7 +118,7 @@ export default function MiniCart() {
             onClick={() => setOpen(false)}
           >
             <div className="flex items-center justify-center gap-2">
-              Lanjut ke Pembayaran
+              {t.cart.toPayment}
               <ArrowRight size={16} />
             </div>
           </Link>

@@ -9,7 +9,8 @@ export async function GET(request: NextRequest) {
 
 const searchParams = request.nextUrl.searchParams
   const status = searchParams.get('status')
-  const where: Prisma.OrderWhereInput = { userId: session.user.id }
+  const isAdmin = session.user.role === 'ADMIN'
+  const where: Prisma.OrderWhereInput = isAdmin ? {} : { userId: session.user.id }
   if (status) where.status = status as OrderStatus
   const orders = await prisma.order.findMany({
     where,

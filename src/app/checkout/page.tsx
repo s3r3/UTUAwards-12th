@@ -44,7 +44,6 @@ export default function CheckoutPage() {
   const [success, setSuccess] = useState('')
 
   useEffect(() => {
-    if (items.length === 0) { router.push('/cart'); return }
     fetch('/api/addresses').then(r => r.json()).then(d => {
       if (d.success) {
         setAddresses(d.data)
@@ -52,7 +51,7 @@ export default function CheckoutPage() {
         if (def) setSelectedAddress(def.id)
       }
     })
-  }, [items, router, session])
+  }, [session])
 
   const handleSaveAddress = async () => {
     const res = await fetch('/api/addresses', {
@@ -240,7 +239,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* ============ RIGHT — Order Summary ============ */}
-          <aside className="lg:sticky lg:top-28 lg:h-[calc(100vh-8rem)] flex flex-col bg-gray-950 text-gray-300 px-6 py-10 rounded-t-3xl lg:rounded-none mt-10 lg:mt-0 shadow-[0_-20px_40px_rgba(0,0,0,0.1)] lg:shadow-none">
+          <aside className="lg:sticky lg:top-28 lg:self-start flex flex-col bg-gray-950 text-gray-300 px-6 py-10 rounded-t-3xl lg:rounded-none mt-10 lg:mt-0 shadow-[0_-20px_40px_rgba(0,0,0,0.1)] lg:shadow-none">
             <h3 className="font-serif text-xl font-semibold text-white mb-8">Ringkasan Pesanan</h3>
 
             {/* Items */}
@@ -319,7 +318,7 @@ export default function CheckoutPage() {
             <button
               onClick={handlePay}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-emerald-950 text-white text-sm font-semibold uppercase tracking-widest hover:bg-emerald-800 transition-colors disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-emerald-500 text-gray-950 text-sm font-bold uppercase tracking-widest hover:bg-emerald-400 transition-colors disabled:opacity-50"
             >
               <ShoppingBag size={18} />
               {loading ? t.checkout.processing : 'Bayar Sekarang'}

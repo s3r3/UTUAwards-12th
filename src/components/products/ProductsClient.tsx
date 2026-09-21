@@ -63,11 +63,11 @@ export default function ProductsClient() {
       params.set('_limit', '12')
       const res = await fetch(`/api/products?${params.toString()}`)
       const json: ProductResponse = await res.json()
-      if (!json.success) throw new Error(json.error || 'Gagal memuat produk')
+      if (!json.success) throw new Error(json.error || t.products.loadFailed)
       setProducts(pageNum === 1 ? json.data : (prev) => [...prev, ...json.data])
       setHasNextPage(json.pagination?.hasNextPage ?? false)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Error')
+      setError(e instanceof Error ? e.message : t.common.error)
     } finally {
       setLoading(false)
     }
@@ -95,7 +95,7 @@ export default function ProductsClient() {
   return (
     <div className={`min-h-screen ${isDark ? 'bg-gray-950 text-stone-200' : 'bg-white text-stone-900'}`}>
       <div className={`mt-20 border-b py-4 px-6 md:px-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 ${isDark ? 'bg-gray-950 border-white/10' : 'bg-white border-black/10'}`}>
-        <span className={`font-sans text-sm ${isDark ? 'text-stone-200' : 'text-stone-900'}`}>Showing {products.length} products</span>
+        <span className={`font-sans text-sm ${isDark ? 'text-stone-200' : 'text-stone-900'}`}>{t.products.showing.replace('{count}', String(products.length))}</span>
         <div className="flex flex-wrap items-center gap-4 md:gap-8 w-full md:w-auto">
             <div className="relative group">
                 <button className={`flex items-center gap-1 text-sm tracking-widest uppercase ${isDark ? 'text-white' : 'text-stone-900'}`}>
@@ -150,7 +150,7 @@ function ProductCard({ product, addItem }: { product: Product; addItem: (item: C
       viewport={{ once: true }}
       className="group flex flex-col h-full"
     >
-      <div className="relative w-full aspect-[4/5] overflow-hidden bg-stone-100 mb-4">
+      <div className="relative w-full aspect-[4/5] overflow-hidden bg-stone-100 dark:bg-gray-800 mb-4">
         <Link href={`/products/${product.id}`} className="absolute inset-0">
           <Image
             src={product.image || ''}
@@ -162,7 +162,7 @@ function ProductCard({ product, addItem }: { product: Product; addItem: (item: C
           />
         </Link>
         <div className="absolute top-4 right-4">
-          <Heart className="text-stone-900 hover:fill-stone-900 transition-colors" size={20} />
+          <Heart className="text-stone-900 hover:fill-stone-900 dark:text-stone-100 dark:hover:fill-stone-100 transition-colors" size={20} />
         </div>
       </div>
 

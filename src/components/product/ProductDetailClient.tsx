@@ -204,7 +204,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
     try {
       const userId = localStorage.getItem('acelora-user-id')
       if (!userId) {
-        alert('Silakan login terlebih dahulu untuk memberikan ulasan')
+        alert(t.landing.loginToReview)
         return
       }
       const res = await fetch('/api/reviews', {
@@ -216,13 +216,13 @@ export default function ProductDetailClient({ product, category, isAvailable, re
       if (data.success) {
         setNewComment('')
         setNewRating(5)
-        alert('Ulasan berhasil dikirim!')
+        alert(t.landing.reviewSent)
         window.location.reload()
       } else {
-        alert(data.error || 'Gagal mengirim ulasan')
+        alert(data.error || t.landing.reviewFailed)
       }
     } catch (err) {
-      alert('Terjadi kesalahan saat mengirim ulasan')
+      alert(t.landing.reviewError)
     } finally {
       setIsSubmitting(false)
     }
@@ -274,7 +274,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-stone-400 dark:text-gray-500">
-              <span className="text-xs">No Image</span>
+              <span className="text-xs">{t.landing.noImage}</span>
             </div>
           )}
         </div>
@@ -307,7 +307,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
           <button
             onClick={handleShare}
             className="flex items-center gap-2 px-4 py-2 text-sm text-stone-600 hover:text-stone-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-            aria-label="Bagikan"
+            aria-label={t.landing.share}
           >
             <Share2 size={18} />
             {t.landing.share || 'Share'}
@@ -347,7 +347,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
 
           {/* Stock */}
           <p className="mt-2 text-xs text-stone-500 dark:text-gray-400">
-            {isAvailable ? `${t.landing.inStockShort} (${product.stock} available)` : t.landing.outOfStockShort}
+            {isAvailable ? `${t.landing.inStockShort} (${product.stock})` : t.landing.outOfStockShort}
           </p>
         </div>
 
@@ -444,11 +444,11 @@ export default function ProductDetailClient({ product, category, isAvailable, re
 
         {/* Reviews */}
         <div className="mt-10 pt-10 border-t border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-bold text-stone-900 dark:text-white mb-6">ULASAN PELANGGAN</h3>
+          <h3 className="text-lg font-bold text-stone-900 dark:text-white mb-6">{t.landing.testimonials}</h3>
 
           {/* Add Review Form */}
           <div className="mb-8 p-6 bg-stone-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700">
-            <h4 className="text-sm font-semibold text-stone-900 dark:text-white mb-4 uppercase tracking-widest">Tulis Ulasan Anda</h4>
+            <h4 className="text-sm font-semibold text-stone-900 dark:text-white mb-4 uppercase tracking-widest">{t.landing.writeReview}</h4>
             <form onSubmit={handleSubmitReview} className="space-y-4">
               <select
                 value={newRating}
@@ -461,7 +461,7 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-stone-900 dark:text-white h-24 resize-none text-sm placeholder:text-stone-400 dark:placeholder:text-gray-500"
-                placeholder="Bagikan pengalaman Anda..."
+                placeholder={t.landing.ratingPlaceholder}
                 required
               ></textarea>
               <button
@@ -469,19 +469,22 @@ export default function ProductDetailClient({ product, category, isAvailable, re
                 disabled={isSubmitting}
                 className="w-full px-4 py-2 bg-stone-900 text-white text-sm uppercase tracking-widest hover:bg-stone-700 transition-colors disabled:opacity-50"
               >
-                {isSubmitting ? 'Mengirim...' : 'Kirim Ulasan'}
+                {isSubmitting ? t.landing.submitting : t.landing.submitReview}
               </button>
             </form>
           </div>
 
           {/* List Reviews */}
           <div className="space-y-6">
+            {reviews.length === 0 && (DUMMY_REVIEWS[product.id] || []).length === 0 && (
+              <p className="py-4 text-center text-sm text-stone-500 dark:text-gray-400">{t.landing.noReviews}</p>
+            )}
             {(reviews.length > 0 ? reviews : (DUMMY_REVIEWS[product.id] || [])).map((review) => (
               <div key={review.id} className="border-b border-gray-200 dark:border-gray-700 pb-6">
                 <div className="flex items-center gap-3 mb-2">
                   <UserCircle2 className="w-8 h-8 text-stone-400 dark:text-gray-500" />
                   <div>
-                    <span className="text-sm font-medium text-stone-900 dark:text-white">{review.user?.name || 'Anonim'}</span>
+                    <span className="text-sm font-medium text-stone-900 dark:text-white">{review.user?.name || t.landing.anonymous}</span>
                     <div className="flex text-yellow-400 text-xs">
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star key={i} size={12} fill={i < review.rating ? 'currentColor' : 'none'} />

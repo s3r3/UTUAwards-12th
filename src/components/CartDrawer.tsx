@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { X } from 'lucide-react'
 import { useCartStore } from '@/store/cart.store'
+import { useTranslations } from '@/lib/i18n'
 import { useUIStore } from '@/store/ui.store'
 
 export interface UpsellProduct {
@@ -30,6 +31,7 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
   const router = useRouter()
   const { items, removeItem, updateQuantity, subtotal, totalItems } = useCartStore()
   const { theme } = useUIStore()
+  const t = useTranslations()
   const isDark = theme === 'dark'
 
   const bgClass = isDark ? 'bg-gray-950' : 'bg-[#faf7f2]'
@@ -86,19 +88,19 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
                   className="text-3xl font-extralight"
                   style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
                 >
-                  Your Cart
+                  {t.cart.title}
                 </h2>
                 <div
                   className="-mt-1 text-[9px] uppercase tracking-[0.2em]"
                   style={{ fontFamily: MONO_FONT, color: isDark ? '#9ca3af' : '#6b7280' }}
                 >
-                  [{items.length === 0 ? 'EMPTY' : totalItems() + ' items'}]
+                  {items.length === 0 ? t.cart.emptyBadge : `[${totalItems()} ${t.cart.items}]`}
                 </div>
               </div>
               <button
                 onClick={onClose}
                 className="rounded-full p-1.5 hover:bg-gray-200/60 dark:hover:bg-gray-700/60"
-                aria-label="Close cart"
+                aria-label={t.cart.close}
               >
                 <X size={18} />
               </button>
@@ -108,7 +110,7 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
             <div className="flex-1 min-h-0 overflow-y-auto px-6 py-4">
               {items.length === 0 ? (
                 <div className="py-10 text-center text-sm" style={{ color: isDark ? '#9ca3af' : '#6b7280' }}>
-                  Your cart is empty
+                  {t.cart.empty}
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -160,7 +162,7 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
 
             {/* Upsell bar */}
             <div className={`border-y ${borderClass} px-6 py-3 text-center text-xs ${textMuted}`}>
-              <span style={{ fontFamily: MONO_FONT }}>DISCOVER ACELORA SPECIALTIES</span>
+              <span style={{ fontFamily: MONO_FONT }}>{t.cart.upsellTitle}</span>
             </div>
 
             {/* Upsell grid - land left, sea right */}
@@ -187,19 +189,19 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
                         {product.name}
                       </h3>
                       <p className={`mb-2 text-[10px] ${textMuted}`}>
-                        {product.category === 'SEAFOOD' ? 'Laut' : 'Darat'} • Rp {product.price.toLocaleString('id-ID')} / kg
+                        {product.category === 'SEAFOOD' ? t.cart.sea : t.cart.land} • Rp {product.price.toLocaleString('id-ID')} / kg
                       </p>
                       <button className="rounded-full bg-primary-600 px-5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-white hover:bg-primary-700">
-                        Add to Cart
+                        {t.products.addToCart}
                       </button>
                     </>
                   ) : (
                     <>
                       <div className={`mb-4 flex h-28 w-28 items-center justify-center rounded-xl border-2 ${isDark ? 'border-white' : 'border-black'} border-dashed ${isDark ? 'border-gray-600' : 'border-gray-300'}`}>
-                        <span className={`text-[10px] ${textMuted}`}>No product</span>
+                        <span className={`text-[10px] ${textMuted}`}>{t.cart.noProduct}</span>
                       </div>
                       <button className="rounded-full border border-gray-500 px-4 py-1 text-[10px] font-medium uppercase tracking-wider text-gray-700 dark:text-gray-300">
-                        SEDEKAPAN DATANG!
+                        {t.landing.comingSoon}
                       </button>
                     </>
                   )}
@@ -211,7 +213,7 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
             {items.length > 0 && (
               <div className={`sticky bottom-0 border-t ${borderClass} ${bgClass} p-6`}>
                 <div className="flex justify-between text-sm">
-                  <span className={textMuted}>Subtotal</span>
+                  <span className={textMuted}>{t.cart.subtotal}</span>
                   <span className="font-medium">
                     Rp {subtotal().toLocaleString('id-ID')}
                   </span>
@@ -227,7 +229,7 @@ export default function CartDrawer({ isOpen, onClose, upsellLand, upsellSea }: C
                       : 'bg-gray-900 text-white hover:bg-gray-800'
                   }`}
                 >
-                  Proceed to checkout
+                  {t.cart.proceed}
                 </button>
               </div>
             )}
