@@ -72,7 +72,7 @@ const en = {
     orderPrefix: 'Order ID:',
   },
   orders: {
-    title: 'My Orders', noOrders: 'No orders yet', noOrdersDesc: 'Start shopping',
+    title: 'My Orders',  noOrdersDesc: 'Start shopping',
     detail: 'Order Detail', status: 'Status', total: 'Total', date: 'Date',
     items: 'Items', address: 'Shipping Address', shippedTo: 'Shipped to',
     notFound: 'Order not found',

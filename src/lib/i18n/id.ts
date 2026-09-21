@@ -615,6 +615,7 @@ const id: Translations = {
     mapViewProducts: 'Lihat Produk dari',
     partnerPage: {
       heroTitle: 'Bawa Produk Aceh ke Pasar Lebih Luas',
+      eyebrow: "KEMITRAAN ACELORA",
       heroSub: 'Bergabung sebagai mitra Acelora dan tampilkan produk Anda dalam ekosistem commerce B2B yang menghubungkan komoditas Aceh dengan pembeli.',
       primaryCta: 'AJUKAN KEMITRAAN',
       secondaryCta: 'PELAJARI CARANYA',
