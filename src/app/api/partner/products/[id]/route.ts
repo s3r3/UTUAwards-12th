@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { formatRupiah } from '@/data/partnerDemo';
+import { Prisma } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
@@ -58,7 +59,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       'compareAt', 'stock', 'weight', 'packageDesign', 'status', 'legality',
       'quality', 'shipping', 'faq',
     ]);
-    const updates: Record<string, any> = {};
+    const updates: Record<string, string | number | string[] | boolean | null> = {};
     for (const key of Object.keys(body)) {
       if (VALID_PRODUCT_FIELDS.has(key) && body[key] !== undefined) {
         updates[key] = body[key];
@@ -91,15 +92,15 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       data: {
         ...updates,
         updatedAt: new Date(),
-      },
+      } as Prisma.ProductUpdateInput,
     });
 
     return NextResponse.json(updatedProduct);
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Error updating product ${productId}:`, error);
     // Handle specific Prisma errors if necessary, e.g., P2025 for not found
-    if (error.code === 'P2025') {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
       return new NextResponse('Product not found or not authorized', { status: 404 });
     }
     return new NextResponse('Internal Server Error', { status: 500 });
@@ -128,7 +129,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         },
         // Check for active order statuses
         status: {
-          notIn: ['Completed', 'Cancelled'],
+          notIn: ['DELIVERED', 'CANCELLED'],
         },
       },
       select: { id: true, status: true },
@@ -151,9 +152,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
     return new NextResponse(null, { status: 204 }); // No Content
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Error deleting product ${productId}:`, error);
-    if (error.code === 'P2025') { // Prisma error code for record not found
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') { // Prisma error code for record not found
       return new NextResponse('Product not found or not authorized', { status: 404 });
     }
     // Handle other potential errors, like foreign key constraints if active order check was insufficient

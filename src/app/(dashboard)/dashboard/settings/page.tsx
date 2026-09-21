@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Bell, Globe, Moon, ShieldAlert, ShoppingBag, Trash2 } from 'lucide-react'
 import { useUIStore } from '@/store/ui.store'
 import { useI18NStore, useTranslations } from '@/lib/i18n'
@@ -40,16 +40,16 @@ export default function SettingsPage() {
   const { theme, setTheme } = useUIStore()
   const lang = useI18NStore((s) => s.lang)
   const setLang = useI18NStore((s) => s.setLang)
-  const [prefs, setPrefs] = useState<Prefs>(DEFAULT_PREFS)
-  const [saved, setSaved] = useState(false)
-  const [confirmDelete, setConfirmDelete] = useState(false)
-
-  useEffect(() => {
+  const [prefs, setPrefs] = useState<Prefs>(() => {
+    if (typeof window === 'undefined') return DEFAULT_PREFS
     try {
       const raw = localStorage.getItem('acelora-user-prefs')
-      if (raw) setPrefs({ ...DEFAULT_PREFS, ...(JSON.parse(raw) as Partial<Prefs>) })
+      if (raw) return { ...DEFAULT_PREFS, ...(JSON.parse(raw) as Partial<Prefs>) }
     } catch { /* abaikan */ }
-  }, [])
+    return DEFAULT_PREFS
+  })
+  const [saved, setSaved] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   const set = <K extends keyof Prefs>(key: K, value: Prefs[K]) => {
     setPrefs((p) => {

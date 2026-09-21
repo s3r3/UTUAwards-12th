@@ -23,9 +23,9 @@ export async function GET() {
       select: { id: true, name: true, category: true, price: true, stock: true, status: true, updatedAt: true, ownerId: true },
     })
 
-    const activeProductsCount = partnerProducts.filter((p: any) => p.status === 'Active').length
+    const activeProductsCount = partnerProducts.filter((p) => p.status === 'Active').length
     const lowStockProductsCount = partnerProducts.filter(
-      (p: any) => p.stock > 0 && p.stock < 25
+      (p) => p.stock > 0 && p.stock < 25
     ).length
 
     const partnerOrders = await prisma.order.findMany({
@@ -43,13 +43,13 @@ export async function GET() {
       take: 5,
     })
 
-    const totalSalesValue = partnerOrders.reduce((acc: number, order: any) => acc + order.total, 0)
+    const totalSalesValue = partnerOrders.reduce((acc: number, order) => acc + order.total, 0)
     const activeOrdersCount = partnerOrders.filter(
-      (order: any) => order.status !== 'Completed' && order.status !== 'Cancelled'
+      (order) => order.status !== 'Completed' && order.status !== 'Cancelled'
     ).length
 
-    const recentOrders = partnerOrders.map((order: any) => {
-      const partnerOrderItem = order.orderItems.find((item: any) => item.product.ownerId === partnerId)
+    const recentOrders = partnerOrders.map((order) => {
+      const partnerOrderItem = order.items.find((item) => item.product.ownerId === partnerId)
       return {
         id: order.id,
         buyer: order.user?.name || 'N/A',
@@ -62,17 +62,17 @@ export async function GET() {
     })
 
     const productRevenueMap: Record<string, number> = {}
-    partnerOrders.forEach((order: any) => {
-      order.orderItems.forEach((item: any) => {
+    partnerOrders.forEach((order) => {
+      order.items.forEach((item) => {
         if (item.product.ownerId === partnerId) {
-          productRevenueMap[item.productId] = (productRevenueMap[item.productId] || 0) + item.total
+          productRevenueMap[item.productId] = (productRevenueMap[item.productId] || 0) + item.price * item.quantity
         }
       })
     })
 
     const topProducts = Object.entries(productRevenueMap)
       .map(([productId, revenue]) => {
-        const product = partnerProducts.find((p: any) => p.id === productId)
+        const product = partnerProducts.find((p) => p.id === productId)
         return {
           id: productId,
           name: product?.name || 'Unknown Product',
@@ -80,7 +80,7 @@ export async function GET() {
           revenue,
         }
       })
-      .sort((a: any, b: any) => b.revenue - a.revenue)
+      .sort((a, b) => b.revenue - a.revenue)
       .slice(0, 5)
 
     const salesChartData = Array.from({ length: 7 }, (_, i) => {

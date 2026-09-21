@@ -28,7 +28,6 @@ export default function UserAddressesPage() {
   const [saving, setSaving] = useState(false)
 
   const load = async () => {
-    setLoading(true)
     try {
       const res = await fetch('/api/addresses')
       const json = await res.json()

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { formatRupiah } from '@/data/partnerDemo';
+import type { Prisma, ProductStatus } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,9 +19,9 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const statusFilter = url.searchParams.get('status');
 
-    const where: any = { ownerId: partnerId };
+    const where: Prisma.ProductWhereInput = { ownerId: partnerId };
     if (statusFilter && ['Active', 'Draft', 'Pending Approval', 'Rejected', 'Archived'].includes(statusFilter)) {
-      where.status = statusFilter;
+      where.status = statusFilter as ProductStatus;
     }
 
     const products = await prisma.product.findMany({
@@ -64,7 +65,7 @@ export async function POST(request: Request) {
       'compareAt', 'stock', 'weight', 'packageDesign', 'status', 'legality',
       'quality', 'shipping', 'faq',
     ]);
-    const data: Record<string, any> = {};
+    const data: Record<string, string | number | string[] | boolean | null> = {};
     for (const k of Object.keys(body)) {
       if (VALID_PRODUCT_FIELDS.has(k) && body[k] !== undefined) data[k] = body[k];
     }
@@ -76,7 +77,7 @@ export async function POST(request: Request) {
         ownerId: partnerId,
         createdAt: new Date(),
         updatedAt: new Date(),
-      },
+      } as Prisma.ProductUncheckedCreateInput,
     });
 
     return NextResponse.json({ success: true, data: newProduct }, { status: 201 });

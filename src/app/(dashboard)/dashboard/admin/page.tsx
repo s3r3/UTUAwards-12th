@@ -118,7 +118,7 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 // Recent Order Row Component
-function OrderRow({ order }: { order: any }) {
+function OrderRow({ order }: { order: RecentOrder }) {
   const t = useTranslations()
 
   return (
@@ -213,11 +213,28 @@ interface DashboardStats {
   pendingOrders: number
 }
 
+interface AdminOrderItem {
+  quantity?: number
+  price?: number
+  product?: { name?: string; image?: string | null } | null
+}
+
+interface AdminOrderLike {
+  id: string
+  user?: { name: string } | null
+  address?: { name: string } | null
+  customerName?: string
+  items?: AdminOrderItem[]
+  total?: number
+  status: string
+  createdAt: string
+}
+
 interface RecentOrder {
   id: string
   user?: { name: string }
   customerName?: string
-  items?: any[]
+  items?: AdminOrderItem[]
   total: number
   status: string
   createdAt: string
@@ -248,23 +265,23 @@ export default function AdminDashboardPage() {
         ])
 
         // Parse responses
-        const ordersData = await ordersRes.json()
-        const productsData = await productsRes.json()
+        const ordersData = (await ordersRes.json()) as { success: boolean; data: AdminOrderLike[] }
+        const productsData = (await productsRes.json()) as { success: boolean; data: unknown[] }
 
-        const allOrders = ordersData.success ? ordersData.data : []
+        const allOrders: AdminOrderLike[] = ordersData.success ? ordersData.data : []
         const pendingProducts = productsData.success ? productsData.data.length : 0
 
         // Calculate stats
-        const totalRevenue = allOrders.reduce((sum: number, order: any) => sum + (order.total || 0), 0)
+        const totalRevenue = allOrders.reduce((sum: number, order) => sum + (order.total || 0), 0)
         const totalOrders = allOrders.length
 
         // Get recent 5 orders
-        const recent = allOrders.slice(0, 5).map((order: any) => ({
+        const recent: RecentOrder[] = allOrders.slice(0, 5).map((order) => ({
           id: order.id,
-          user: order.user,
+          user: order.user ?? undefined,
           customerName: order.address?.name || order.user?.name,
           items: order.items,
-          total: order.total,
+          total: order.total || 0,
           status: order.status,
           createdAt: order.createdAt,
         }))
@@ -274,7 +291,7 @@ export default function AdminDashboardPage() {
         const mockTotalProducts = 150
         const mockTotalUsers = 2450
         const mockPendingPartners = 12
-        const mockPendingOrders = allOrders.filter((o: any) => o.status === 'PENDING').length
+        const mockPendingOrders = allOrders.filter((o) => o.status === 'PENDING').length
 
         setStats({
           totalRevenue,

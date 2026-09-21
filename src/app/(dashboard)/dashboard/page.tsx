@@ -15,20 +15,24 @@ interface DashboardData {
   recommendations: { id: string; name: string; image: string | null; price: number; ownerName: string }[]
 }
 
+function readWishlistCount() {
+  if (typeof window === 'undefined') return 0
+  try {
+    return (JSON.parse(localStorage.getItem('acelora-wishlist') || '[]') as string[]).length
+  } catch {
+    return 0
+  }
+}
+
 export default function DashboardPage() {
   const { data: session } = useSession()
   const t = useTranslations()
   const [orders, setOrders] = useState<Order[]>([])
   const [data, setData] = useState<DashboardData | null>(null)
-  const [wishlistCount, setWishlistCount] = useState(0)
+  const [wishlistCount] = useState(readWishlistCount)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('acelora-wishlist') || '[]'
-      setWishlistCount((JSON.parse(saved) as string[]).length)
-    } catch { setWishlistCount(0) }
-
     Promise.allSettled([
       fetch('/api/orders').then(r => r.json()),
       fetch('/api/dashboard-data').then(r => r.json()),

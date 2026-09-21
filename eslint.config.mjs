@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Nested git worktrees/checkouts live here; they are separate working
+    // copies with their own lint state and must not be linted as part of
+    // this project (mirrors .git/info/exclude, which ESLint does not read).
+    ".claude/worktrees/**",
   ]),
 ]);
 

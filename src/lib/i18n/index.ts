@@ -6,18 +6,24 @@ import type { Translations } from './en'
 
 export type Lang = 'en' | 'id'
 
-// Deep-merge `en` (base) with the locale override. `id.ts` is incomplete — it
-// lacks entire sections (e.g. `partnerDashboard`) — so a shallow merge would
-// drop `en`'s values for any section `id` partially defines. Recursing keeps
+// Deep-merge `en` (base) with the locale override. A shallow merge would drop
+// `en`'s values for any section `id` partially defines, so recursing keeps
 // every missing key backed by English instead of throwing
 // `can't access property "X", t.Y is undefined`.
-function deepMerge<T extends Record<string, any>>(base: T, override: Partial<T>): T {
-  const out = { ...base } as Record<string, any>
+type PlainRecord = Record<string, unknown>
+
+function isPlainRecord(v: unknown): v is PlainRecord {
+  return !!v && typeof v === 'object' && !Array.isArray(v)
+}
+
+function deepMerge<T extends PlainRecord>(base: T, override: Partial<T>): T {
+  const out: PlainRecord = { ...base }
   for (const k in override) {
-    const v = (override as any)[k]
+    const v: unknown = override[k]
+    const current: unknown = base[k]
     out[k] =
-      v && typeof v === 'object' && !Array.isArray(v) && k in base
-        ? deepMerge((base as any)[k], v)
+      isPlainRecord(v) && isPlainRecord(current) && k in base
+        ? deepMerge(current, v)
         : v
   }
   return out as T

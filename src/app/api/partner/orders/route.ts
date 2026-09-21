@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import type { OrderStatus, Prisma } from '@prisma/client';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
@@ -17,7 +18,7 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const statusFilter = url.searchParams.get('status');
 
-    const whereClause: any = {
+    const whereClause: Prisma.OrderWhereInput = {
       items: {
         some: {
           product: {
@@ -28,7 +29,7 @@ export async function GET(request: Request) {
     };
 
     if (statusFilter && ['New', 'Processing', 'Ready to Ship', 'Shipped', 'Completed', 'Cancelled'].includes(statusFilter)) {
-      whereClause.status = statusFilter;
+      whereClause.status = statusFilter as OrderStatus;
     }
 
     const orders = await prisma.order.findMany({

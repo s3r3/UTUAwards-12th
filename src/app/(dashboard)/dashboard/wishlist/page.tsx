@@ -8,55 +8,63 @@ import { useCartStore } from '@/store/cart.store'
 import { useTranslations } from '@/lib/i18n'
 import type { Product } from '@/types'
 
+function readWishlistIds(): string[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const v = JSON.parse(localStorage.getItem('acelora-wishlist') || '[]') as string[]
+    return Array.isArray(v) ? v : []
+  } catch {
+    return []
+  }
+}
+
 export default function UserWishlistPage() {
   const t = useTranslations()
-  const [ids, setIds] = useState<string[]>([])
+  const [ids, setIds] = useState<string[]>(readWishlistIds)
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const addItem = useCartStore((s) => s.addItem)
 
   useEffect(() => {
     let cancelled = false
-    const seedIfEmpty = async () => {
-      try {
-        const saved = JSON.parse(localStorage.getItem('acelora-wishlist') || '[]') as string[]
-        if (saved.length > 0) {
-          if (!cancelled) setIds(saved)
-          return
-        }
-        const res = await fetch('/api/products')
-        const json = await res.json()
-        const seed = json.success && Array.isArray(json.data)
-          ? (json.data as { id: string }[]).slice(0, 3).map((p) => p.id)
-          : []
-        if (!cancelled) {
+    const saved = readWishlistIds()
+    const listPromise: Promise<string[]> = saved.length > 0
+      ? Promise.resolve(saved)
+      : fetch('/api/products')
+        .then((r) => r.json())
+        .then((json) => {
+          const seed = json.success && Array.isArray(json.data)
+            ? (json.data as { id: string }[]).slice(0, 3).map((p) => p.id)
+            : []
           if (seed.length > 0) {
-            localStorage.setItem('acelora-wishlist', JSON.stringify(seed))
-            setIds(seed)
-          } else {
-            setIds([])
+            try { localStorage.setItem('acelora-wishlist', JSON.stringify(seed)) } catch { /* abaikan */ }
           }
-        }
-      } catch {
-        if (!cancelled) setIds([])
+          return seed
+        })
+        .catch(() => [] as string[])
+    listPromise.then((list) => {
+      if (cancelled) return
+      setIds(list)
+      if (list.length === 0) {
+        setProducts([])
+        setLoading(false)
+        return
       }
-    }
-    seedIfEmpty()
+      Promise.all(list.map((id) => fetch(`/api/products/${id}`).then((r) => r.json()).catch(() => null)))
+        .then((res) => {
+          if (cancelled) return
+          setProducts(res.filter((r) => r?.success).map((r) => r.data as Product))
+        })
+        .finally(() => { if (!cancelled) setLoading(false) })
+    })
     return () => { cancelled = true }
   }, [])
-
-  useEffect(() => {
-    if (ids.length === 0) { setProducts([]); setLoading(false); return }
-    setLoading(true)
-    Promise.all(ids.map((id) => fetch(`/api/products/${id}`).then(r => r.json()).catch(() => null)))
-      .then((res) => setProducts(res.filter((r) => r?.success).map((r) => r.data as Product)))
-      .finally(() => setLoading(false))
-  }, [ids])
 
   const remove = (id: string) => {
     const next = ids.filter((x) => x !== id)
     setIds(next)
-    localStorage.setItem('acelora-wishlist', JSON.stringify(next))
+    setProducts((prev) => prev.filter((p) => p.id !== id))
+    try { localStorage.setItem('acelora-wishlist', JSON.stringify(next)) } catch { /* abaikan */ }
   }
 
   if (loading) return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{[0, 1, 2].map((i) => <div key={i} className="h-44 animate-pulse rounded-xl bg-gray-100 dark:bg-gray-800" />)}</div>

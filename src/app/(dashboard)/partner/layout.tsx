@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ShieldAlert, X } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import PartnerSidebar from '@/components/partner/PartnerSidebar'
@@ -9,8 +9,6 @@ import PartnerHeader from '@/components/partner/PartnerHeader'
 export default function PartnerLayout({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession()
   const [open, setOpen] = useState(false)
-
-  useEffect(() => setOpen(false), [])
 
   if (status === 'loading') {
     return <div className="min-h-screen bg-cream p-6 dark:bg-gray-950"><div className="h-16 max-w-64 animate-pulse rounded-xl bg-gray-200 dark:bg-gray-800" /></div>

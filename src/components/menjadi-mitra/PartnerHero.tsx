@@ -1,8 +1,9 @@
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import type { Translations } from '@/lib/i18n/en'
 
-export default function PartnerHero({ t }: { t: any }) {
+export default function PartnerHero({ t }: { t: Translations['landing']['partnerPage'] }) {
   return (
     <section className="relative min-h-[600px] flex items-center bg-primary-900 text-white py-20 px-6 md:px-16 overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
