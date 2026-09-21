@@ -32,6 +32,9 @@ const TRANSLATIONS = {
     online: "Online",
     assistant: "Ara — Acelora",
     error: "Maaf, koneksi bermasalah. Coba lagi ya.",
+    recommendation: "Berikut rekomendasi produk:",
+    checkoutAll: "Checkout Semua",
+    send: "Kirim",
   },
   en: {
     greeting: "Hi! 👋 I'm Ara, Acelora assistant. How can I help you today? Ask me about products, shipping, or how to shop.",
@@ -39,6 +42,9 @@ const TRANSLATIONS = {
     online: "Online",
     assistant: "Ara — Acelora",
     error: "Sorry, connection issue. Please try again.",
+    recommendation: "Here are product recommendations:",
+    checkoutAll: "Checkout All",
+    send: "Send",
   },
 };
 
@@ -90,7 +96,7 @@ export default function ChatWidget() {
           ...history,
           {
             role: "assistant",
-            content: data.content || "Berikut rekomendasi produk:",
+            content: data.content || t.recommendation,
             type: "RECOMMENDATION",
             data: data.data,
           },
@@ -209,7 +215,7 @@ export default function ChatWidget() {
                         }}
                         className="w-full rounded-full bg-emerald-950 px-3 py-2 text-center text-xs tracking-widest uppercase text-white hover:bg-emerald-800"
                       >
-                        Checkout Semua
+                        {t.checkoutAll}
                       </button>
                     </div>
                   )}
@@ -253,7 +259,7 @@ export default function ChatWidget() {
             <button
               onClick={send}
               disabled={!input.trim()}
-              aria-label="Kirim"
+              aria-label={t.send}
               className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-white transition hover:bg-primary-700 disabled:opacity-40"
             >
               ➤

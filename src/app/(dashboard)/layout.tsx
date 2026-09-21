@@ -1,195 +1,32 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  ShoppingBag,
-  User,
-  Settings,
-  Shield,
-  Package,
-  Users,
-  Menu,
-  X,
-  LogOut,
-  Sun,
-  Moon,
-  Globe,
-  Store,
-} from "lucide-react";
-import { useUIStore } from "@/store/ui.store";
-import { useI18NStore, useTranslations } from "@/lib/i18n";
-import { useSession, signOut } from "next-auth/react";
-import type { ReactNode } from "react";
-import type { Translations } from "@/lib/i18n/en";
-import type { LucideIcon } from "lucide-react";
-
-type DashboardTranslationKey = keyof Translations['dashboard'];
-
-const allMenuItems: { href: string; label: DashboardTranslationKey; icon: LucideIcon }[] = [
-  { href: "/dashboard", label: "overviewTitle", icon: LayoutDashboard },
-  { href: "/dashboard/orders", label: "myOrders", icon: ShoppingBag },
-  { href: "/dashboard/profile", label: "profile", icon: User },
-  { href: "/dashboard/settings", label: "settings", icon: Settings },
-];
-
-const adminMenuItems: { href: string; label: DashboardTranslationKey; icon: LucideIcon }[] = [
-  { href: "/dashboard/admin", label: "adminOrders", icon: ShoppingBag },
-  { href: "/dashboard/admin/products", label: "adminProducts", icon: Package },
-  { href: "/dashboard/admin/users", label: "adminUsers", icon: Users },
-];
+import { X } from "lucide-react";
+import UserSidebar from "@/components/user/UserSidebar";
+import UserHeader from "@/components/user/UserHeader";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { data: session } = useSession();
-  const t = useTranslations();
-  const isAdmin = session?.user?.role === "ADMIN";
-  const { theme, setTheme } = useUIStore();
-  const lang = useI18NStore((s) => s.lang);
-  const setLang = useI18NStore((s) => s.setLang);
-  const isDark = theme === "dark";
 
-  useEffect(() => {
-    let cancelled = false;
-    setTimeout(() => {
-      if (!cancelled) setSidebarOpen(false);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [pathname]);
-
-  const NavLink = ({ item }: { item: (typeof allMenuItems)[0] }) => {
-    const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
-    return (
-      <Link
-        href={item.href}
-        onClick={() => setSidebarOpen(false)}
-        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-          isActive
-            ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
-            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-        }`}
-      >
-        <item.icon size={18} />
-        {(t.dashboard[item.label] as string)}
-      </Link>
-    );
-  };
+  // Partner & admin have their own dedicated layouts (mirroring partner pattern)
+  if (pathname.startsWith("/partner") || pathname.startsWith("/dashboard/admin")) {
+    return <>{children}</>;
+  }
 
   return (
-    <div
-      className={`min-h-screen flex ${isDark ? "bg-gray-950 text-gray-200" : "bg-gray-50 text-gray-700"}`}
-    >
-      {/* Overlay for mobile */}
+    <div className="min-h-screen bg-cream text-gray-700 dark:bg-gray-950 dark:text-gray-200">
       {sidebarOpen && (
-        <div
-          onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-30 bg-black/40 md:hidden"
-        />
+        <button aria-label="Tutup menu" onClick={() => setSidebarOpen(false)} className="fixed inset-0 z-30 bg-black/40 md:hidden" />
       )}
-
-      {/* Sidebar */}
-      <aside
-        className={`fixed inset-y-0 left-0 z-40 w-64 border-r transition-transform duration-200 md:translate-x-0 ${
-          isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
-        } ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
-      >
-        <div className="flex items-center justify-between h-16 px-4 border-b">
-          <Link href="/" className="font-serif text-2xl font-bold">
-            Acelora
-          </Link>
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="md:hidden p-1 text-gray-500 hover:text-gray-900 dark:hover:text-white"
-          >
-            <X size={18} />
-          </button>
-        </div>
-
-        <nav className="p-3 space-y-1 mt-2">
-          {allMenuItems.map((item) => (
-            <NavLink key={item.href} item={item} />
-          ))}
-        </nav>
-
-        {isAdmin && (
-          <>
-            <div className="px-3 pt-4 mt-2 border-t border-gray-200 dark:border-gray-800">
-              <p className="px-3 text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">
-                {(t.dashboard as Record<string, ReactNode>).adminPanel}
-              </p>
-            </div>
-            <nav className="px-3 space-y-1">
-              {adminMenuItems.map((item) => (
-                <NavLink key={item.href} item={item} />
-              ))}
-            </nav>
-          </>
-        )}
-
-        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-200 dark:border-gray-800">
-          <button
-            onClick={() => signOut({ callbackUrl: "/login" })}
-            className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-          >
-            <LogOut size={16} /> Logout
-          </button>
-        </div>
+      <aside className={`fixed inset-y-0 left-0 z-40 w-72 border-r border-gray-200 transition-transform dark:border-gray-800 md:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <button onClick={() => setSidebarOpen(false)} className="absolute right-3 top-4 rounded-lg p-1 text-gray-500 hover:bg-gray-100 md:hidden dark:hover:bg-gray-800" aria-label="Tutup menu"><X size={18} /></button>
+        <UserSidebar onNavigate={() => setSidebarOpen(false)} />
       </aside>
-
-      <div className="flex-1 md:ml-64 min-w-0 overflow-x-hidden">
-        {/* Top Navbar (mengganti header statis) */}
-        <header
-          className={`sticky top-0 z-20 h-16 flex items-center justify-between border-b px-4 gap-3 ${
-            isDark ? "bg-gray-950 border-gray-800" : "bg-white border-gray-200"
-          }`}
-        >
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="md:hidden p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white"
-          >
-            <Menu size={20} />
-          </button>
-
-          <div className="flex-1" />
-
-          {/* Shop link */}
-          <Link
-            href="/products"
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          >
-            <Store size={16} />
-            <span className="hidden sm:inline">Shop</span>
-          </Link>
-
-          {/* Language toggle */}
-          <button
-            onClick={() => setLang(lang === "id" ? "en" : "id")}
-            className="p-2 rounded-lg text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            aria-label="Toggle language"
-          >
-            <Globe size={16} />
-            <span className="sr-only">{lang === "id" ? "English" : "Bahasa"}</span>
-          </button>
-
-          {/* Theme toggle */}
-          <button
-            onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="p-2 rounded-lg text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            aria-label="Toggle theme"
-          >
-            {isDark ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
-
-          <span className="text-sm text-gray-500">{session?.user?.name || "User"}</span>
-        </header>
-
-        <main className="p-4 sm:p-6 md:p-8 min-w-0">{children}</main>
+      <div className="min-w-0 md:ml-72">
+        <UserHeader onMenu={() => setSidebarOpen(true)} />
+        <main className="min-w-0 p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );

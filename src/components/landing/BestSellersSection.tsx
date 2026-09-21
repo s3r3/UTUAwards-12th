@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { getBestSellers, type BestSellerProduct } from '@/lib/products'
 import Image from 'next/image'
 import { Leaf, Handshake, Recycle, Factory } from 'lucide-react'
@@ -94,9 +95,11 @@ export default function BestSellersSection() {
             >
               Acelora
             </h2>
-            <button className="mt-8 rounded-full bg-slate-900 px-8 py-3 text-sm font-semibold uppercase tracking-[0.24em] text-white transition-colors hover:bg-slate-800 dark:bg-ocean-900 dark:hover:bg-ocean-800">
-              {t.landing.shopAll}
-            </button>
+            <Link href="/products" className="mt-8">
+              <button className="rounded-full bg-slate-900 px-8 py-3 text-sm font-semibold uppercase tracking-[0.24em] text-white transition-colors hover:bg-slate-800 dark:bg-ocean-900 dark:hover:bg-ocean-800">
+                {t.landing.shopAll}
+              </button>
+            </Link>
           </div>
 
           <div className="w-full">

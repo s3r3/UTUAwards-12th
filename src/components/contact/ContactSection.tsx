@@ -37,7 +37,7 @@ export default function ContactSection() {
           {t.landing.questions}
         </motion.h1>
         <motion.p variants={fadeUp} className="mt-4 text-center text-base text-slate-600 dark:text-gray-400 md:text-lg">
-          We are here to help with your harvest, catch, or order.
+          {t.landing.contactSubtitle}
         </motion.p>
         <motion.div variants={fadeUp} className="mx-auto mt-6 h-px w-16 bg-slate-950/15 dark:bg-white/15" />
       </motion.div>
@@ -92,12 +92,12 @@ export default function ContactSection() {
           </div>
 
           <div className="group">
-            <label htmlFor="message" className="sr-only">Message</label>
+            <label htmlFor="message" className="sr-only">{t.landing.messagePlaceholder}</label>
             <textarea
               id="message"
               name="message"
               rows={4}
-              placeholder="Message"
+              placeholder={t.landing.messagePlaceholder}
               className="w-full resize-none border-b border-slate-950/20 bg-transparent py-3 text-sm text-slate-950 outline-none transition-colors placeholder:text-slate-500/60 focus:border-slate-950/60 dark:border-white/20 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-white/60"
             />
           </div>

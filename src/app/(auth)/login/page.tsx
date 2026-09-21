@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { signIn } from 'next-auth/react'
+import { signIn, getSession } from 'next-auth/react'
 import Image from 'next/image'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { FcGoogle } from 'react-icons/fc'
@@ -36,7 +36,13 @@ export default function LoginPage() {
       })
       
       if (result?.ok) {
-        router.push('/dashboard')
+        const session = await getSession()
+        const role = session?.user?.role
+        const target =
+          role === 'PARTNER' ? '/partner/dashboard'
+          : role === 'ADMIN' ? '/dashboard/admin'
+          : '/dashboard'
+        router.push(target)
       } else {
         setError(t.auth.errorInvalid)
       }
