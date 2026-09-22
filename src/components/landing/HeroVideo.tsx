@@ -47,14 +47,6 @@ export default function HeroVideo() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.5 }}
-            className="mt-4 text-center text-2xl md:text-3xl font-serif font-bold text-white drop-shadow-md"
-          >
-            {t.landing.fromLandSea}
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.5 }}
             className="mx-auto mt-6 max-w-xl text-lg text-white/85"
           >
             {t.hero.heroSub}
